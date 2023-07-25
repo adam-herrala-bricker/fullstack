@@ -1,4 +1,4 @@
-mermaid
+```mermaid
 sequenceDiagram
-
-browser->>server: a
+    browser->>server: a
+```
