@@ -10,7 +10,7 @@ sequenceDiagram
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
     server->>browser: js file
     Note right of browser: Browser executes js code that fetches JSON from server.
-    server->>browser: GET https://studies.cs.helsinki.fi/exampleapp/data.json
-    browser->>server: JSON data
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    server->>browser: JSON data
     Note right of browser: Browser executes callback function in js script and renders JSON data.
 ```
