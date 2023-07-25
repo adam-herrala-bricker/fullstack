@@ -1,7 +1,9 @@
 ```mermaid
 sequenceDiagram 
     browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
-    server->>browser: HTTP status code 302 found
+    Note right of browser: Data sent as body of post request.
+    Note left of server: Server appends new note to note array.
+    server->>browser: HTTP status code 302 Found
     Note left of server: Server asks browser to do new GET request and browser reloads page.
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
     server->>browser: HTML document
