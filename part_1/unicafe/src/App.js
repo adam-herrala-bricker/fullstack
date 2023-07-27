@@ -15,7 +15,7 @@ const Button = (props) => {
 }
 
 //component for displaying stats
-const ShowStat = (props) => {
+const Statistics = (props) => {
   return(
     <div>{props.text}{props.stat}</div>
 
@@ -38,7 +38,7 @@ const App = () => {
   }
   const percentPositive = (arr) => {
     return(
-      arr.filter(entry => entry === 1).length/arr.length + ' %'
+      100*(arr.filter(entry => entry === 1).length/arr.length) + ' %'
     )
   }
 
@@ -64,12 +64,12 @@ const App = () => {
       <Button click={clickNeutral} text='neutral'/>
       <Button click={clickBad} text='bad'/>
       <Title text='statistics' />
-      <ShowStat text='good ' stat={good} />
-      <ShowStat text='neutral ' stat={neutral} />
-      <ShowStat text='bad ' stat={bad} />
-      <ShowStat text='all ' stat={responses.length} />
-      <ShowStat text='average ' stat={sum(responses)/responses.length} />
-      <ShowStat text='positive ' stat={percentPositive(responses)} />
+      <Statistics text='good ' stat={good} />
+      <Statistics text='neutral ' stat={neutral} />
+      <Statistics text='bad ' stat={bad} />
+      <Statistics text='all ' stat={responses.length} />
+      <Statistics text='average ' stat={sum(responses)/responses.length} />
+      <Statistics text='positive ' stat={percentPositive(responses)} />
     </div>
   )
 }
