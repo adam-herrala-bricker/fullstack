@@ -1,5 +1,9 @@
 import { useState } from 'react'
 
+const TextLine = ({text}) => <p>{text}</p>
+
+const VoteLine = ({votes}) => <p>has {votes} votes.</p>
+
 const Button = (props) => {
   return(
     <button onClick={props.click}>{props.text}</button>
@@ -20,7 +24,8 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
-  const [shownAnecdotes, setShownAnecdotes] = useState([]) //want to avoid repeats before every one has been shown
+  const [shownAnecdotes, setShownAnecdotes] = useState([selected]) //want to avoid repeats before every one has been shown
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
 
   //helper functions
   const randomInt = (max) => {
@@ -34,6 +39,7 @@ const App = () => {
     let thisRandom = randomInt(anecdotes.length)
     //seen them all --> reset for another round
     if (shownAnecdotes.length === anecdotes.length) { 
+      console.log('reset')
       return(
         setSelected(thisRandom),
         setShownAnecdotes([])
@@ -50,12 +56,19 @@ const App = () => {
         )
       }
   }
+  
+  const clickVote = (selected) => {
+    const votesCopy = [...votes] //important to do it this way; unclear why
+    votesCopy[selected] += 1
+    setVotes(votesCopy)
+  }
 
   return (
     <div>
-      {anecdotes[selected]}
-      <p></p>
+      <TextLine text={anecdotes[selected]} />
+      <VoteLine votes={votes[selected]} />
       <Button text='next anecdote' click ={clickNext} />
+      <Button text='vote' click={() => clickVote(selected)} /> 
     </div>
   )
 }
