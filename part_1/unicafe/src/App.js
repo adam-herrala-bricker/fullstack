@@ -14,7 +14,7 @@ const Button = (props) => {
   )
 }
 
-//component for single lines of stats
+//component for single lines of stats (two props are redundant now)
 const StatsLine = (props) => {
   return(
   <div>{props.text}{props.stat}</div>
@@ -45,14 +45,36 @@ const Statistics = (props) => {
     )
   }
   return(
-    <div>
-      <StatsLine text='good ' stat={props.responses.filter(entry => entry === 1).length}/>
-      <StatsLine text='neutral ' stat={props.responses.filter(entry => entry === 0).length}/>
-      <StatsLine text='bad ' stat={props.responses.filter(entry => entry === -1).length} />
-      <StatsLine text='all ' stat={props.responses.length} />
-      <StatsLine text='average ' stat={sum(props.responses)/props.responses.length} />
-      <StatsLine text='positive ' stat={percentPositive(props.responses)} />
-    </div>
+    <table>
+      <tbody>
+        <tr>
+          <td><StatsLine text ='good' /></td>
+          <td><StatsLine stat = {props.responses.filter(entry => entry === 1).length} /></td>
+        </tr>
+        <tr>
+          <td><StatsLine text='neutral' /></td>
+          <td><StatsLine stat={props.responses.filter(entry => entry === 0).length} /></td>
+        </tr>
+        <tr>
+          <td><StatsLine text='bad' /></td>
+          <td><StatsLine stat={props.responses.filter(entry => entry === -1).length} /></td>
+        </tr>
+        <tr>
+          <td><StatsLine text='all' /></td>
+          <td><StatsLine stat={props.responses.length} /></td>
+        </tr>
+        <tr>
+          <td><StatsLine text='average' /></td>
+          <td><StatsLine stat={sum(props.responses)/props.responses.length} /></td>
+        </tr>
+        <tr>
+          <td><StatsLine text='positive' /></td>
+          <td><StatsLine stat={percentPositive(props.responses)} /></td>
+        </tr>
+      </tbody>
+    </table>
+    
+  
   )
 }
 
