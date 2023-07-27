@@ -23,8 +23,8 @@ const StatsLine = (props) => {
 
 
 //component for displaying all stats
-const Statistics = (props) => {
-  console.log(props.responses.length)
+const Statistics = ({responses}) => {
+  console.log(responses.length)
  
   //stats functions (idk if JS has these built in??)
   const sum = (arr) => {
@@ -32,6 +32,8 @@ const Statistics = (props) => {
       return total + current;
     }, 0);
   }
+  const mean = (arr) => sum(arr)/arr.length
+
   const percentPositive = (arr) => {
     return(
       100*(arr.filter(entry => entry === 1).length/arr.length) + ' %'
@@ -39,7 +41,7 @@ const Statistics = (props) => {
   }
   
   //check whether there are stats to display, only attempt to render if yes
-  if (props.responses.length === 0) {
+  if (responses.length === 0) {
     return(
       <div>No feedback given</div>
     )
@@ -49,27 +51,27 @@ const Statistics = (props) => {
       <tbody>
         <tr>
           <td><StatsLine text ='good' /></td>
-          <td><StatsLine stat = {props.responses.filter(entry => entry === 1).length} /></td>
+          <td><StatsLine stat = {responses.filter(entry => entry === 1).length} /></td>
         </tr>
         <tr>
           <td><StatsLine text='neutral' /></td>
-          <td><StatsLine stat={props.responses.filter(entry => entry === 0).length} /></td>
+          <td><StatsLine stat={responses.filter(entry => entry === 0).length} /></td>
         </tr>
         <tr>
           <td><StatsLine text='bad' /></td>
-          <td><StatsLine stat={props.responses.filter(entry => entry === -1).length} /></td>
+          <td><StatsLine stat={responses.filter(entry => entry === -1).length} /></td>
         </tr>
         <tr>
           <td><StatsLine text='all' /></td>
-          <td><StatsLine stat={props.responses.length} /></td>
+          <td><StatsLine stat={responses.length} /></td>
         </tr>
         <tr>
           <td><StatsLine text='average' /></td>
-          <td><StatsLine stat={sum(props.responses)/props.responses.length} /></td>
+          <td><StatsLine stat={mean(responses)} /></td>
         </tr>
         <tr>
           <td><StatsLine text='positive' /></td>
-          <td><StatsLine stat={percentPositive(props.responses)} /></td>
+          <td><StatsLine stat={percentPositive(responses)} /></td>
         </tr>
       </tbody>
     </table>
