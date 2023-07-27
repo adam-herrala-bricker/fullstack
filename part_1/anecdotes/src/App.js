@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+const Header = ({text}) => <h1>{text}</h1>
+
 const TextLine = ({text}) => <p>{text}</p>
 
 const VoteLine = ({votes}) => <p>has {votes} votes.</p>
@@ -28,11 +30,9 @@ const App = () => {
   const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
 
   //helper functions
-  const randomInt = (max) => {
-    return(
-      Math.floor(Math.random() * max)
-    )
-  }
+  const randomInt = (max) => Math.floor(Math.random() * max)
+  const maxLocation = (arr) => arr.indexOf(Math.max(...arr))
+
 
   //event handlers
   const clickNext = () => {
@@ -63,12 +63,17 @@ const App = () => {
     setVotes(votesCopy)
   }
 
+  //MUST. PASS. EVENT HANDLERS. AS. FUNCTIONS. 
   return (
     <div>
+      <Header text='Anecdote of the day' />
       <TextLine text={anecdotes[selected]} />
       <VoteLine votes={votes[selected]} />
       <Button text='next anecdote' click ={clickNext} />
-      <Button text='vote' click={() => clickVote(selected)} /> 
+      <Button text='vote' click={() => clickVote(selected)} />
+      <Header text='anecdote with the most votes' />
+      <TextLine text={anecdotes[maxLocation(votes)]} />
+      <VoteLine votes={Math.max(...votes)} />
     </div>
   )
 }
