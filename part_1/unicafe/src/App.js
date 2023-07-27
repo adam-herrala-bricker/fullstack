@@ -21,6 +21,7 @@ const StatsLine = (props) => {
   )
 }
 
+
 //component for displaying all stats
 const Statistics = (props) => {
   console.log(props.responses.length)
