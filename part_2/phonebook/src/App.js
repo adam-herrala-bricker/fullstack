@@ -21,13 +21,21 @@ const App = () => {
     event.preventDefault()
     const newPerson = {
       name: newName,
-      number: '(616) 844-2540',
-      id: persons.length + 1
+      number: '(616) 844-2540'
     }
+    //check for repeat entry
+    //NOTE THE SYNTAX!! This is far more temperamental than, say, python.
+    // Can't check for .includes({object}) bc of how object identity works:
+    //e.g., [{name: 'Adam'}].includes({name='Adam'}) returns false!!!
+    if (persons.map(i => i.name).includes(newPerson.name)) {
+      //Also note the formatting here for a string w a variable
+       window.alert(`${newName} is already added to phonebook`)
 
-    setPersons(persons.concat(newPerson))
-    setNewName('')
+    } else {
+      setPersons(persons.concat(newPerson))
+      setNewName('')
     }
+  }
    
   const handleNameChange = (event) => {
     setNewName(event.target.value)
