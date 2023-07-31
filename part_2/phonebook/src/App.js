@@ -4,7 +4,7 @@ const Entry = ({persons}) => {
   return(
     <ul>
       {persons.map((person) =>
-      <li key={person.name}>
+      <li key={person.id}>
         {person.name} {person.number}
       </li>
       )}
@@ -12,17 +12,68 @@ const Entry = ({persons}) => {
   )
 }
 
+const DisplaySearchResults = ({results}) => {
+  console.log(results)
+  if (results.length === 0){
+    return(
+      <p>(no results to display)</p>
+    )
+  }
+  return(
+    results.map(i =>
+      <p key={i.id}>{i.name} {i.number}</p>
+      )
+  )
+}
+
+const Search = ({persons}) => {
+  const [newSearchTerm, setSearchTerm] = useState('')
+  const [searchResults, setSearchResults] = useState([])
+
+  //Event handlers
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value)
+    //holy fuck this took forever to figure out (need to make new var to get up-to-date search value)
+    console.log(newSearchTerm)
+    const currentSearchTerm = event.target.value
+    console.log(currentSearchTerm)
+    const newSearchResults = persons.filter(i => i.name.toLowerCase().includes(currentSearchTerm.toLowerCase()))
+      return(
+        setSearchResults(newSearchResults)
+      )
+  }
+
+  //nice to have a button toreset field
+  const buttonPress = () => setSearchTerm('')
+
+  
+  return(
+    <div>
+      filter name shown with <input value={newSearchTerm} onChange={handleSearchChange} />
+        <button onClick={buttonPress}> clear search</button>
+      <DisplaySearchResults results={searchResults} />
+    </div>
+
+  )
+}
+
 const App = () => {
-  const [persons, setPersons] = useState([ { name: 'Arto Hellas', number: 'KL5-3226' }]) 
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: 'KL5-3226', id: 1 },
+    {name: 'Craig Billingsly', number: '(616) 844-2540', id: 2}]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] =useState ('')
+
+
+
 
   //Event handlers
   const addPerson = (event) => {
     event.preventDefault()
     const newPerson = {
       name: newName,
-      number: newNumber
+      number: newNumber,
+      id: persons.length + 1
     }
     //check for repeat entry
     //NOTE THE SYNTAX!! This is far more temperamental than, say, python.
@@ -46,7 +97,10 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <h2>Search</h2>
+      <Search persons={persons} />
+      <h2>Add a new entry</h2>
       <form onSubmit={addPerson}>
         <div>
           name: <input value={newName} onChange={handleNameChange}/>
