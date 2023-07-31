@@ -1,57 +1,63 @@
-
-//function for sum of elements in array
-const sum = (arr) => arr.reduce((total, current) => total + current, 0)
-
-//function for pulling out exercise numbers from course object
-const exerciseTotaler = (course) => {
-  const exArr = course.parts.map((part) => part.exercises)
-  return(sum(exArr))
-
-}
+import Course from './Course'
 
 
-const Course = ({course}) => {
-  return( 
-    <div>
-      <h1>{course.name}</h1>
-      <ul>
-        {course.parts.map((part) => <li key = {part.id}>{part.name} {part.exercises}</li>)}
-      </ul>
-      <h4>total of {exerciseTotaler(course)} exercises</h4>
-    </div>
-  )
-}
+//REMEMBER YOU HAD TO ADD THE KEY HERE TOO!! Everywhere there's a JSX element inside a map.
+const MetaCourse = ({courses}) => <div>{courses.map((i) => <Course course={i} key={i.id}/>)}</div>
 
 const App = () => {
-  const course = {
-    id: 1,
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10,
-        id: 1
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7,
-        id: 2
-      },
-      {
-        name: 'State of a component',
-        exercises: 14,
-        id: 3
-      },
-      {
-        name: 'Fouth one for testing',
-        exercises: 0,
-        id: 4
-      }
-    ]
-  }
+  const courses = [
+    {
+      name: 'Half Stack application development',
+      id: 1,
+      parts: [
+        {
+          name: 'Fundamentals of React',
+          exercises: 10,
+          id: 1
+        },
+        {
+          name: 'Using props to pass data',
+          exercises: 7,
+          id: 2
+        },
+        {
+          name: 'State of a component',
+          exercises: 14,
+          id: 3
+        },
+        {
+          name: 'Redux',
+          exercises: 11,
+          id: 4
+        }
+      ]
+    }, 
+    {
+      name: 'Node.js',
+      id: 2,
+      parts: [
+        {
+          name: 'Routing',
+          exercises: 3,
+          id: 1
+        },
+        {
+          name: 'Middlewares',
+          exercises: 7,
+          id: 2
+        }
+      ]
+    }
+  ]
+  
 
   return (
-  <Course course={course} />
+  
+  <>
+    <h1>Web development curriculum</h1>  
+    <MetaCourse courses={courses} />
+  </>
+
   
   )
 }
