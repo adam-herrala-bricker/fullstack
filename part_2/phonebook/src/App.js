@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import serverBuddy from './services/serverKamu'
 
 const DisplaySearchResults = ({results, query}) => {
   console.log(results)
@@ -62,10 +62,10 @@ const App = () => {
 
   //Hook
   const hook = () => {
-    axios
-    .get('http://localhost:3001/persons')
-    .then(response =>{
-      setPersons(response.data)
+    serverBuddy
+    .getAll()
+    .then(initialPersons =>{
+      setPersons(initialPersons)
     })
   }
 
@@ -76,22 +76,26 @@ const App = () => {
     event.preventDefault()
     const newPerson = {
       name: newName,
-      number: newNumber,
-      id: persons.length + 1
+      number: newNumber 
+      //removed 'id: persons.length + 1' to let served handle generating IDs
     }
     //check for repeat entry
     //NOTE THE SYNTAX!! This is far more temperamental than, say, python.
     // Can't check for .includes({object}) bc of how object identity works:
-    //e.g., [{name: 'Adam'}].includes({name='Adam'}) returns false!!!
+    //e.g., [{name: 'Adam'}].includes({name: 'Adam'}) returns false!!!
     //(also: allows for multiple people to share a number, since instructions didn't say otherwise)
     if (persons.map(i => i.name).includes(newPerson.name)) {
       //Also note the formatting here for a string w a variable
        window.alert(`${newName} is already added to phonebook`)
 
     } else {
-      setPersons(persons.concat(newPerson))
-      setNewName('')
-      setNewNumber('')
+      serverBuddy
+      .create(newPerson)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('') 
+      })
     }
   }
   
