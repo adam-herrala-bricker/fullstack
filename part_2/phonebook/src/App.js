@@ -88,7 +88,16 @@ const App = () => {
     //(also: allows for multiple people to share a number, since instructions didn't say otherwise)
     if (persons.map(i => i.name).includes(newPerson.name)) {
       //Also note the formatting here for a string w a variable
-       window.alert(`${newName} is already added to phonebook`)
+      if (window.confirm(`${newName} is already added to the phonebook. Replace the old number with a new one?`)) {
+        const thisID = persons.find(i => i.name === newPerson.name).id
+        serverBuddy
+        .updateListing(thisID, newPerson)
+        .then(returnedPerson => {
+          setPersons(persons.map(person => person.id !== thisID ? person : returnedPerson))
+          setNewName('')
+          setNewNumber('') 
+        })
+      }
 
     } else {
       serverBuddy
