@@ -41,12 +41,14 @@ const Form = ({onSubmit, onNameChange, onNumberChange, newName, newNumber}) =>{
   )
 }
 
-const Entry = ({persons}) => {
+const Entry = ({persons, deleteEvent}) => {
   return(
     <ul>
       {persons.map((person) =>
       <li key={person.id}>
-        {person.name} {person.number}
+        {person.name} {person.number} {' '}
+        <button onClick={() => deleteEvent(person.id)}>delete</button>
+        <p></p>
       </li>
       )}
     </ul>
@@ -115,7 +117,18 @@ const App = () => {
   }
 
   //nice to have a button to reset field
+  //(named before adding a second button, wouldn't go that generic again)
   const buttonPress = () => setSearchTerm('')
+
+  const deleteListing = (id) =>{
+    const listingToRemove = persons.find(n => n.id ===id)
+    if (window.confirm(`Are you sure you want to delete ${listingToRemove.name} from the server?`)){
+      const newListing = persons.filter(n => n.id !== id)
+      serverBuddy
+      .removeListing(id)
+      .then(setPersons(newListing))
+    } 
+} 
 
   return (
     <div>
@@ -125,7 +138,7 @@ const App = () => {
       <h2>Add a new entry</h2>
       <Form onSubmit={addPerson} onNameChange={handleNameChange} onNumberChange={handleNumberChange} newName ={newName} newNumber={newNumber}/>
       <h2>Numbers</h2>
-      <Entry persons={persons}/>
+      <Entry persons={persons} deleteEvent={deleteListing}/>
     </div>
   )
 }
