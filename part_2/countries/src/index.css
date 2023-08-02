@@ -1,0 +1,10 @@
+ul {
+    padding-bottom: 20px;
+}
+
+img {
+    border-style: solid;
+    border-radius: 20px;
+    border-color: black;
+    border-width: 2px;
+}
