@@ -114,6 +114,18 @@ const App = () => {
             setNotificationText(null)
           }, 5000) 
         })
+        //for the two-tab delete-change error thing
+        .catch(error => {
+          setNotificationClass('error')
+          setNotificationText(`error: ${newPerson.name} no longer on server`)
+          setTimeout(() => {
+            setNotificationText(null)
+            setNotificationClass('notification') //default operating value
+          }, 5000)
+          setNewName('')
+          setNewNumber('')
+          setPersons(persons.filter(person => person.id !== thisID))
+        })
       }
 
     } else {
@@ -124,9 +136,9 @@ const App = () => {
         setNewName('')
         setNewNumber('')
         setNotificationText(`added ${newPerson.name}`)
-          setTimeout(() => {
-            setNotificationText(null)
-          }, 5000)  
+        setTimeout(() => {
+          setNotificationText(null)
+        }, 5000)  
       })
     }
   }
@@ -156,14 +168,20 @@ const App = () => {
       const newListing = persons.filter(n => n.id !== id)
       serverBuddy
       .removeListing(id)
-      .then(setPersons(newListing))
+      .then(() => {
+        setPersons(newListing)
+        setNotificationText(`deleted ${listingToRemove.name}`)
+        setTimeout(() => {
+          setNotificationText(null)
+        }, 5000)  
+      })
     } 
 } 
 
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={notificationText} className='notification'/>
+      <Notification message={notificationText} className={notificationClass}/>
       <h2>Search</h2>
       <Search persons={persons} change={handleSearchChange} searchBar={newSearchTerm} display={searchResults} bPress={buttonPress} />
       <h2>Add a new entry</h2>
