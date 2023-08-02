@@ -55,12 +55,25 @@ const Entry = ({persons, deleteEvent}) => {
   )
 }
 
+const Notification = ({message, className}) => {
+  if (message === null){
+    return null
+  }
+  return(
+    <div className={className}>
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] =useState ('')
   const [newSearchTerm, setSearchTerm] = useState('')
   const [searchResults, setSearchResults] = useState([])
+  const [notificationText, setNotificationText] = useState(null)
+  const [notificationClass, setNotificationClass] = useState('notification')
 
   //Hook
   const hook = () => {
@@ -95,7 +108,11 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.map(person => person.id !== thisID ? person : returnedPerson))
           setNewName('')
-          setNewNumber('') 
+          setNewNumber('')
+          setNotificationText(`changed listing for ${newPerson.name}`)
+          setTimeout(() => {
+            setNotificationText(null)
+          }, 5000) 
         })
       }
 
@@ -105,7 +122,11 @@ const App = () => {
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
-        setNewNumber('') 
+        setNewNumber('')
+        setNotificationText(`added ${newPerson.name}`)
+          setTimeout(() => {
+            setNotificationText(null)
+          }, 5000)  
       })
     }
   }
@@ -142,6 +163,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={notificationText} className='notification'/>
       <h2>Search</h2>
       <Search persons={persons} change={handleSearchChange} searchBar={newSearchTerm} display={searchResults} bPress={buttonPress} />
       <h2>Add a new entry</h2>
