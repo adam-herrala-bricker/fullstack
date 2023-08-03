@@ -1,8 +1,6 @@
 import serverBuddy from './services/serverKamu'
 import {useState, useEffect} from 'react'
 
-//import flag from './fi.png' 
-
 const InfoCard = ({country}) => {
    //no country to display
    if (!country) {
@@ -88,7 +86,6 @@ const Search = ({searchResults, searchTerm, handleSearchTermChange, countryData,
 }
 
 const WeatherCard = ({country, weatherData}) => {
-  console.log(weatherData)
   const iconURL = `https://openweathermap.org/img/wn/${weatherData.weather['0'].icon}@2x.png`
   const thisCapital = country.capital
   return(
@@ -118,7 +115,6 @@ const App = () => {
       setCountryData(returnedData)
       const foundCountryNames = returnedData
       .map((i) => i.name.common).sort()
-      console.log(foundCountryNames) //holy shit it works on the first try!
       setCountryNames(foundCountryNames)
     })
   }
