@@ -2,7 +2,7 @@ ul {
     padding-bottom: 20px;
 }
 
-img {
+.flagStyle {
     border-style: solid;
     border-radius: 20px;
     border-color: black;
