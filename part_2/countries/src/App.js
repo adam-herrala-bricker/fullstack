@@ -41,8 +41,8 @@ const DisplaySearchResults = ({searchResults, searchTerm, countryData, handleSho
       <p>Too many results found. Try something more specific.</p>
     )
   }
-  //more than 1 but less than 10 results
-  if (1 < searchResults.length & searchResults.length < 10) {
+  //more than 1 but 10 or fewer
+  if (1 < searchResults.length & searchResults.length <= 10) {
     return(
          searchResults.map(i =>
          <div key={i}>
