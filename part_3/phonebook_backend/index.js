@@ -26,6 +26,13 @@ let persons = [
     }
 ]
 
+//helper function (gives big, pseudo-random number )
+const generateID = () => {
+    return(Math.round(Math.random()*10e20)
+)}
+
+//HANDLING REQUESTS TO SERVER
+
 //get request for info page
 app.get('/info', (request, response)=> {
     response.send(`
@@ -57,6 +64,21 @@ app.delete('/api/persons/:id', (request, response) => {
     persons = persons.filter(person => person.id !== id) //includes every person but the one being deleted
 
     response.status(204).end()
+})
+
+//post request to add new person
+app.post('/api/persons/', (request, response) => {
+    const body = request.body
+    newID = generateID()
+
+    const person = {
+        name: body.name,
+        number: body.number,
+        id: newID
+    }
+    
+    persons = persons.concat(person)
+    response.json(person)
 })
 
 
