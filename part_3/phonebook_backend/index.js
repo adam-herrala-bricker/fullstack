@@ -71,6 +71,21 @@ app.post('/api/persons/', (request, response) => {
     const body = request.body
     newID = generateID()
 
+    //missing name or number
+    if (!body.name | !body.number) {
+        return response.status(400).json({
+            error: 'name or number missing'
+        })
+    }
+
+    //person already added
+    if (persons.map(entry => entry.name).includes(body.name)) {
+        return response.status(400).json({
+            error: 'name must be unique'
+        })
+    }
+
+    //otherwise . . .
     const person = {
         name: body.name,
         number: body.number,
