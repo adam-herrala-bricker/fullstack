@@ -37,6 +37,18 @@ app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
 
+//get request for single person
+app.get('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    const person = persons.find(person => person.id === id)
+
+    if (person) {
+        response.json(person)
+    } else {
+        response.status(404).end()
+    }
+})
+
 
 //sending this bad boy out
 const PORT = 3001
