@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 let persons = [
     { 
       "id": 1,
@@ -49,8 +51,16 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
 
+//delete request for single person
+app.delete('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    persons = persons.filter(person => person.id !== id) //includes every person but the one being deleted
 
-//sending this bad boy out
+    response.status(204).end()
+})
+
+
+//sending this bad boy out into the world
 const PORT = 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
