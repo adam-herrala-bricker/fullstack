@@ -1,7 +1,10 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
+//middleware!!
 app.use(express.json())
+app.use(morgan('tiny'))
 
 let persons = [
     { 
@@ -52,7 +55,7 @@ app.get('/api/persons/:id', (request, response) => {
     const person = persons.find(person => person.id === id)
 
     if (person) {
-        response.json(person)
+        response.send(person)
     } else {
         response.status(404).end()
     }
