@@ -4,7 +4,17 @@ const app = express()
 
 //middleware!!
 app.use(express.json())
-app.use(morgan('tiny'))
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postRes')) //'tiny' formatting plus our custom job
+ //add token to morgan for logging POST request only
+ morgan.token('postRes', function (req, res ) {
+    if(req.method === 'POST') {
+        return(
+        JSON.stringify(req.body)
+        )
+    }
+    return(' ') 
+})
 
 let persons = [
     { 
