@@ -24,6 +24,14 @@ let persons = [
     }
 ]
 
+//get request for info page
+app.get('/info', (request, response)=> {
+    response.send(`
+    <p>Phonebook has info for ${persons.length} people.</p>
+    <p>${Date()}</p>
+    `)
+})
+
 //get request for all persons
 app.get('/api/persons', (request, response) => {
     response.json(persons)
