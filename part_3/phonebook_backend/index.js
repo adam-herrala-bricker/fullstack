@@ -4,6 +4,7 @@ const app = express()
 
 //middleware!!
 app.use(express.json())
+app.use(express.static('build'))
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postRes')) //'tiny' formatting plus our custom job
  //add token to morgan for logging POST request only
@@ -111,7 +112,7 @@ app.post('/api/persons/', (request, response) => {
 
 
 //sending this bad boy out into the world
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
