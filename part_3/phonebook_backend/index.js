@@ -51,10 +51,10 @@ app.get('/api/persons/:id', (request, response) => {
 
 //delete request for single person
 app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    persons = persons.filter(person => person.id !== id) //includes every person but the one being deleted
-
-    response.status(204).end()
+    Entry.findByIdAndRemove(request.params.id)
+    .then(result => {
+        response.status(204).end()
+    })
 })
 
 //post request to add new person
@@ -91,7 +91,7 @@ app.post('/api/persons/', (request, response) => {
 
 
 //sending this bad boy out into the world
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
