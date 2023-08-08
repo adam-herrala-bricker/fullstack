@@ -28,10 +28,12 @@ const generateID = () => {
 
 //get request for info page
 app.get('/info', (request, response)=> {
-    response.send(`
-    <p>Phonebook has info for ${persons.length} people.</p>
-    <p>${Date()}</p>
-    `)
+    Entry.find({}).then(entries => {
+        response.send(`
+        <p>Phonebook has info for ${entries.length} people.</p>
+        <p>${Date()}</p>
+        `)
+    })
 })
 
 //get request for all persons
@@ -43,14 +45,8 @@ app.get('/api/persons', (request, response) => {
 
 //get request for single person
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
-
-    if (person) {
-        response.send(person)
-    } else {
-        response.status(404).end()
-    }
+    Entry.findById(request.params.id)
+    .then(entry => {response.json(entry)})
 })
 
 //delete request for single person
@@ -73,22 +69,24 @@ app.post('/api/persons/', (request, response) => {
         })
     }
 
+    /*
     //person already added
     if (persons.map(entry => entry.name).includes(body.name)) {
         return response.status(400).json({
             error: 'name must be unique'
         })
     }
+    */
 
     //otherwise . . .
-    const person = {
+    const person = new Entry ({
         name: body.name,
         number: body.number,
-        id: newID
-    }
-    
-    persons = persons.concat(person)
-    response.json(person)
+    })
+
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
 })
 
 
