@@ -41,12 +41,20 @@ app.get('/api/persons', (request, response) => {
     Entry.find({}).then(entries => {
         response.json(entries)
     })
+    .catch(error => next(error))
 })
 
 //get request for single person
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
     Entry.findById(request.params.id)
-    .then(entry => {response.json(entry)})
+    .then(entry => {
+        if (entry) {
+            response.json(entry)
+        } else {
+            response.status(404).end()
+        }    
+    })
+    .catch(error => next(error))
 })
 
 //delete request for single person
@@ -55,6 +63,7 @@ app.delete('/api/persons/:id', (request, response) => {
     .then(result => {
         response.status(204).end()
     })
+    .catch(error => next(error))
 })
 
 //post request to add new person
@@ -89,6 +98,19 @@ app.post('/api/persons/', (request, response) => {
     })
 })
 
+//Error handling middleware (needs to go at end!)
+const errorHandler = (error, request, response, next) => {
+    console.error("error:", error.message)
+  
+    if (error.name === 'CastError') {
+      return response.status(400).send({ error: 'malformed id' })
+    } 
+  
+    next(error)
+  }
+  
+
+app.use(errorHandler)
 
 //sending this bad boy out into the world
 const PORT = process.env.PORT
