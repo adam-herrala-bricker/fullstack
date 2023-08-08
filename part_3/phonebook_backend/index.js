@@ -19,25 +19,21 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :p
     return(' ') 
 })
 
-//helper function (gives big, pseudo-random number )
-const generateID = () => {
-    return(Math.round(Math.random()*10e20)
-)}
-
 //HANDLING REQUESTS TO SERVER
 
 //get request for info page
-app.get('/info', (request, response)=> {
+app.get('/info', (request, response, next)=> {
     Entry.find({}).then(entries => {
         response.send(`
         <p>Phonebook has info for ${entries.length} people.</p>
         <p>${Date()}</p>
         `)
     })
+    .catch(error => next(error))
 })
 
 //get request for all persons
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response, next) => {
     Entry.find({}).then(entries => {
         response.json(entries)
     })
@@ -58,7 +54,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 })
 
 //delete request for single person
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
     Entry.findByIdAndRemove(request.params.id)
     .then(result => {
         response.status(204).end()
@@ -67,9 +63,8 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 //post request to add new person
-app.post('/api/persons/', (request, response) => {
+app.post('/api/persons/', (request, response, next) => {
     const body = request.body
-    newID = generateID()
 
     //missing name or number
     if (!body.name | !body.number) {
@@ -77,15 +72,6 @@ app.post('/api/persons/', (request, response) => {
             error: 'name or number missing'
         })
     }
-
-    /*
-    //person already added
-    if (persons.map(entry => entry.name).includes(body.name)) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    }
-    */
 
     //otherwise . . .
     const person = new Entry ({
@@ -96,6 +82,21 @@ app.post('/api/persons/', (request, response) => {
     person.save().then(savedPerson => {
         response.json(savedPerson)
     })
+    .catch(error => next(error))
+})
+
+//put request to change existing entry
+app.put('/api/persons/:id', (request, response, next) => {
+    const body = request.body
+    const thisID = request.params.id
+    const updates = {name: body.name, number: body.number, id: thisID}
+    
+    Entry.findByIdAndUpdate(thisID, updates, {overwrite: true})
+    .then(updatedPerson => {
+        response.json(updates)
+    })
+    .catch(error => next(error))
+
 })
 
 //Error handling middleware (needs to go at end!)

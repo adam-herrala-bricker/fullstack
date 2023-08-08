@@ -6,5 +6,15 @@ Content-Type: application/json
     "number" : "7"
 }
 
+### Testing the put request for updating an ID
+PUT http://localhost:3001/api/persons/64d285dcdf1cb359ddfc4485
+Content-Type: application/json
+
+{
+    "name" : "Ace",
+    "number" : "1"
+}
+
+
 ### checking all the data
 GET http://localhost:3001/api/persons/
