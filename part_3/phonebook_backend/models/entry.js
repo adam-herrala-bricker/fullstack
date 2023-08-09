@@ -8,7 +8,7 @@ const url = process.env.MONGODB_URI
 console.log('connecting to', url)
 
 mongoose.connect(url)
-    .then(result => {
+    .then(() => {
         console.log('connected to MongoDB')
     })
     .catch((error) => {
@@ -16,12 +16,12 @@ mongoose.connect(url)
     })
 
 const entrySchema = new mongoose.Schema({
-    name: {type: String, minLength: 3, required: true},
-    number: {type: String, minLength: 8, required: true, 
-        validate: {validator: function(i){return /\b(\d{2}|\d{3})-\d+\b/.test(i)}},
-        message: () => 'invalid phone number!' //can't figure out how to pass this to the actual error message 
+    name: { type: String, minLength: 3, required: true },
+    number: { type: String, minLength: 8, required: true,
+        validate: { validator: function(i){return /\b(\d{2}|\d{3})-\d+\b/.test(i)} },
+        message: () => 'invalid phone number!' //can't figure out how to pass this to the actual error message
     },
-    })
+})
 
 entrySchema.set('toJSON', {
     transform: (document, returnedObject) => {

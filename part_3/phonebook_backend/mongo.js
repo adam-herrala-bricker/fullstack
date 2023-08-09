@@ -4,11 +4,11 @@
 const mongoose = require('mongoose')
 
 if (process.argv.length<3) {
-  console.log('give password as argument')
-  process.exit(1)
+    console.log('give password as argument')
+    process.exit(1)
 }
 
-const collectionName = "phonebook"
+const collectionName = 'phonebook'
 const password = process.argv[2] //2nd parameter passed in shell command
 
 const url =
@@ -18,8 +18,8 @@ mongoose.set('strictQuery',false)
 mongoose.connect(url)
 
 const entrySchema = new mongoose.Schema({
-  name: String,
-  number: String,
+    name: String,
+    number: String,
 })
 
 const Entry = mongoose.model('Entry', entrySchema)
@@ -31,13 +31,13 @@ if (process.argv.length === 5) {
         number: process.argv[4],
     })
 
-    newEntry.save().then(result => {
+    newEntry.save().then(() => {
         console.log('entry saved!')
         mongoose.connection.close()
-      })
+    })
 } else { //just display existing entries
     console.log('phonebook:')
-    Entry.find({}).then(result =>{
+    Entry.find({}).then(result => {
         result.forEach(entry => {
             console.log(`${entry.name} ${entry.number}`)
         })
