@@ -114,17 +114,17 @@ const App = () => {
             setNotificationText(null)
           }, 5000) 
         })
-        //for the two-tab delete-change error thing
+        //validation error handling
+        //note: removed the two-tab delete-change error handling from old version
         .catch(error => {
           setNotificationClass('error')
-          setNotificationText(`error: ${newPerson.name} no longer on server`)
+          setNotificationText(error.response.data.error)
           setTimeout(() => {
             setNotificationText(null)
             setNotificationClass('notification') //default operating value
           }, 5000)
           setNewName('')
           setNewNumber('')
-          setPersons(persons.filter(person => person.id !== thisID))
         })
       }
 
@@ -139,6 +139,16 @@ const App = () => {
         setTimeout(() => {
           setNotificationText(null)
         }, 5000)  
+      })
+      .catch(error => {
+        setNotificationClass('error')
+        setNotificationText(error.response.data.error)
+        setTimeout(() => {
+          setNotificationText(null)
+          setNotificationClass('notification') //default operating value
+        }, 5000)
+        setNewName('')
+        setNewNumber('')
       })
     }
   }

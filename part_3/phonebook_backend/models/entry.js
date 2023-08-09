@@ -16,8 +16,11 @@ mongoose.connect(url)
     })
 
 const entrySchema = new mongoose.Schema({
-    name: String,
-    number: String,
+    name: {type: String, minLength: 3, required: true},
+    number: {type: String, minLength: 8, required: true, 
+        validate: {validator: function(i){return /\b(\d{2}|\d{3})-\d+\b/.test(i)}},
+        message: () => 'invalid phone number!' //can't figure out how to pass this to the actual error message 
+    },
     })
 
 entrySchema.set('toJSON', {
