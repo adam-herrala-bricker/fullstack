@@ -40,6 +40,87 @@ const threeItemList = [
     }
 ]
 
+const daveList = [
+    {
+        _id: 'aaaaaaaaaaaaa',
+        title: 'How to juggle',
+        author: 'Randy',
+        url: 'juggle.org/blog',
+        likes: 15,
+        __v: 0
+
+    },
+    {
+        _id: 'bbbbbbbbbbbb',
+        title: 'How to cook',
+        author: 'Dave',
+        url: 'cook.org/blog',
+        likes: 17,
+        __v: 0
+
+    }, 
+    {
+        _id: 'ccccccccccccc',
+        title: 'How to podcast',
+        author: 'Nancy',
+        url: 'podcast.org/blog',
+        likes: 15000,
+        __v: 0
+
+    },
+    {
+        _id: 'dddddddddddddd',
+        title: 'How to blog',
+        author: 'Dave',
+        url: 'blog.org/how-to',
+        likes: 3,
+        __v: 0
+
+    },
+]
+
+const lindaList = [
+
+    {
+        _id: 'eeeeeeeeeeee',
+        title: 'Making soup',
+        author: 'Linda',
+        url: 'wikipedia.org/soup',
+        likes: 47,
+        __v: 0
+
+    },
+    {
+        _id: 'ffffffffffffff',
+        title: 'Making stew',
+        author: 'Alex',
+        url: 'wikipedia.org/stew',
+        likes: 49,
+        __v: 0
+
+    },
+    {
+        _id: 'ggggggggggggg',
+        title: 'Making gumbo',
+        author: 'Linda',
+        url: 'wikipedia.org/gumbo',
+        likes: 54,
+        __v: 0
+
+    },
+    {
+        _id: 'hhhhhhhhhhh',
+        title: 'Fixing bad stew',
+        author: 'Linda',
+        url: 'wikipedia.org/stew_fix',
+        likes: '12',
+        __v: 0
+
+    },
+
+]
+
+
 test('dummy returns one', () => {
   const blogs = []
 
@@ -88,9 +169,18 @@ describe('favorite blog', () => {
         }
         expect(result).toEqual(expectedResult)
     })
+})
 
-
-
-
-
+describe('most blogs', () => {
+    test('list with most (2) by Dave', () => {
+        const result = listHelper.mostBlogs(daveList)
+        const expectedResults = {author: 'Dave', blogs: 2}
+        expect(result).toEqual(expectedResults)
+    })
+    
+    test('list with most (3) by Linda', () => {
+        const result = listHelper.mostBlogs(lindaList)
+        const expectedResults = {author: 'Linda', blogs: 3}
+        expect(result).toEqual(expectedResults)
+    })
 })

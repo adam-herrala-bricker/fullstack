@@ -19,4 +19,30 @@ const favoriteBlog = (arr) => {
     return(topBlog) 
 }
 
-module.exports = {dummy, totalLikes, favoriteBlog}
+//WORKS FIRST TRY!!!!
+const mostBlogs = (arr) => {
+    //unique list of bloggers
+    const bloggers = Array.from(new Set(arr.map(i => i.author)))
+    //reduce over that list
+    const bloggersByBlogs = bloggers.reduce((accumulator, blogger) => {
+        //look at blogs by just the current blogger
+        const theseBlogs = arr.filter(i => i.author === blogger)
+        //reduce over that blogger's blogs to get the number
+        const blogNumber = theseBlogs.reduce((accumulator, blog) => {
+            return(accumulator + 1)
+        }, 0)
+
+        //new entry for list
+        const newEntry = {author: blogger, blogs: blogNumber}
+
+        //add entry to accumulator
+        return(accumulator.concat(newEntry))
+
+    }, [])
+
+    //sort list by blog number (highest first) and return 0th entry from list
+    return(bloggersByBlogs.sort((i,j) => {return(j.blogs - i.blogs)})[0])
+
+}
+
+module.exports = {dummy, totalLikes, favoriteBlog, mostBlogs}
