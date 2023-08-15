@@ -12,4 +12,11 @@ const totalLikes = (arr) => {
 
 }
 
-module.exports = {dummy, totalLikes}
+const favoriteBlog = (arr) => {
+    const topBlog = arr.length === 0 
+    ? []
+    : arr.sort((i,j) => {return(j.likes - i.likes)})[0] //comparison is via sign. look up the docs if you forget how this works. 
+    return(topBlog) 
+}
+
+module.exports = {dummy, totalLikes, favoriteBlog}
