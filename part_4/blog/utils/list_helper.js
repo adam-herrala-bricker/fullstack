@@ -45,4 +45,23 @@ const mostBlogs = (arr) => {
 
 }
 
-module.exports = {dummy, totalLikes, favoriteBlog, mostBlogs}
+//similar structure to mostBlogs
+const mostLikes = (arr) => {
+    const bloggers = Array.from(new Set(arr.map(i => i.author)))
+    const bloggersByBlogs = bloggers.reduce((accumulator, blogger) => {
+        const theseBlogs = arr.filter(i => i.author === blogger)
+        const likeNumber = theseBlogs.reduce((accumulator, blog) => {
+            return(accumulator + blog.likes) //key change is we're counting likes now
+        }, 0)
+
+        const newEntry = {author: blogger, likes: likeNumber}
+
+        return(accumulator.concat(newEntry))
+
+    }, [])
+
+    return(bloggersByBlogs.sort((i,j) => {return(j.likes - i.likes)})[0])
+
+}
+
+module.exports = {dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes}

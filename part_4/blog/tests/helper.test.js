@@ -113,7 +113,7 @@ const lindaList = [
         title: 'Fixing bad stew',
         author: 'Linda',
         url: 'wikipedia.org/stew_fix',
-        likes: '12',
+        likes: 12,
         __v: 0
 
     },
@@ -183,4 +183,25 @@ describe('most blogs', () => {
         const expectedResults = {author: 'Linda', blogs: 3}
         expect(result).toEqual(expectedResults)
     })
+})
+
+describe ('most likes', () => {
+    test('list with most likes (15000) by Nancy', () => {
+        const result = listHelper.mostLikes(daveList) //ignore the unfortunate name
+        const expectedResults = {author: 'Nancy', likes: 15000}
+        expect(result).toEqual(expectedResults)
+    })
+
+    test('list with most likes (113) by Linda', () => {
+        const result = listHelper.mostLikes(lindaList)
+        const expectedResults = {author: 'Linda', likes: 113}
+        expect(result).toEqual(expectedResults)
+    })
+
+    test('list with the most likes (40) by Dave Davies', () => {
+        const result = listHelper.mostLikes(threeItemList)
+        const expectedResults = {author: 'Dave Davies', likes: 40}
+        expect(result).toEqual(expectedResults)
+    })
+
 })
