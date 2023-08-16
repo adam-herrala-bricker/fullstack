@@ -5,6 +5,7 @@ require('express-async-errors')
 const app = express()
 const cors = require('cors')
 const blogsRouter = require('./controllers/blog')
+const usersRouter = require('./controllers/users')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
 
@@ -28,6 +29,8 @@ app.use(middleWare.requestLogger)
 */
 
 app.use('/api/blogs', blogsRouter)
+app.use('/api/users', usersRouter)
+
 
 //then custom error handling MW that goes at end would go here
 
