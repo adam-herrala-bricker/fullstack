@@ -3,9 +3,8 @@ POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-    "name": "Randy Randerson",
-    "username": "ra.randerson",
-    "password": "burrito_monday"
+    "name": "Randy",
+    "username": "randy_1"
 }
 
 ###check all users

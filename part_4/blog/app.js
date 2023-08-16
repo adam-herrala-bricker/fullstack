@@ -6,6 +6,7 @@ const app = express()
 const cors = require('cors')
 const blogsRouter = require('./controllers/blog')
 const usersRouter = require('./controllers/users')
+const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
 
@@ -32,6 +33,7 @@ app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 
 
-//then custom error handling MW that goes at end would go here
+//then custom error handling MW that goes at end goes here
+app.use(middleware.errorHandler)
 
 module.exports = app
