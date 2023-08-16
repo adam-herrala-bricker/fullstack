@@ -1,8 +1,18 @@
 const blogsRouter = require('express').Router() //new router object
 const Blog = require ('../models/blog')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 
 //NOTE: refactored to use async/await
+
+//helper function for getting token
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.startsWith('Bearer ')) { //watch out! at places in fullstack its "bearer" in lowercase
+    return authorization.replace('Bearer ', '')
+  }
+  return null
+}
 
 //getting all the blogs
 blogsRouter.get('/', async (request, response) => {
@@ -15,11 +25,16 @@ blogsRouter.get('/', async (request, response) => {
   }
 })
   
-//posting a new blog
+//posting a new blog (note that this requires a token now)
 blogsRouter.post('/', async (request, response) => {
-  //const user = await User.findById(body.userId)
-  const user = await User.findById('64dccbf65717056c369fa8bf') //temp stand-in
+  //token bits
+  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
+  const user = await User.findById(decodedToken.id)
 
+  //back to regular bits
   const blog = new Blog({...request.body, user: user.id})
   
   //probably not the correct way to do this, but otherwise it wants to throw a 500

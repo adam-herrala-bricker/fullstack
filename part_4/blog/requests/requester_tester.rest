@@ -4,11 +4,12 @@ GET http://localhost:3003/api/blogs
 ###POST test
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJhbmR5XzE1IiwiaWQiOiI2NGRjZjFiMzJlMzQ3OTEyYTFjOWFiYWEiLCJpYXQiOjE2OTIyMDI3Nzl9.Ejq7BxyxhABxviW-26D5F5wswvBxLixF-zTfVHtqi2M
 
 {
-    "title" : "every fog, ranked",
+    "title" : "every nog, ranked",
     "author" : "Dave Davies",
-    "url" : "deadspin.com/fog-ranked",
-    "likes" : 517
+    "url" : "deadspin.com/nog-ranked",
+    "likes" : 3
 
 }
