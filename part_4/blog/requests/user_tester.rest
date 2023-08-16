@@ -3,9 +3,20 @@ POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-    "name": "Randy",
-    "username": "randy_1"
+    "name": "Password Randy",
+    "username": "randy_15",
+    "password": "password"
 }
 
 ###check all users
 GET http://localhost:3003/api/users
+
+###test logins
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+    "username": "randy_15",
+    "password": "password"
+}
+
