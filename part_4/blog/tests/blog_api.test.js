@@ -28,6 +28,12 @@ const blogToAdd = {
     likes: 15000
 }
 
+const blogMissingLikes = {
+    title: 'Oh really, Mr. Nixon?',
+    author: 'Neil Young',
+    url: 'pono.org/blog'
+}
+
 beforeEach(async () => {
     await Blog.deleteMany({})
     let blogObject = new Blog(initialBlogs[0])
@@ -65,12 +71,19 @@ test('adding blog returns object with same properties', async () => {
     expect(response.body.title).toEqual('The Star Wars')
 })
 
-test.only('added blog is in DB', async () => {
+test('added blog is in DB', async () => {
     const postResponse = await api.post('/api/blogs').send(blogToAdd)
     
     const getResponse = await api.get('/api/blogs')
     expect(getResponse.body).toContainEqual(postResponse.body)
 })
+
+test.only('missing likes --> 0 likes', async () => {
+    const postResponse = await api.post('/api/blogs').send(blogMissingLikes)
+    expect(postResponse.body.likes).toEqual(0)
+})
+
+
 
 afterAll(async () => {
     await mongoose.connection.close()
