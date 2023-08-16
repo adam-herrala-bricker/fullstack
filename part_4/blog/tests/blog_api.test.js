@@ -34,6 +34,18 @@ const blogMissingLikes = {
     url: 'pono.org/blog'
 }
 
+const blogMissingTitle = {
+    author: 'Randy',
+    url: 'blog.org/untitled',
+    likes: 5000
+}
+
+const blogMissingURL = {
+    title: 'We are soup',
+    author: 'A Soup',
+    likes: 12
+}
+
 beforeEach(async () => {
     await Blog.deleteMany({})
     let blogObject = new Blog(initialBlogs[0])
@@ -78,12 +90,20 @@ test('added blog is in DB', async () => {
     expect(getResponse.body).toContainEqual(postResponse.body)
 })
 
-test.only('missing likes --> 0 likes', async () => {
+test('missing likes --> 0 likes', async () => {
     const postResponse = await api.post('/api/blogs').send(blogMissingLikes)
     expect(postResponse.body.likes).toEqual(0)
 })
 
+test('missing title --> 400', async () => {
+    await api.post('/api/blogs').send(blogMissingTitle)
+    .expect(400)
+})
 
+test('missing url --> 400', async () => {
+    await api.post('/api/blogs').send(blogMissingURL)
+    .expect(400)
+})
 
 afterAll(async () => {
     await mongoose.connection.close()
