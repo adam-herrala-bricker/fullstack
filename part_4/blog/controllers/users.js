@@ -31,7 +31,9 @@ usersRouter.post('/', async (request, response, next) => {
 
 //GET request to return list of all users
 usersRouter.get('/', async (request, response) => {
-    const users = await User.find({})
+    const users = await User
+        .find({})
+        .populate('blogs', {'title' : 1, 'author' : 1, 'url' : 1, 'likes' : 1}) //"populate" is so nifty wow
     response.json(users)
 })
 

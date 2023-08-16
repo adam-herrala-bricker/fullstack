@@ -1,11 +1,12 @@
 const blogsRouter = require('express').Router() //new router object
 const Blog = require ('../models/blog')
+const User = require('../models/user')
 
 //NOTE: refactored to use async/await
 
 //getting all the blogs
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog.find({}).populate('user', {username: 1, name: 1})
 
   if(blogs) {
     response.json(blogs)
@@ -16,7 +17,10 @@ blogsRouter.get('/', async (request, response) => {
   
 //posting a new blog
 blogsRouter.post('/', async (request, response) => {
-  const blog = new Blog(request.body)
+  //const user = await User.findById(body.userId)
+  const user = await User.findById('64dccbf65717056c369fa8bf') //temp stand-in
+
+  const blog = new Blog({...request.body, user: user.id})
   
   //probably not the correct way to do this, but otherwise it wants to throw a 500
   if (!blog.title | !blog.url) {
@@ -24,6 +28,8 @@ blogsRouter.post('/', async (request, response) => {
   }
 
   const savedBlog = await blog.save()
+  user.blogs = user.blogs.concat(savedBlog._id)
+  await user.save()
 
   response.status(201).json(savedBlog)
 })

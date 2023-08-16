@@ -6,9 +6,9 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title" : "every dog, ranked",
+    "title" : "every fog, ranked",
     "author" : "Dave Davies",
-    "url" : "deadspin.com/dog-ranked",
-    "likes" : 2
+    "url" : "deadspin.com/fog-ranked",
+    "likes" : 517
 
 }
