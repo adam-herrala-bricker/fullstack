@@ -105,6 +105,38 @@ test('missing url --> 400', async () => {
     .expect(400)
 })
 
+test('delete --> 204', async () => {
+    //need to get id of blog to delete
+    const getResponse = await api.get('/api/blogs' )
+    deleteID = getResponse.body[0].id
+    
+    await api.delete(`/api/blogs/${deleteID}`)
+    .expect(204)
+})
+
+test('delete results in one less blog on list', async () => {
+    const getResponse = await api.get('/api/blogs' )
+    const deleteID = getResponse.body[0].id
+
+    await api.delete(`/api/blogs/${deleteID}`)
+
+    const newGetResponse = await api.get('/api/blogs' )
+    expect(newGetResponse.body).toHaveLength(getResponse.body.length - 1)
+})
+
+test('updated likes (100) works', async () => {
+    //need to get id of blog to update
+    const getResponse = await api.get('/api/blogs')
+    const body = getResponse.body[0]
+    const updateID = getResponse.body[0].id
+
+    const newBlog = {title : body.title, author: body.author, url: body.url, likes: 100}
+
+    const response = await api.put(`/api/blogs/${updateID}`).send(newBlog) //note the syntax!!
+    
+    expect(response.body.likes).toEqual(100)
+})
+
 afterAll(async () => {
     await mongoose.connection.close()
   })
