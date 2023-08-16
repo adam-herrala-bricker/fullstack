@@ -1,6 +1,19 @@
 const logger = require('./logger')
 
-const errorHandler = (error, requre, response, next) => {
+//for use with blog router
+const tokenExtractor = (request, response, next) => {
+
+    const authorization = request.get('authorization')
+
+    if (authorization && authorization.startsWith('Bearer ')) { //watch out! at places in fullstack its "bearer" in lowercase
+        request.token = authorization.replace('Bearer ', '')
+    }
+    
+
+    next()
+}
+
+const errorHandler = (error, requre, response, next) => { //something's going on here; figure out
     logger.error(error.message)
 
     if (error.name === 'CastError') {
@@ -14,4 +27,4 @@ const errorHandler = (error, requre, response, next) => {
     next(error)
 }
 
-module.exports = {errorHandler}
+module.exports = {errorHandler, tokenExtractor}

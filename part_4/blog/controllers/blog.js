@@ -5,15 +5,6 @@ const jwt = require('jsonwebtoken')
 
 //NOTE: refactored to use async/await
 
-//helper function for getting token
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')) { //watch out! at places in fullstack its "bearer" in lowercase
-    return authorization.replace('Bearer ', '')
-  }
-  return null
-}
-
 //getting all the blogs
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', {username: 1, name: 1})
@@ -27,8 +18,9 @@ blogsRouter.get('/', async (request, response) => {
   
 //posting a new blog (note that this requires a token now)
 blogsRouter.post('/', async (request, response) => {
+  console.log(request.token)
   //token bits
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token invalid' })
   }
