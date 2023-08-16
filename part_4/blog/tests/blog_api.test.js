@@ -21,6 +21,13 @@ const initialBlogs = [
     }
 ]
 
+const blogToAdd = {
+    title: 'The Star Wars',
+    author: 'George Lucas',
+    url: 'wookepedia.org',
+    likes: 15000
+}
+
 beforeEach(async () => {
     await Blog.deleteMany({})
     let blogObject = new Blog(initialBlogs[0])
@@ -35,14 +42,34 @@ test('blogs are returned as json', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
-test('there are 0 blogs', async () => {
+test('there are 2 blogs', async () => {
     const response = await api.get('/api/blogs')
     expect(response.body).toHaveLength(2)
 })
 
-test.only('contains id property', async() => {
+test('contains id property', async () => {
     const response = await api.get('/api/blogs')
     expect(response.body[0]['id']).toBeDefined
+})
+
+test('adding a blog increases total number by 1', async () => {
+    await api.post('/api/blogs').send(blogToAdd)
+
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(3)
+})
+
+test('adding blog returns object with same properties', async () => {
+    const response = await api.post('/api/blogs').send(blogToAdd)
+    expect(response.body.author).toEqual('George Lucas')
+    expect(response.body.title).toEqual('The Star Wars')
+})
+
+test.only('added blog is in DB', async () => {
+    const postResponse = await api.post('/api/blogs').send(blogToAdd)
+    
+    const getResponse = await api.get('/api/blogs')
+    expect(getResponse.body).toContainEqual(postResponse.body)
 })
 
 afterAll(async () => {
