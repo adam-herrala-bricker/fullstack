@@ -30,7 +30,7 @@ app.use(express.static('build))
 app.use(middleWare.requestLogger)
 */
 
-app.use(middleware.tokenExtractor) //this must go before the routers!!!!
+app.use(middleware.userExtractor) //this must go before the routers!!!!
 
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)

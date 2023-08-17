@@ -1,12 +1,22 @@
 const logger = require('./logger')
+const jwt = require('jsonwebtoken')
 
 //for use with blog router
-const tokenExtractor = (request, response, next) => {
+const userExtractor = (request, response, next) => {
 
     const authorization = request.get('authorization')
 
     if (authorization && authorization.startsWith('Bearer ')) { //watch out! at places in fullstack its "bearer" in lowercase
-        request.token = authorization.replace('Bearer ', '')
+        const token = authorization.replace('Bearer ', '')
+
+        const decodedToken = jwt.verify(token, process.env.SECRET)
+
+        if (!decodedToken.id) {
+            next()
+          }
+
+        request.user = decodedToken
+        
     }
     
 
@@ -27,4 +37,4 @@ const errorHandler = (error, requre, response, next) => { //something's going on
     next(error)
 }
 
-module.exports = {errorHandler, tokenExtractor}
+module.exports = {errorHandler, userExtractor}

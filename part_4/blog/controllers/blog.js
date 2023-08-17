@@ -19,11 +19,9 @@ blogsRouter.get('/', async (request, response) => {
 //posting a new blog (note that this requires a token now)
 blogsRouter.post('/', async (request, response) => {
   //token bits
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token invalid' })
-  }
-  const user = await User.findById(decodedToken.id)
+  const userInfo = request.user
+
+  const user = await User.findById(userInfo.id)
 
   //back to regular bits
   const blog = new Blog({...request.body, user: user.id})
@@ -51,8 +49,8 @@ blogsRouter.delete('/:id', async (request, response) => {
   const userID = blog.user.toString()
 
   //token bits
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  if (decodedToken.id === userID) {
+  const tokenUser = request.user
+  if (tokenUser.id === userID) {
     await Blog.findByIdAndRemove(request.params.id)
     response.status(204).end()
   } else {
