@@ -6,21 +6,35 @@ const userExtractor = (request, response, next) => {
 
     const authorization = request.get('authorization')
 
+    
     if (authorization && authorization.startsWith('Bearer ')) { //watch out! at places in fullstack its "bearer" in lowercase
         const token = authorization.replace('Bearer ', '')
 
         const decodedToken = jwt.verify(token, process.env.SECRET)
 
         if (!decodedToken.id) {
-            next()
+
+            request.user = false
+
+          } else {
+
+            request.user = decodedToken
+
           }
 
-        request.user = decodedToken
+        
         
     }
     
 
+    
+
+    
     next()
+    
+    
+
+    
 }
 
 const errorHandler = (error, requre, response, next) => { //something's going on here; figure out

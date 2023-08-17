@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const {TOKEN, RANDY_HASH} = require('../utils/config')
 
 const api = supertest(app)
 
@@ -12,18 +14,31 @@ const initialBlogs = [
         author: "Matt Matthews",
         url: "deadspin.com/blog-ranked",
         likes : 10,
+        user : '64dcf1b32e347912a1c9abaa'
     },
     {
         title: 'every dog, ranked',
         author: 'Dave Davies',
         url: 'deadspin.com/dog-ranked',
         likes: 40,
+        user : '64dcf1b32e347912a1c9abaa'
+    }
+]
+
+//need a user in the user DB
+const initialUser = [
+    {
+        username: "randy_15",
+        name: "Password Randy",
+        blogs: [],
+        id: '64dcf1b32e347912a1c9abaa',
+        passwordHash: RANDY_HASH
     }
 ]
 
 const blogToAdd = {
     title: 'The Star Wars',
-    author: 'George Lucas',
+    author: 'Password Randy',
     url: 'wookepedia.org',
     likes: 15000
 }
@@ -46,12 +61,18 @@ const blogMissingURL = {
     likes: 12
 }
 
+
 beforeEach(async () => {
     await Blog.deleteMany({})
     let blogObject = new Blog(initialBlogs[0])
     await blogObject.save()
     blogObject = new Blog(initialBlogs[1])
     await blogObject.save()
+
+    //only adding a single user
+    await User.deleteMany({})
+    userObject = new User(initialUser[0])
+    await userObject.save()
 })
 
 test('blogs are returned as json', async () => {
@@ -71,37 +92,39 @@ test('contains id property', async () => {
 })
 
 test('adding a blog increases total number by 1', async () => {
-    await api.post('/api/blogs').send(blogToAdd)
+    await api.post('/api/blogs').set('Authorization', `Bearer ${TOKEN}`).send(blogToAdd)
 
     const response = await api.get('/api/blogs')
+    
     expect(response.body).toHaveLength(3)
+    
 })
 
 test('adding blog returns object with same properties', async () => {
-    const response = await api.post('/api/blogs').send(blogToAdd)
-    expect(response.body.author).toEqual('George Lucas')
+    const response = await api.post('/api/blogs').set('Authorization', `Bearer ${TOKEN}`).send(blogToAdd)
+    expect(response.body.author).toEqual('Password Randy')
     expect(response.body.title).toEqual('The Star Wars')
 })
 
 test('added blog is in DB', async () => {
-    const postResponse = await api.post('/api/blogs').send(blogToAdd)
+    const postResponse = await api.post('/api/blogs').set('Authorization', `Bearer ${TOKEN}`).send(blogToAdd)
     
     const getResponse = await api.get('/api/blogs')
     expect(getResponse.body).toContainEqual(postResponse.body)
 })
 
 test('missing likes --> 0 likes', async () => {
-    const postResponse = await api.post('/api/blogs').send(blogMissingLikes)
+    const postResponse = await api.post('/api/blogs').set('Authorization', `Bearer ${TOKEN}`).send(blogMissingLikes)
     expect(postResponse.body.likes).toEqual(0)
 })
 
 test('missing title --> 400', async () => {
-    await api.post('/api/blogs').send(blogMissingTitle)
+    await api.post('/api/blogs').set('Authorization', `Bearer ${TOKEN}`).send(blogMissingTitle)
     .expect(400)
 })
 
 test('missing url --> 400', async () => {
-    await api.post('/api/blogs').send(blogMissingURL)
+    await api.post('/api/blogs').set('Authorization', `Bearer ${TOKEN}`).send(blogMissingURL)
     .expect(400)
 })
 
@@ -110,7 +133,7 @@ test('delete --> 204', async () => {
     const getResponse = await api.get('/api/blogs' )
     deleteID = getResponse.body[0].id
     
-    await api.delete(`/api/blogs/${deleteID}`)
+    await api.delete(`/api/blogs/${deleteID}`).set('Authorization', `Bearer ${TOKEN}`)
     .expect(204)
 })
 
@@ -118,7 +141,7 @@ test('delete results in one less blog on list', async () => {
     const getResponse = await api.get('/api/blogs' )
     const deleteID = getResponse.body[0].id
 
-    await api.delete(`/api/blogs/${deleteID}`)
+    await api.delete(`/api/blogs/${deleteID}`).set('Authorization', `Bearer ${TOKEN}`)
 
     const newGetResponse = await api.get('/api/blogs' )
     expect(newGetResponse.body).toHaveLength(getResponse.body.length - 1)
@@ -132,9 +155,14 @@ test('updated likes (100) works', async () => {
 
     const newBlog = {title : body.title, author: body.author, url: body.url, likes: 100}
 
-    const response = await api.put(`/api/blogs/${updateID}`).send(newBlog) //note the syntax!!
+    const response = await api.put(`/api/blogs/${updateID}`).set('Authorization', `Bearer ${TOKEN}`).send(newBlog) //note the syntax!!
     
     expect(response.body.likes).toEqual(100)
+})
+
+test('no token --> 401', async () => {
+    await api.post('/api/blogs').send(blogToAdd)
+    .expect(401)
 })
 
 afterAll(async () => {

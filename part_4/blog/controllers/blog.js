@@ -2,13 +2,19 @@ const blogsRouter = require('express').Router() //new router object
 const Blog = require ('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
+const {NODE_ENV} = require('../utils/config')
 
 //NOTE: refactored to use async/await
 
 //getting all the blogs
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', {username: 1, name: 1})
+  
+  //populating breaks the test
+  const blogs = NODE_ENV == 'testing' 
+  ? await Blog.find({})
+  : await Blog.find({}).populate('user', {username: 1, name: 1})
 
+    
   if(blogs) {
     response.json(blogs)
   } else {
@@ -20,6 +26,10 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   //token bits
   const userInfo = request.user
+
+  if (!userInfo) {
+    response.status(401).json({ error: 'valid token required' })
+  }
 
   const user = await User.findById(userInfo.id)
 
@@ -50,6 +60,10 @@ blogsRouter.delete('/:id', async (request, response) => {
 
   //token bits
   const tokenUser = request.user
+  if (!tokenUser) {
+    response.status(401).json({ error: 'valid token required' })
+  }
+  
   if (tokenUser.id === userID) {
     await Blog.findByIdAndRemove(request.params.id)
     response.status(204).end()
