@@ -4,7 +4,7 @@ GET http://localhost:3003/api/blogs
 ###POST test
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJhbmR5XzE1IiwiaWQiOiI2NGRjZjFiMzJlMzQ3OTEyYTFjOWFiYWEiLCJpYXQiOjE2OTIyMDYyOTZ9.ZIh7C9p_jMP_9X-BlNRZj8ipPCj7QKSdWnmAEVAaUUc
+Authorization: Bearer 
 
 {
     "title" : "how to train your dragon, II",

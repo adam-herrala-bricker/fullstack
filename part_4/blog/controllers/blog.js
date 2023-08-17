@@ -18,7 +18,6 @@ blogsRouter.get('/', async (request, response) => {
   
 //posting a new blog (note that this requires a token now)
 blogsRouter.post('/', async (request, response) => {
-  console.log(request.token)
   //token bits
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken.id) {
@@ -43,8 +42,23 @@ blogsRouter.post('/', async (request, response) => {
 
 //deleting a single blog
 blogsRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id)
-  response.status(204).end()
+  //find the user ID of the blog creator
+  const blog = await Blog.findById(request.params.id)
+  //something goes wrong
+  if (!blog) {
+    response.status(404).json({ error: 'requested blog not found' })
+  }
+  const userID = blog.user.toString()
+
+  //token bits
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (decodedToken.id === userID) {
+    await Blog.findByIdAndRemove(request.params.id)
+    response.status(204).end()
+  } else {
+    response.status(401).json({ error: 'token invalid' })
+  }
+
 })
 
 //update content on an existing blog
