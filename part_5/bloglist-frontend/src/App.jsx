@@ -4,11 +4,12 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 
-const Blogs = ({blogs, user}) => {
+const Blogs = ({blogs, user, handleLogout}) => {
   return(
     <div>
       <h2>Blogs</h2>
       <h4>Logged in as {user.name}</h4>
+      <button onClick ={handleLogout}>log out</button>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
@@ -48,6 +49,7 @@ const App = () => {
       const user = await loginService.login({
         username, password,
       })
+      window.localStorage.setItem('loggedBlogUser', JSON.stringify(user))
       setUser(user)
       setUsername('')
       setPassword('')
@@ -65,6 +67,13 @@ const App = () => {
     inputField === 'Password' && setPassword(event.target.value)
   }
 
+  const handleLogout = () => {
+    setUser(null)
+    setUsername('')
+    setPassword('')
+    window.localStorage.clear()
+  }
+
   //effect hook originally loaded all the blogs on first go
   //seemed like a bad strategy to load everyone's blogs to FE regardless of login
   //changed to only load for one user once that user is login in
@@ -76,11 +85,20 @@ const App = () => {
     )  
   }, [user])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      //blogService.setToken(user.token)
+    }
+  }, [])
+
   return (
     <div>
       {user === null
       ? <LogIn username = {username} password={password} handleLogin = {handleLogin} handleFormChange={handleFormChange}/>
-      : <Blogs blogs={blogs} user={user}/>}
+      : <Blogs blogs={blogs} user={user} handleLogout = {handleLogout}/>}
     </div>
     
   )
