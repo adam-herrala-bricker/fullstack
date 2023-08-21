@@ -34,8 +34,34 @@ const LogIn = ({handleLogin, handleFormChange, username, password}) => {
   )
 }
 
+const Create = ({handleCreateNew, newEntry, handleEntryChange}) => {
+  return(
+    <div>
+      <h2>Create new</h2>
+      <form autoComplete = 'off' onSubmit = {handleCreateNew}>
+        <div>
+          title <input name = 'title' value = {newEntry.title} onChange = {handleEntryChange} />
+        </div>
+        <div>
+          author <input name = 'author' value = {newEntry.author} onChange = {handleEntryChange} />
+        </div>
+        <div>
+          url <input name = 'url' value = {newEntry.url} onChange = {handleEntryChange} />
+        </div>
+        <button type = 'submit'>create</button>
+      </form>
+    </div>
+
+  )
+
+
+}
+
 const App = () => {
+  const emptyNewEntry = {title: '', author: '', url: ''}
+
   const [blogs, setBlogs] = useState([])
+  const [newEntry, setNewEntry] = useState(emptyNewEntry)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -50,6 +76,7 @@ const App = () => {
         username, password,
       })
       window.localStorage.setItem('loggedBlogUser', JSON.stringify(user))
+      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -67,6 +94,20 @@ const App = () => {
     inputField === 'Password' && setPassword(event.target.value)
   }
 
+  const handleEntryChange = (event) => {
+    const thisField = event.target.name
+    setNewEntry({...newEntry, [thisField] : event.target.value})
+  }
+
+  const handleCreateNew = async (event) => {
+    event.preventDefault()
+    
+    const newBlog = await blogService.create(newEntry)
+    setNewEntry(emptyNewEntry)
+    setBlogs(blogs.concat(newBlog))
+    
+  }
+
   const handleLogout = () => {
     setUser(null)
     setUsername('')
@@ -79,10 +120,13 @@ const App = () => {
   //changed to only load for one user once that user is login in
   //even better version would only get from that specific user's id, not get all
   useEffect(() => {
-    user !== null &&
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs.filter(i => i.user.username === user.username) )
-    )  
+    if (user !== null) {
+      const fetchData = async() => {
+        const foundBlogs = await blogService.getAll()
+        setBlogs(foundBlogs.filter(i => i.user.username === user.username))
+      }
+    fetchData()
+    }
   }, [user])
 
   useEffect(() => {
@@ -90,7 +134,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      //blogService.setToken(user.token)
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -98,7 +142,10 @@ const App = () => {
     <div>
       {user === null
       ? <LogIn username = {username} password={password} handleLogin = {handleLogin} handleFormChange={handleFormChange}/>
-      : <Blogs blogs={blogs} user={user} handleLogout = {handleLogout}/>}
+      : <div>
+          <Blogs blogs={blogs} user={user} handleLogout = {handleLogout}/>
+          <Create handleCreateNew = {handleCreateNew} handleEntryChange = {handleEntryChange} newEntry = {newEntry}/>
+        </div>}
     </div>
     
   )
