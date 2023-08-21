@@ -19,6 +19,16 @@ const Notification = ({message}) => {
 }
 
 const Blogs = ({blogs, setBlogs, user, handleLogout}) => {
+  //helper function for sorting blogs
+  const sortByLikes = (obj1, obj2) => {
+    if (obj1.likes < obj2.likes) {
+      return 1
+    } else if (obj1.likes > obj2.likes) {
+      return -1
+    } else {
+      return 0
+    }
+  }
 
   //event handlers
   const handleLike = async (blog) => {
@@ -31,6 +41,9 @@ const Blogs = ({blogs, setBlogs, user, handleLogout}) => {
     const replaceIndex = blogs.findIndex((i) => objectHelper.singleEqualityChecker(i,blog))
     setBlogs(blogs.with(replaceIndex, returnedUpdate))
   }
+
+  //sort blogs!
+  blogs.sort(sortByLikes)
 
   return(
     <div>
