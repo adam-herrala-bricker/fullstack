@@ -1,6 +1,6 @@
 import { useState} from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleLike }) => {
   const [unroll, setUnroll] = useState(false)
 
   //event handlers
@@ -13,7 +13,7 @@ const Blog = ({ blog }) => {
       <div className = 'bloggy'>
         <p>{blog.title} -- {blog.author} <button onClick={toggleUnroll}>hide</button></p>
         <p>{blog.url}</p>
-        <p>likes: {blog.likes} <button>like</button></p>
+        <p>likes: {blog.likes} <button onClick = {handleLike}>like</button></p>
         <p>{blog.user.name}</p>
       </div>
     )

@@ -77,11 +77,21 @@ blogsRouter.delete('/:id', async (request, response) => {
 
 //update content on an existing blog
 blogsRouter.put('/:id', async (request, response) => {
+   //token bits
+   const userInfo = request.user
+
+   if (!userInfo) {
+     response.status(401).json({ error: 'valid token required' })
+   }
+  
   const thisID = request.params.id
   const body = request.body
-  const updates = {title: body.title, author: body.author, url: body.url, likes: body.likes}
+  const updates = {title: body.title, author: body.author, url: body.url, likes: body.likes, user: body.user.id}
 
   const savedUpdates = await Blog.findByIdAndUpdate(thisID, updates, {new: true})
+
+   await savedUpdates.populate('user', {username: 1, name: 1})
+
   response.json(savedUpdates)
 })
 
