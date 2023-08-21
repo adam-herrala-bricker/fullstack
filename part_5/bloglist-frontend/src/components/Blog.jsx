@@ -1,13 +1,24 @@
 import { useState} from 'react'
+import blogService from '../services/blogs'
 
-const Blog = ({ blog, handleLike }) => {
+const Blog = ({ blog, blogs, user, handleLike, setBlogs }) => {
   const [unroll, setUnroll] = useState(false)
 
   //event handlers
   const toggleUnroll = () => {
     setUnroll(!unroll)
   }
-  
+
+  const handleDelete = async (blog) => {
+    if (window.confirm(`Are you sure that you want to remove '${blog.title}'?`)) {
+      const response = await blogService.erase(blog)
+      if (response.status === 204) {
+        setBlogs(blogs.filter(i => i.id !== blog.id))
+       console.log('you did it!')
+      }
+    }
+  }
+
   if (unroll) {
     return(
       <div className = 'bloggy'>
@@ -15,6 +26,7 @@ const Blog = ({ blog, handleLike }) => {
         <p>{blog.url}</p>
         <p>likes: {blog.likes} <button onClick = {handleLike}>like</button></p>
         <p>{blog.user.name}</p>
+        <button className = {user.username === blog.user.username ? 'red-button' : 'ded-button'} onClick = {() => handleDelete(blog)}>remove</button>
       </div>
     )
   }

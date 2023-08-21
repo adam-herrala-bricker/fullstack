@@ -52,7 +52,7 @@ const Blogs = ({blogs, setBlogs, user, handleLogout}) => {
       <button onClick ={handleLogout}>log out</button>
       <p> </p>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} handleLike={() => handleLike(blog)}/>
+        <Blog key={blog.id} blog={blog} blogs = {blogs} user = {user} setBlogs = {setBlogs} handleLike={() => handleLike(blog)}/>
       )}
     </div>
   )
@@ -179,7 +179,7 @@ const App = () => {
     if (user !== null) {
       const fetchData = async() => {
         const foundBlogs = await blogService.getAll()
-        setBlogs(foundBlogs.filter(i => i.user.username === user.username))
+        setBlogs(foundBlogs)
       }
     fetchData()
     }
