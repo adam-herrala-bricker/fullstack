@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
 import Blog from './components/Blog'
+import Create from './components/Create'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -47,27 +48,6 @@ const LogIn = ({handleLogin, handleFormChange, username, password}) => {
   )
 }
 
-const Create = ({handleCreateNew, newEntry, handleEntryChange}) => {
-  return(
-    <div>
-      <h2>Create new</h2>
-      <form autoComplete = 'off' onSubmit = {handleCreateNew}>
-        <div>
-          title <input name = 'title' value = {newEntry.title} onChange = {handleEntryChange} />
-        </div>
-        <div>
-          author <input name = 'author' value = {newEntry.author} onChange = {handleEntryChange} />
-        </div>
-        <div>
-          url <input name = 'url' value = {newEntry.url} onChange = {handleEntryChange} />
-        </div>
-        <button type = 'submit'>create</button>
-      </form>
-    </div>
-
-  )
-}
-
 const ToggleView = forwardRef(({buttonLabel, children}, refs) => {
   const [visible, setVisible] = useState(false)
 
@@ -99,11 +79,9 @@ const ToggleView = forwardRef(({buttonLabel, children}, refs) => {
 })
 
 const App = () => {
-  const emptyNewEntry = {title: '', author: '', url: ''}
   const emptyMessage = {type: null, content : null}
 
   const [blogs, setBlogs] = useState([])
-  const [newEntry, setNewEntry] = useState(emptyNewEntry)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -143,18 +121,13 @@ const App = () => {
     inputField === 'Password' && setPassword(event.target.value)
   }
 
-  const handleEntryChange = (event) => {
-    const thisField = event.target.name
-    setNewEntry({...newEntry, [thisField] : event.target.value})
-  }
-
   const handleCreateNew = async (event) => {
     event.preventDefault()
     
     blogFormRef.current.toggleVisibility()
 
+    const newEntry = {title: event.target[0].value, author: event.target[1].value, url: event.target[2].value}
     const newBlog = await blogService.create(newEntry)
-    setNewEntry(emptyNewEntry)
     setBlogs(blogs.concat(newBlog))
     notifier('message', `New blog added: '${newBlog.title}' by ${newBlog.author}.`)
   }
@@ -197,7 +170,7 @@ const App = () => {
       : <div>
           <Blogs blogs={blogs} user={user} handleLogout = {handleLogout}/>
           <ToggleView buttonLabel='new blog' ref={blogFormRef}>
-            <Create handleCreateNew = {handleCreateNew} handleEntryChange = {handleEntryChange} newEntry = {newEntry}/>
+            <Create handleCreateNew = {handleCreateNew} />
           </ToggleView>
         </div>}
     </div>
