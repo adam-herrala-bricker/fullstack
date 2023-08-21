@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -20,8 +20,9 @@ const Blogs = ({blogs, user, handleLogout}) => {
   return(
     <div>
       <h2>Blogs</h2>
-      <h4>Logged in as {user.name}</h4>
+      <b>Logged in as {user.name} </b>
       <button onClick ={handleLogout}>log out</button>
+      <p> </p>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
@@ -65,9 +66,37 @@ const Create = ({handleCreateNew, newEntry, handleEntryChange}) => {
     </div>
 
   )
-
-
 }
+
+const ToggleView = forwardRef(({buttonLabel, children}, refs) => {
+  const [visible, setVisible] = useState(false)
+
+  //event handler
+  const toggleVisibility = () => {
+    setVisible(!visible)
+  }
+
+  //?? that ref thing ??
+  useImperativeHandle(refs, () => {
+    return {
+      toggleVisibility
+    }
+  })
+
+  if (visible) {
+    return(
+      <div>
+        {children}
+        <button onClick = {toggleVisibility}>cancel</button>
+      </div>
+    )
+  }
+  return(
+    <div>
+      <button onClick = {toggleVisibility}>{buttonLabel}</button>
+    </div>
+  )
+})
 
 const App = () => {
   const emptyNewEntry = {title: '', author: '', url: ''}
@@ -79,6 +108,8 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(emptyMessage)
+
+  const blogFormRef = useRef()
 
   //helper function for setting notification
   const notifier = (type, content) => {
@@ -120,6 +151,8 @@ const App = () => {
   const handleCreateNew = async (event) => {
     event.preventDefault()
     
+    blogFormRef.current.toggleVisibility()
+
     const newBlog = await blogService.create(newEntry)
     setNewEntry(emptyNewEntry)
     setBlogs(blogs.concat(newBlog))
@@ -163,7 +196,9 @@ const App = () => {
       ? <LogIn username = {username} password={password} handleLogin = {handleLogin} handleFormChange={handleFormChange}/>
       : <div>
           <Blogs blogs={blogs} user={user} handleLogout = {handleLogout}/>
-          <Create handleCreateNew = {handleCreateNew} handleEntryChange = {handleEntryChange} newEntry = {newEntry}/>
+          <ToggleView buttonLabel='new blog' ref={blogFormRef}>
+            <Create handleCreateNew = {handleCreateNew} handleEntryChange = {handleEntryChange} newEntry = {newEntry}/>
+          </ToggleView>
         </div>}
     </div>
     
