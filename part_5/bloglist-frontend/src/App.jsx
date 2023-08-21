@@ -4,6 +4,18 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 
+const Notification = ({message}) => {
+  if (message.content === null) {
+    return(null)
+  }
+
+  return(
+    <div className={message.type}>
+      {message.content}
+    </div>
+  )
+}
+
 const Blogs = ({blogs, user, handleLogout}) => {
   return(
     <div>
@@ -59,13 +71,22 @@ const Create = ({handleCreateNew, newEntry, handleEntryChange}) => {
 
 const App = () => {
   const emptyNewEntry = {title: '', author: '', url: ''}
+  const emptyMessage = {type: null, content : null}
 
   const [blogs, setBlogs] = useState([])
   const [newEntry, setNewEntry] = useState(emptyNewEntry)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [message, setMessage] = useState(emptyMessage)
+
+  //helper function for setting notification
+  const notifier = (type, content) => {
+    setMessage({type: type, content: content})
+    setTimeout(() => {
+      setMessage(emptyMessage)
+    }, 5000)
+  }
 
   //event handlers
   const handleLogin = async (event) => {
@@ -81,10 +102,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      notifier('error', 'username or password incorrect')
     }
   }
 
@@ -105,7 +123,7 @@ const App = () => {
     const newBlog = await blogService.create(newEntry)
     setNewEntry(emptyNewEntry)
     setBlogs(blogs.concat(newBlog))
-    
+    notifier('message', `New blog added: '${newBlog.title}' by ${newBlog.author}.`)
   }
 
   const handleLogout = () => {
@@ -140,6 +158,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message = {message}/>
       {user === null
       ? <LogIn username = {username} password={password} handleLogin = {handleLogin} handleFormChange={handleFormChange}/>
       : <div>
