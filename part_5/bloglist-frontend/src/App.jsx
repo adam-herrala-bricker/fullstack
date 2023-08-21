@@ -126,7 +126,12 @@ const App = () => {
     
     blogFormRef.current.toggleVisibility()
 
-    const newEntry = {title: event.target[0].value, author: event.target[1].value, url: event.target[2].value}
+    const newEntry = {
+      title: event.target[0].value, 
+      author: event.target[1].value, 
+      url: event.target[2].value
+    }
+
     const newBlog = await blogService.create(newEntry)
     setBlogs(blogs.concat(newBlog))
     notifier('message', `New blog added: '${newBlog.title}' by ${newBlog.author}.`)

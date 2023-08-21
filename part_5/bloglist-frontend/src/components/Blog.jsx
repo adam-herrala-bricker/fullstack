@@ -14,6 +14,7 @@ const Blog = ({ blog }) => {
         <p>{blog.title} -- {blog.author} <button onClick={toggleUnroll}>hide</button></p>
         <p>{blog.url}</p>
         <p>likes: {blog.likes} <button>like</button></p>
+        <p>{blog.user.name}</p>
       </div>
     )
   }

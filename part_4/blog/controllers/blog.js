@@ -42,6 +42,8 @@ blogsRouter.post('/', async (request, response) => {
   }
 
   const savedBlog = await blog.save()
+  await savedBlog.populate('user', {username: 1, name: 1}) //note populating the document itself. this so the FE is returned the user within the blog document
+
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
 
