@@ -62,3 +62,24 @@ test('renders full content on click', async () => {
     screen.getByText('test.com/url', {exact: false})
     screen.getByText('17', {exact: false})
 })
+
+test.only('clicking like button twice calls like EH twice', async () => {
+    //here's the mock EH
+    const mockHandler = jest.fn()
+
+    render(<Blog blog = {blog} user = {user0} handleLike = {mockHandler}/>)
+
+    const user = userEvent.setup()
+    
+    //need to click view button in order to make like button visible
+    const viewButton = screen.getByText('view')
+    await user.click(viewButton)
+
+    //now clicking the like button
+    const likeButton = screen.getByText('like')
+    await user.click(likeButton)
+    await user.click(likeButton)
+
+    //check it was clicked twice
+    expect(mockHandler.mock.calls).toHaveLength(2)
+})
