@@ -1,4 +1,4 @@
-import { useState} from 'react'
+import { useState } from 'react'
 import blogService from '../services/blogs'
 
 const Blog = ({ blog, blogs, user, handleLike, setBlogs }) => {
@@ -14,7 +14,7 @@ const Blog = ({ blog, blogs, user, handleLike, setBlogs }) => {
       const response = await blogService.erase(blog)
       if (response.status === 204) {
         setBlogs(blogs.filter(i => i.id !== blog.id))
-       console.log('you did it!')
+        console.log('you did it!')
       }
     }
   }
@@ -30,14 +30,14 @@ const Blog = ({ blog, blogs, user, handleLike, setBlogs }) => {
       </div>
     )
   }
-  
-  
+
+
   return(
     <div className = 'bloggy'>
-    {blog.title} -- {blog.author} <button onClick={toggleUnroll}>view</button>
-  </div> 
+      {blog.title} -- {blog.author} <button onClick={toggleUnroll}>view</button>
+    </div>
   )
-   
+
 }
 
 export default Blog

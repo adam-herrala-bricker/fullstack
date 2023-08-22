@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
+import PropTypes from 'prop-types'
 import Blog from './components/Blog'
 import Create from './components/Create'
 import blogService from './services/blogs'
@@ -6,7 +7,7 @@ import loginService from './services/login'
 import objectHelper from './utils/objectHelper'
 
 
-const Notification = ({message}) => {
+const Notification = ({ message }) => {
   if (message.content === null) {
     return(null)
   }
@@ -18,7 +19,7 @@ const Notification = ({message}) => {
   )
 }
 
-const Blogs = ({blogs, setBlogs, user, handleLogout}) => {
+const Blogs = ({ blogs, setBlogs, user, handleLogout }) => {
   //helper function for sorting blogs
   const sortByLikes = (obj1, obj2) => {
     if (obj1.likes < obj2.likes) {
@@ -33,7 +34,7 @@ const Blogs = ({blogs, setBlogs, user, handleLogout}) => {
   //event handlers
   const handleLike = async (blog) => {
     const thisID = blog.id
-    const updatedEntry = {...blog, likes: blog.likes + 1}
+    const updatedEntry = { ...blog, likes: blog.likes + 1 }
 
     const returnedUpdate = await blogService.update(updatedEntry)
 
@@ -58,7 +59,7 @@ const Blogs = ({blogs, setBlogs, user, handleLogout}) => {
   )
 }
 
-const LogIn = ({handleLogin, handleFormChange, username, password}) => {
+const LogIn = ({ handleLogin, handleFormChange, username, password }) => {
   return(
     <div>
       <h2>Log in to application</h2>
@@ -75,7 +76,15 @@ const LogIn = ({handleLogin, handleFormChange, username, password}) => {
   )
 }
 
-const ToggleView = forwardRef(({buttonLabel, children}, refs) => {
+//prop types
+LogIn.propTypes = {
+  handleLogin: PropTypes.func.isRequired,
+  handleFormChange: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
+  password: PropTypes.string.isRequired
+}
+
+const ToggleView = forwardRef(({ buttonLabel, children }, refs) => {
   const [visible, setVisible] = useState(false)
 
   //event handler
@@ -105,8 +114,10 @@ const ToggleView = forwardRef(({buttonLabel, children}, refs) => {
   )
 })
 
+ToggleView.displayName = 'Togglable'
+
 const App = () => {
-  const emptyMessage = {type: null, content : null}
+  const emptyMessage = { type: null, content : null }
 
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
@@ -118,7 +129,7 @@ const App = () => {
 
   //helper function for setting notification
   const notifier = (type, content) => {
-    setMessage({type: type, content: content})
+    setMessage({ type: type, content: content })
     setTimeout(() => {
       setMessage(emptyMessage)
     }, 5000)
@@ -150,12 +161,12 @@ const App = () => {
 
   const handleCreateNew = async (event) => {
     event.preventDefault()
-    
+
     blogFormRef.current.toggleVisibility()
 
     const newEntry = {
-      title: event.target[0].value, 
-      author: event.target[1].value, 
+      title: event.target[0].value,
+      author: event.target[1].value,
       url: event.target[2].value
     }
 
@@ -175,13 +186,14 @@ const App = () => {
   //seemed like a bad strategy to load everyone's blogs to FE regardless of login
   //changed to only load for one user once that user is login in
   //even better version would only get from that specific user's id, not get all
+  //update: changed it back
   useEffect(() => {
     if (user !== null) {
       const fetchData = async() => {
         const foundBlogs = await blogService.getAll()
         setBlogs(foundBlogs)
       }
-    fetchData()
+      fetchData()
     }
   }, [user])
 
@@ -198,15 +210,15 @@ const App = () => {
     <div>
       <Notification message = {message}/>
       {user === null
-      ? <LogIn username = {username} password={password} handleLogin = {handleLogin} handleFormChange={handleFormChange}/>
-      : <div>
+        ? <LogIn username = {username} password={password} handleLogin = {handleLogin} handleFormChange={handleFormChange}/>
+        : <div>
           <Blogs blogs={blogs} setBlogs = {setBlogs} user={user} handleLogout = {handleLogout}/>
           <ToggleView buttonLabel='new blog' ref={blogFormRef}>
             <Create handleCreateNew = {handleCreateNew} />
           </ToggleView>
         </div>}
     </div>
-    
+
   )
 }
 
