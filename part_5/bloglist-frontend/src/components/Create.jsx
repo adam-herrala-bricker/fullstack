@@ -10,11 +10,18 @@ const Create = ({ handleCreateNew }) => {
     setNewEntry({ ...newEntry, [thisField] : event.target.value })
   }
 
-
+  //Note: before ex. 5.16 Create used a more elegant solution that didn't require this middleMan EH
+  //which pulled the props right from the event
+  //but the "testing modules" couldn't "handle that" so now it's objectively worse
+  const middleMan = (event) => {
+    event.preventDefault()
+    handleCreateNew(newEntry)
+  }
+  
   return(
     <div>
       <h2>Create new</h2>
-      <form autoComplete = 'off' onSubmit = {handleCreateNew}>
+      <form autoComplete = 'off' onSubmit = {middleMan}>
         <div>
             title <input name = 'title' value = {newEntry.title} onChange = {handleEntryChange} />
         </div>

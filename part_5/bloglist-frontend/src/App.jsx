@@ -159,15 +159,14 @@ const App = () => {
     inputField === 'Password' && setPassword(event.target.value)
   }
 
-  const handleCreateNew = async (event) => {
-    event.preventDefault()
+  const handleCreateNew = async (passedEntry) => {
 
     blogFormRef.current.toggleVisibility()
 
     const newEntry = {
-      title: event.target[0].value,
-      author: event.target[1].value,
-      url: event.target[2].value
+      title: passedEntry.title,
+      author: passedEntry.author,
+      url: passedEntry.url
     }
 
     const newBlog = await blogService.create(newEntry)

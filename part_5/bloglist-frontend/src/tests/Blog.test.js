@@ -21,12 +21,6 @@ const user0 = {
     name: 'Tester Randy'
 }
 
-
-const user1 = {
-    username: 'randy_15',
-    name: 'Password Randy'
-}
-
 test('renders default content', () => {
 
     //renders the component we're interested in testing
@@ -63,7 +57,7 @@ test('renders full content on click', async () => {
     screen.getByText('17', {exact: false})
 })
 
-test.only('clicking like button twice calls like EH twice', async () => {
+test('clicking like button twice calls like EH twice', async () => {
     //here's the mock EH
     const mockHandler = jest.fn()
 
