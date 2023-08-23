@@ -97,7 +97,7 @@ describe('Blog app', () => {
       cy.get('html').should('not.contain', 'every blog ranked') //note the syntax here; html --> entire rendered page
     })
 
-    it.only("User who didn't create blog doesn't see 'remove' button", () => {
+    it("User who didn't create blog doesn't see 'remove' button", () => {
       cy.newBlog({title: 'every blog, ranked', author: 'Dave Davies', url: 'blog.com/ranked'})
 
       cy.contains('view').click()
@@ -106,5 +106,36 @@ describe('Blog app', () => {
       cy.get('.ded-button').should('contain', 'remove')
     })
 
+    describe('Sorted by likes', () => {
+      beforeEach(() => {
+          //four blogs, added out of order but with titles corresponding w ranking
+          cy.newBlog({title: 'title2', author: 'author2', url:'blog.com/url2', likes: 700})
+          cy.newBlog({title: 'title1', author: 'author1', url:'blog.com/url1', likes: 15000})
+          cy.newBlog({title: 'title4', author: 'author4', url:'blog.com/url4', likes: 0})
+          cy.newBlog({title: 'title3', author: 'author3', url:'blog.com/url3', likes: 1})
+
+      })
+
+      it('Initial sorting', () => {
+        cy.get('.bloggy').eq(0).should('contain', 'title1') //note the syntax for selecting the nth element of the .bloggy css class
+        cy.get('.bloggy').eq(1).should('contain', 'title2')
+        cy.get('.bloggy').eq(2).should('contain', 'title3')
+        cy.get('.bloggy').eq(3).should('contain', 'title4')
+      })
+
+      it('Sorting after additional clicks', () => {
+        //strategy here is to click title4 multiple times, so it rises above title3
+        cy.contains('title4').contains('view').click()
+
+        cy.contains('like').click()
+        cy.contains('likes: 1') //doesn't seem necessary here, but just in case clicking is too fast for state updates
+        cy.contains('like').click()
+
+        //now title4 should have moved up
+        cy.get('.bloggy').eq(2).should('contain', 'title4')
+        cy.get('.bloggy').eq(3).should('contain','title3')
+
+      })
+    })
   })
 })
