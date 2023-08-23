@@ -51,7 +51,6 @@ describe('Blog app', () => {
   describe('When logged in', () => {
     beforeEach(() => {
       cy.login({ username: 'randy_1947', password: 'password' })
-      cy.newBlog({title: 'every blog, ranked', author: 'Dave Davies', url: 'blog.com/ranked'})
     })
 
     it('A blog can be created', () => {
@@ -73,11 +72,29 @@ describe('Blog app', () => {
 
     })
 
-    it.only('User can like a blog', () => {
+    it('User can like a blog', () => {
+      cy.newBlog({title: 'every blog, ranked', author: 'Dave Davies', url: 'blog.com/ranked'})
       cy.contains('view').click()
       cy.contains('like').click()
 
       cy.contains('likes: 1')
+    })
+
+    it('User who creates blog can delete it', () => {
+      //create new blog first
+      cy.contains('new blog').click()
+
+      cy.get("input[name='title']").type('new title')
+      cy.get("input[name='author']").type('new author')
+      cy.get("input[name='url']").type('new.blog/url')
+
+      cy.contains('create').click()
+      
+      //then delete
+      cy.contains('view').click()
+      cy.contains('remove').click()
+
+      cy.get('html').should('not.contain', 'every blog ranked') //note the syntax here; html --> entire rendered page
     })
 
   })
