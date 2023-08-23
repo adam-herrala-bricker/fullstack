@@ -1,5 +1,5 @@
 //note: added stuff from the exercises too
-const {mongourl, PORT} = require('./utils/config')
+const {mongourl, PORT, NODE_ENV} = require('./utils/config')
 const express = require('express')
 require('express-async-errors')
 const app = express()
@@ -32,9 +32,18 @@ app.use(middleWare.requestLogger)
 
 app.use(middleware.userExtractor) //this must go before the routers!!!!
 
+
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
+
+//if testing --> testing router to reset testing DB
+if (NODE_ENV === 'testing') {
+    const testingRouter = require('./controllers/testing')
+    app.use('/api/testing', testingRouter)
+}
+
+
 
 
 //then custom error handling MW that goes at end goes here

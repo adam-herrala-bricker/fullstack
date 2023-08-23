@@ -1,7 +1,5 @@
 const info = (...params) => {
-    if (process.env.NODE_ENV !== 'testing') {
-        console.log(...params)
-    }
+    console.log(...params) //idk why this was off for testing . . .
 }
 
 const error = (...params) => {
