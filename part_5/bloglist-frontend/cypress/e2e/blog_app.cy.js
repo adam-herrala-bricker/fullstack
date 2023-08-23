@@ -54,7 +54,7 @@ describe('Blog app', () => {
       cy.newBlog({title: 'every blog, ranked', author: 'Dave Davies', url: 'blog.com/ranked'})
     })
 
-    it.only('A blog can be created', () => {
+    it('A blog can be created', () => {
       cy.contains('new blog').click()
 
       cy.get("input[name='title']").type('new title')
@@ -73,6 +73,12 @@ describe('Blog app', () => {
 
     })
 
+    it.only('User can like a blog', () => {
+      cy.contains('view').click()
+      cy.contains('like').click()
+
+      cy.contains('likes: 1')
+    })
 
   })
 })
