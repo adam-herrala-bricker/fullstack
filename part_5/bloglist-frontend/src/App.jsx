@@ -70,7 +70,7 @@ const LogIn = ({ handleLogin, handleFormChange, username, password }) => {
         <div>
           password <input name='Password' type='password' value={password} onChange = {handleFormChange}/>
         </div>
-        <button type='submit'>login</button>
+        <button id = 'login-button'type='submit'>login</button>
       </form>
     </div>
   )
