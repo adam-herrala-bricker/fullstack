@@ -97,5 +97,14 @@ describe('Blog app', () => {
       cy.get('html').should('not.contain', 'every blog ranked') //note the syntax here; html --> entire rendered page
     })
 
+    it.only("User who didn't create blog doesn't see 'remove' button", () => {
+      cy.newBlog({title: 'every blog, ranked', author: 'Dave Davies', url: 'blog.com/ranked'})
+
+      cy.contains('view').click()
+
+      //'ded-button' is our css class for a hidden button
+      cy.get('.ded-button').should('contain', 'remove')
+    })
+
   })
 })
