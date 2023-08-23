@@ -37,7 +37,7 @@ describe('Blog app', () => {
       cy.contains('Logged in as Password Randy')
     })
 
-    it.only('fails with incorrect password', () => {
+    it('fails with incorrect password', () => {
       cy.get("input[name='Username']").type('randy_1947')
       cy.get("input[name='Password']").type('passwors')
       cy.get('#login-button').click()
@@ -45,7 +45,34 @@ describe('Blog app', () => {
       //should can match partial strings, plus css stuff
       cy.get('.error').should('contain', 'username or password incorrect')
       cy.get('.error').should('have.css', 'color', 'rgb(255, 0, 0)')
+    })
+  })
+
+  describe('When logged in', () => {
+    beforeEach(() => {
+      cy.login({ username: 'randy_1947', password: 'password' })
+      cy.newBlog({title: 'every blog, ranked', author: 'Dave Davies', url: 'blog.com/ranked'})
+    })
+
+    it.only('A blog can be created', () => {
+      cy.contains('new blog').click()
+
+      cy.get("input[name='title']").type('new title')
+      cy.get("input[name='author']").type('new author')
+      cy.get("input[name='url']").type('new.blog/url')
+
+      cy.contains('create').click()
+
+      //check that notification message works
+      cy.get('.message').should('contain', 'new title')
+      cy.get('.message').should('contain', 'new author')
+
+      //title and author displayed in default view
+      cy.contains('new title')
+      cy.contains('new author')
 
     })
+
+
   })
 })
