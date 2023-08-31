@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 import {vote, newEntry} from './reducers/anecdoteReducer'
+import AnecdoteForm from './components/AnecdoteForm'
 
 const App = () => {
   //helper function to sort the store
@@ -24,11 +25,6 @@ const App = () => {
     console.log('vote', id)
   }
 
-  const handleNew = (event) => {
-    event.preventDefault()
-    dispatch(newEntry(event.target.create.value))
-  }
-
   return (
     <div>
       <h2>Anecdotes</h2>
@@ -43,11 +39,7 @@ const App = () => {
           </div>
         </div>
       )}
-      <h2>create new</h2>
-      <form onSubmit = {handleNew} autoComplete='false'>
-        <div><input name = 'create'/></div>
-        <button>create</button>
-      </form>
+      <AnecdoteForm />
     </div>
   )
 }

@@ -17,7 +17,7 @@ const asObject = (anecdote) => {
 
 //action creators
 export const vote = (id) => {
-  return {type : 'vote',payload : {id}}
+  return {type : 'vote', payload : {id}}
 }
 
 export const newEntry = (anecdote) => {
