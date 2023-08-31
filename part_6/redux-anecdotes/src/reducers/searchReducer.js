@@ -18,25 +18,5 @@ const searchSlice = createSlice({
     }
 })
 
-/*
-//action creator
-export const search = (searchTerm) => {
-    return {type : 'search', payload : searchToObject(searchTerm)}
-}
-
-
-const initialState = searchToObject(initialSearch)
-
-//main body of reducer
-const searchReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case 'search' : {
-            return searchToObject(action.payload.searchTerm)
-        }
-    default: return state
-    }
-}
-*/
-
 export const { searcher } = searchSlice.actions
 export default searchSlice.reducer
