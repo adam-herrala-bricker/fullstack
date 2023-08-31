@@ -1,3 +1,4 @@
+import Search from './components/Search'
 import AnecdoteList from './components/AnecdoteList'
 import AnecdoteForm from './components/AnecdoteForm'
 
@@ -6,6 +7,7 @@ const App = () => {
   return (
     <div>
       <h2>Anecdotes</h2>
+      <Search />
       <AnecdoteList />
       <AnecdoteForm />
     </div>

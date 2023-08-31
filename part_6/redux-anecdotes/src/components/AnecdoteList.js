@@ -13,7 +13,14 @@ const AnecdoteList = () => {
         }
     }
 
-    const anecdotes = useSelector(state => state)
+    //const anecdotes = useSelector(state => state.anecdotes) //old one
+    console.log('current store', useSelector(state => state))
+    const anecdotes = useSelector(({anecdotes, search}) => {
+        return search.searchTerm === ''
+            ? anecdotes
+            : anecdotes.filter(i => i.content.toLowerCase().includes(search.searchTerm.toLowerCase()))
+    })
+
     anecdotes.sort(sortByVotes)
 
     const dispatch = useDispatch()

@@ -27,8 +27,6 @@ export const newEntry = (anecdote) => {
 const initialState = anecdotesAtStart.map(asObject)
 
 const reducer = (state = initialState, action) => {
-  console.log('action', action)
-  console.log('state now: ', state)
   switch (action.type) {
     case 'vote' : {
       const id = action.payload.id
