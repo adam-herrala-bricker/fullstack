@@ -1,3 +1,9 @@
 .filter-container {
     margin-bottom : 10px;
 }
+
+.notification {
+    border-style: solid;
+    padding: 10px;
+    border-width: 1px;
+}
