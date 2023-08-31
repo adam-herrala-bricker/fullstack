@@ -1,5 +1,5 @@
 import {useDispatch} from 'react-redux'
-import {search} from '../reducers/searchReducer'
+import {searcher} from '../reducers/searchReducer'
 
 const Search = () => {
     const dispatch = useDispatch()
@@ -7,7 +7,7 @@ const Search = () => {
     //event hander
     const handleChange = (event) => {
         console.log(event.target.value)
-        dispatch(search(event.target.value))
+        dispatch(searcher(event.target.value))
 
 
     }
