@@ -2,7 +2,20 @@ import { useSelector, useDispatch } from 'react-redux'
 import {vote, newEntry} from './reducers/anecdoteReducer'
 
 const App = () => {
+  //helper function to sort the store
+  const sortByVotes = (entry1, entry2) => {
+    if (entry1.votes < entry2.votes) {
+      return 1
+    } else if (entry1.votes > entry2.votes) {
+      return -1
+    } else {
+      return 0
+    }
+  }
+
   const anecdotes = useSelector(state => state)
+  anecdotes.sort(sortByVotes)
+
   const dispatch = useDispatch()
 
   //event handlers
