@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux'
 import {newEntry} from '../reducers/anecdoteReducer'
 import { setNotification, clearNotification } from '../reducers/notificationReducer'
+import anecdoteServices from '../services/acecdoteServices'
 
 const AnecdoteForm = () => {
     const dispatch = useDispatch()
@@ -9,9 +10,12 @@ const AnecdoteForm = () => {
     const handleNew = (event) => {
         event.preventDefault()
         const newContent = event.target.create.value
+        event.target.create.value = ''
 
-        //sending new entry to store
-        dispatch(newEntry(newContent))
+        //add to server
+        anecdoteServices
+            .addNew(newContent)
+            .then(i => dispatch(newEntry(i)))
 
         //notification bit
         dispatch(setNotification(`New entry added: ${newContent}`))

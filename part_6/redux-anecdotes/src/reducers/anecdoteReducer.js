@@ -3,11 +3,6 @@ import { createSlice } from '@reduxjs/toolkit'
 //helper function for making random id
 const getId = () => (100000 * Math.random()).toFixed(0)
 
-//helper function for packaging anecdote to object
-const asObject = (anecdote) => {
-  return {content: anecdote, id: getId(), votes: 0}
-}
-
 //helper function to sort the anecdotes
 const sortByVotes = (entry1, entry2) => {
   if (entry1.votes < entry2.votes) {
@@ -32,9 +27,10 @@ const anecdoteSlice = createSlice({
     },
 
     newEntry(state, action) {
-      const newEntry = asObject(action.payload)
+      //const newEntry = asObject(action.payload)
+      //changed so that conversion to object is handled during post request
 
-      return [...state, newEntry]
+      return [...state, action.payload]
     },
 
     setEntries(state, action) {
