@@ -12,6 +12,11 @@ const sortByVotes = (entry1, entry2) => {
   }
 }
 
+//helper function for packaging anecdote to object (moved back here after brief stay in services)
+const asObject = (anecdote) => {
+  return {content: anecdote, votes: 0}
+}
+
 const anecdoteSlice = createSlice({
   name: 'ancecdotes',
   initialState: [],
@@ -24,6 +29,7 @@ const anecdoteSlice = createSlice({
       return state.map(i => i.id !== id ? i : changedAnecdote).sort(sortByVotes)
     },
 
+    //essentially appending
     newEntry(state, action) {
       return [...state, action.payload]
     },
@@ -37,10 +43,20 @@ const anecdoteSlice = createSlice({
 export const { vote, newEntry, setEntries } = anecdoteSlice.actions
 
 //getting from server on start-up
+//(NOTE: even though you don't have import anything, these usethe redux thunk library??)
 export const initializeAnecdotes = () => {
   return async dispatch => {
     const entries = await anecdoteServices.getAll()
     dispatch(setEntries(entries))
   }
 }
+
+//adding new anecdote to server
+export const addEntry = (newContent) => {
+  return async dispatch => {
+    const thisEntry = await anecdoteServices.addNew(asObject(newContent))
+    dispatch(newEntry(thisEntry))
+  }
+}
+
 export default anecdoteSlice.reducer
