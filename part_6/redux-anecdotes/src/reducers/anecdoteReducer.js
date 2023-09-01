@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-
-//helper function for making random id
-const getId = () => (100000 * Math.random()).toFixed(0)
+import anecdoteServices from '../services/acecdoteServices'
 
 //helper function to sort the anecdotes
 const sortByVotes = (entry1, entry2) => {
@@ -27,9 +25,6 @@ const anecdoteSlice = createSlice({
     },
 
     newEntry(state, action) {
-      //const newEntry = asObject(action.payload)
-      //changed so that conversion to object is handled during post request
-
       return [...state, action.payload]
     },
 
@@ -40,4 +35,12 @@ const anecdoteSlice = createSlice({
 })
 
 export const { vote, newEntry, setEntries } = anecdoteSlice.actions
+
+//getting from server on start-up
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const entries = await anecdoteServices.getAll()
+    dispatch(setEntries(entries))
+  }
+}
 export default anecdoteSlice.reducer
