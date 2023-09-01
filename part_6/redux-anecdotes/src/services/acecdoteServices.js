@@ -18,7 +18,6 @@ const addNew = async (anecdote) => {
 const changeEntry = async(newEntry) => {
     const thisID = newEntry.id
     const response = await axios.put(`${baseURL}/${thisID}`, newEntry)
-    console.log('response', response.data)
     return response.data
 }
 

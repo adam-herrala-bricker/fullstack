@@ -61,7 +61,6 @@ export const addEntry = (newContent) => {
 //handling a vote
 export const addVote = (oldEntry)  => {
   const newEntry = {...oldEntry, votes : oldEntry.votes + 1}
-  console.log('new entry', newEntry)
   return async dispatch => {
     const changedEntry = await anecdoteServices.changeEntry(newEntry)
     dispatch(replaceEntry(changedEntry))

@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { addVote } from '../reducers/anecdoteReducer'
-import { setNotification, clearNotification, setLastTimeoutID } from '../reducers/notificationReducer'
+import { notifier } from '../reducers/notificationReducer'
 
 const AnecdoteList = () => {
     //const anecdotes = useSelector(state => state.anecdotes) //old one
@@ -20,12 +20,7 @@ const AnecdoteList = () => {
         dispatch(addVote(anecdote))
 
         //notification
-        clearTimeout(lastTimeoutID) //avoids weird timing bugs when mashing votes
-        dispatch(setNotification(`New vote for: ${anecdote.content}`))
-        const thisTimeoutID = setTimeout(() => {
-            dispatch(clearNotification())
-        },5000)
-        dispatch(setLastTimeoutID(thisTimeoutID))
+        dispatch(notifier(`New vote for: ${anecdote.content}`, 5))
 
     }
     

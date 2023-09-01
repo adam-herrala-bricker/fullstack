@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 import {addEntry} from '../reducers/anecdoteReducer'
-import { setNotification, clearNotification } from '../reducers/notificationReducer'
+import { notifier } from '../reducers/notificationReducer'
 
 const AnecdoteForm = () => {
     const dispatch = useDispatch()
@@ -11,14 +11,13 @@ const AnecdoteForm = () => {
         const newContent = event.target.create.value
         event.target.create.value = ''
 
+        console.log(newContent)
+
         //add to server + store
         dispatch(addEntry(newContent))
 
-        //notification bit
-        dispatch(setNotification(`New entry added: ${newContent}`))
-        setTimeout(() => {
-            dispatch(clearNotification())
-        },5000)
+        //notification
+        dispatch(notifier(`New entry added: ${newContent}`, 5))
       }
 
     return(
