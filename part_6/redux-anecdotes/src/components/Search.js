@@ -6,7 +6,6 @@ const Search = () => {
 
     //event hander
     const handleChange = (event) => {
-        console.log(event.target.value)
         dispatch(searcher(event.target.value))
 
 

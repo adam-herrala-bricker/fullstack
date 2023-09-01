@@ -21,12 +21,11 @@ const anecdoteSlice = createSlice({
   name: 'ancecdotes',
   initialState: [],
   reducers : {
-    vote(state, action) {
-      const id = action.payload
-      const anecdoteToChange = state.find(i => i.id === id)
-      const changedAnecdote = {...anecdoteToChange, votes : anecdoteToChange.votes + 1}
-      
-      return state.map(i => i.id !== id ? i : changedAnecdote).sort(sortByVotes)
+    //updated from 'vote' that's now handled in addVote
+    replaceEntry(state, action) {
+      const id = action.payload.id
+
+      return state.map(i => i.id !== id ? i : action.payload).sort(sortByVotes)
     },
 
     //essentially appending
@@ -35,12 +34,12 @@ const anecdoteSlice = createSlice({
     },
 
     setEntries(state, action) {
-      return action.payload
+      return action.payload.sort(sortByVotes)
     }
   }
 })
 
-export const { vote, newEntry, setEntries } = anecdoteSlice.actions
+export const { replaceEntry, newEntry, setEntries } = anecdoteSlice.actions
 
 //getting from server on start-up
 //(NOTE: even though you don't have import anything, these usethe redux thunk library??)
@@ -56,6 +55,16 @@ export const addEntry = (newContent) => {
   return async dispatch => {
     const thisEntry = await anecdoteServices.addNew(asObject(newContent))
     dispatch(newEntry(thisEntry))
+  }
+}
+
+//handling a vote
+export const addVote = (oldEntry)  => {
+  const newEntry = {...oldEntry, votes : oldEntry.votes + 1}
+  console.log('new entry', newEntry)
+  return async dispatch => {
+    const changedEntry = await anecdoteServices.changeEntry(newEntry)
+    dispatch(replaceEntry(changedEntry))
   }
 }
 

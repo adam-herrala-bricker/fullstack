@@ -1,10 +1,9 @@
 import { useSelector, useDispatch } from 'react-redux'
-import {vote} from '../reducers/anecdoteReducer'
+import { addVote } from '../reducers/anecdoteReducer'
 import { setNotification, clearNotification, setLastTimeoutID } from '../reducers/notificationReducer'
 
 const AnecdoteList = () => {
     //const anecdotes = useSelector(state => state.anecdotes) //old one
-    console.log('current store', useSelector(state => state))
     const anecdotes = useSelector(({anecdotes, search}) => {
         return search.searchTerm === ''
             ? anecdotes
@@ -17,8 +16,8 @@ const AnecdoteList = () => {
 
     //event handlers
     const handleVote = (anecdote) => {
-        //vote --> store
-        dispatch(vote(anecdote.id))
+        //vote --> store + server
+        dispatch(addVote(anecdote))
 
         //notification
         clearTimeout(lastTimeoutID) //avoids weird timing bugs when mashing votes
@@ -26,7 +25,6 @@ const AnecdoteList = () => {
         const thisTimeoutID = setTimeout(() => {
             dispatch(clearNotification())
         },5000)
-        console.log(thisTimeoutID)
         dispatch(setLastTimeoutID(thisTimeoutID))
 
     }

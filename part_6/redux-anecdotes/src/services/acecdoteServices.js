@@ -14,4 +14,12 @@ const addNew = async (anecdote) => {
     return response.data
 }
 
-export default {getAll, addNew}
+//put to handle voting
+const changeEntry = async(newEntry) => {
+    const thisID = newEntry.id
+    const response = await axios.put(`${baseURL}/${thisID}`, newEntry)
+    console.log('response', response.data)
+    return response.data
+}
+
+export default {getAll, addNew, changeEntry}
