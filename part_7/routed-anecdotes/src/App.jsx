@@ -86,6 +86,12 @@ const CreateNew = ({addNew, setNotification}) => {
     }, 5000)
   }
 
+  const handleReset = (event) => {
+    content.onChange(event)
+    author.onChange(event)
+    info.onChange(event)
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -102,8 +108,10 @@ const CreateNew = ({addNew, setNotification}) => {
           url for more info
           <input {...info} />
         </div>
-        <button>create</button>
+        <button type = 'submit'>create</button>
+        <button type = 'reset' onClick = {handleReset}>reset</button>
       </form>
+      
     </div>
   )
 
