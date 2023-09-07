@@ -4,7 +4,7 @@ const loginRouter = require('express').Router()
 const User = require('../models/user')
 
 //logins work via post request apparently?? (without saving anything to the DB??)
-loginRouter.post('/', async(request, response) => {
+loginRouter.post('/', async (request, response) => {
     const { username, password } = request.body
 
     const user = await User.findOne({ username })
@@ -23,7 +23,7 @@ loginRouter.post('/', async(request, response) => {
 
     const token = jwt.sign(userForToken, process.env.SECRET)
 
-    response.status(200).send({ token, username: user.username, name: user.name})
+    response.status(200).send({ token, username: user.username, displayname: user.displayname})
 
 })
 
