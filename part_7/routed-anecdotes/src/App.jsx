@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { BrowserRouter, Routes, Route, Link, useMatch } from 'react-router-dom'
+import { Routes, Route, Link, useMatch, useNavigate } from 'react-router-dom'
 
 const Menu = () => {
  
@@ -61,20 +61,28 @@ const Footer = () => (
   </div>
 )
 
-const CreateNew = (props) => {
+const CreateNew = ({addNew, setNotification}) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
 
+  const navigate = useNavigate()
+
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    props.addNew({
+    addNew({
       content,
       author,
       info,
       votes: 0
     })
+    setNotification(`New anecdote created: ${content}`)
+    navigate('/') //routes back to home page
+    //note: didn't think this would work, but the timeout is set even after the re-direct. interesting.
+    setTimeout(() => {
+      setNotification('')
+    }, 5000)
   }
 
   return (
@@ -149,11 +157,12 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
+      {notification}
       <Routes>
         <Route path = '/anecdotes/:id' element={<HighlightAnecdote anecdote={anecdote} />}/>
         <Route path = '/' element={<AnecdoteList anecdotes={anecdotes} />}/>
         <Route path = '/about' element = {<About />}/>
-        <Route path = '/create' element = {<CreateNew addNew={addNew} />}/>
+        <Route path = '/create' element = {<CreateNew addNew={addNew} setNotification = {setNotification}/>}/>
       </Routes>
       <Footer />
     </div>
