@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useField } from './hooks' //note how the importing works here: the file itself is named index.js
 
 import { Routes, Route, Link, useMatch, useNavigate } from 'react-router-dom'
 
@@ -33,6 +34,7 @@ const HighlightAnecdote = ({ anecdote }) => {
     <div>
       <h2>{anecdote.content} by {anecdote.author}</h2>
       <p>has {anecdote.votes} votes</p>
+      <p>for more info, see <a className = 'good-link' href = {anecdote.info}>{anecdote.info}</a></p>
     </div>
 
 
@@ -62,22 +64,21 @@ const Footer = () => (
 )
 
 const CreateNew = ({addNew, setNotification}) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  const content = useField('content')
+  const author = useField('author')
+  const info = useField('info')
 
   const navigate = useNavigate()
-
 
   const handleSubmit = (e) => {
     e.preventDefault()
     addNew({
-      content,
-      author,
-      info,
+      content : content.value,
+      author : author.value,
+      info : info.value,
       votes: 0
     })
-    setNotification(`New anecdote created: ${content}`)
+    setNotification(`New anecdote created: ${content.value}`)
     navigate('/') //routes back to home page
     //note: didn't think this would work, but the timeout is set even after the re-direct. interesting.
     setTimeout(() => {
@@ -91,15 +92,15 @@ const CreateNew = ({addNew, setNotification}) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...content}/>
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...author} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input {...info} />
         </div>
         <button>create</button>
       </form>
