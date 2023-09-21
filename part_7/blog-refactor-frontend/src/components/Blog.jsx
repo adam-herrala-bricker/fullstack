@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useState } from "react"
 import { useDispatch } from 'react-redux'
-import { notifier } from '../reducers/notificationReducer'
-import blogService from "../services/blogs";
+import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 
-const Blog = ({ blog, blogs, user, handleLike, setBlogs }) => {
+const Blog = ({ blog, user}) => {
   const [unroll, setUnroll] = useState(false);
 
   const dispatch = useDispatch()
@@ -13,17 +12,16 @@ const Blog = ({ blog, blogs, user, handleLike, setBlogs }) => {
     setUnroll(!unroll);
   };
 
-  const handleDelete = async (blog) => {
-    if (
-      window.confirm(`Are you sure that you want to remove '${blog.title}'?`)
-    ) {
-      const response = await blogService.erase(blog);
-      if (response.status === 204) {
-        setBlogs(blogs.filter((i) => i.id !== blog.id));
-        dispatch(notifier(`'${blog.title}' deleted`, 'message', 5));
-      }
+  const handleDelete = async () => {
+    if ( window.confirm(`Are you sure that you want to remove '${blog.title}'?`)) {
+      dispatch(deleteBlog(blog))
     }
   };
+
+  const handleLike = async () => {
+    dispatch(likeBlog(blog))
+  }
+  
 
   if (unroll) {
     return (
@@ -41,7 +39,7 @@ const Blog = ({ blog, blogs, user, handleLike, setBlogs }) => {
           className={
             user.username === blog.user.username ? "red-button" : "ded-button"
           }
-          onClick={() => handleDelete(blog)}
+          onClick={handleDelete}
         >
           remove
         </button>

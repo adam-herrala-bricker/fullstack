@@ -45,6 +45,7 @@ const Blogs = ({ setBlogs, user, handleLogout }) => {
   };
 
   //event handlers
+  /*
   const handleLike = async (blog) => {
     const thisID = blog.id;
     const updatedEntry = { ...blog, likes: blog.likes + 1 };
@@ -57,9 +58,7 @@ const Blogs = ({ setBlogs, user, handleLogout }) => {
     );
     setBlogs(blogs.with(replaceIndex, returnedUpdate));
   };
-
-  //sort blogs!
-  //blogs.sort(sortByLikes);
+  */
 
   return (
     <div>
@@ -71,10 +70,7 @@ const Blogs = ({ setBlogs, user, handleLogout }) => {
         <Blog
           key={blog.id}
           blog={blog}
-          blogs={blogs}
           user={user}
-          setBlogs={setBlogs}
-          handleLike={() => handleLike(blog)}
         />
       ))}
     </div>
