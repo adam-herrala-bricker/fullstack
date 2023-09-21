@@ -1,8 +1,12 @@
 import { useState } from "react";
+import { useDispatch } from 'react-redux'
+import { notifier } from '../reducers/notificationReducer'
 import blogService from "../services/blogs";
 
 const Blog = ({ blog, blogs, user, handleLike, setBlogs }) => {
   const [unroll, setUnroll] = useState(false);
+
+  const dispatch = useDispatch()
 
   //event handlers
   const toggleUnroll = () => {
@@ -16,7 +20,7 @@ const Blog = ({ blog, blogs, user, handleLike, setBlogs }) => {
       const response = await blogService.erase(blog);
       if (response.status === 204) {
         setBlogs(blogs.filter((i) => i.id !== blog.id));
-        console.log("you did it!");
+        dispatch(notifier(`'${blog.title}' deleted`, 'message', 5));
       }
     }
   };

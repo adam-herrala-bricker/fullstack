@@ -1,3 +1,8 @@
+.notification-container {
+  position: sticky;
+  top: 5px;
+}
+
 .message {
   color: green;
   background: lightgrey;
