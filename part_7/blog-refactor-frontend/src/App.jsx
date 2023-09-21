@@ -13,6 +13,8 @@ import loginService from "./services/login";
 import objectHelper from "./utils/objectHelper";
 import { useSelector, useDispatch } from 'react-redux'
 import { notifier } from './reducers/notificationReducer'
+import { initializeBlogs, createBlog } from './reducers/blogReducer'
+import { toggleView } from './reducers/viewReducer'
 
 const Notification = () => {
   const notification = useSelector(i => i.notification)
@@ -28,7 +30,9 @@ const Notification = () => {
   );
 };
 
-const Blogs = ({ blogs, setBlogs, user, handleLogout }) => {
+const Blogs = ({ setBlogs, user, handleLogout }) => {
+  const blogs = useSelector(i => i.blog)
+  //console.log(blogs)
   //helper function for sorting blogs
   const sortByLikes = (obj1, obj2) => {
     if (obj1.likes < obj2.likes) {
@@ -55,7 +59,7 @@ const Blogs = ({ blogs, setBlogs, user, handleLogout }) => {
   };
 
   //sort blogs!
-  blogs.sort(sortByLikes);
+  //blogs.sort(sortByLikes);
 
   return (
     <div>
@@ -111,47 +115,14 @@ LogIn.propTypes = {
   password: PropTypes.string.isRequired,
 };
 
-const ToggleView = forwardRef(({ buttonLabel, children }, refs) => {
-  const [visible, setVisible] = useState(false);
-
-  //event handler
-  const toggleVisibility = () => {
-    setVisible(!visible);
-  };
-
-  //?? that ref thing ??
-  useImperativeHandle(refs, () => {
-    return {
-      toggleVisibility,
-    };
-  });
-
-  if (visible) {
-    return (
-      <div>
-        {children}
-        <button onClick={toggleVisibility}>cancel</button>
-      </div>
-    );
-  }
-  return (
-    <div>
-      <button onClick={toggleVisibility}>{buttonLabel}</button>
-    </div>
-  );
-});
-
-ToggleView.displayName = "Togglable";
-
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
 
-  const blogFormRef = useRef();
-
   const dispatch = useDispatch()
+
+  const view = useSelector(i => i.view)
 
   //event handlers
   const handleLogin = async (event) => {
@@ -178,25 +149,6 @@ const App = () => {
     inputField === "Password" && setPassword(event.target.value);
   };
 
-  const handleCreateNew = async (passedEntry) => {
-    blogFormRef.current.toggleVisibility();
-
-    const newEntry = {
-      title: passedEntry.title,
-      author: passedEntry.author,
-      url: passedEntry.url,
-    };
-
-    try {
-      const newBlog = await blogService.create(newEntry);
-      setBlogs(blogs.concat(newBlog));
-      dispatch(notifier(`New blog added: '${newBlog.title}' by ${newBlog.author}.`, "message", 5));
-    } catch (exception) {
-      dispatch(notifier(exception.message, 'error', 5))
-    }
-    
-  };
-
   const handleLogout = () => {
     setUser(null);
     setUsername("");
@@ -211,11 +163,7 @@ const App = () => {
   //update: changed it back
   useEffect(() => {
     if (user !== null) {
-      const fetchData = async () => {
-        const foundBlogs = await blogService.getAll();
-        setBlogs(foundBlogs);
-      };
-      fetchData();
+      dispatch(initializeBlogs())
     }
   }, [user]);
 
@@ -241,14 +189,13 @@ const App = () => {
       ) : (
         <div>
           <Blogs
-            blogs={blogs}
-            setBlogs={setBlogs}
             user={user}
             handleLogout={handleLogout}
           />
-          <ToggleView buttonLabel="new blog" ref={blogFormRef}>
-            <Create handleCreateNew={handleCreateNew} />
-          </ToggleView>
+          {view
+            ? <Create/> 
+            : <button onClick = {() => dispatch(toggleView())}>new blog</button>
+          }
         </div>
       )}
     </div>

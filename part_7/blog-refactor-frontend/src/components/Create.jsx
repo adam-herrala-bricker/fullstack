@@ -1,8 +1,14 @@
 import { useState } from "react"
+import { useDispatch } from "react-redux";
+import { notifier} from "../reducers/notificationReducer";
+import { createBlog } from "../reducers/blogReducer"
+import { toggleView } from '../reducers/viewReducer'
 
-const Create = ({ handleCreateNew }) => {
+const Create = () => {
   const emptyNewEntry = { title: "", author: "", url: "" };
   const [newEntry, setNewEntry] = useState(emptyNewEntry);
+
+  const dispatch = useDispatch()
 
   //event handlers
   const handleEntryChange = (event) => {
@@ -10,18 +16,17 @@ const Create = ({ handleCreateNew }) => {
     setNewEntry({ ...newEntry, [thisField]: event.target.value });
   };
 
-  //Note: before ex. 5.16 Create used a more elegant solution that didn't require this middleMan EH
-  //which pulled the props right from the event
-  //but the "testing modules" couldn't "handle that" so now it's objectively worse
-  const middleMan = (event) => {
-    event.preventDefault();
-    handleCreateNew(newEntry);
+  const handleCreateNew = async (event) => {
+    event.preventDefault()
+
+    dispatch(createBlog(newEntry))
+    dispatch(toggleView())
   };
 
   return (
     <div>
       <h2>Create new</h2>
-      <form autoComplete="off" onSubmit={middleMan}>
+      <form autoComplete="off" onSubmit={handleCreateNew}>
         <div>
           title{" "}
           <input
@@ -43,6 +48,7 @@ const Create = ({ handleCreateNew }) => {
           <input name="url" value={newEntry.url} onChange={handleEntryChange} />
         </div>
         <button type="submit">create</button>
+        <button onClick = {() => dispatch(toggleView())}>cancel</button>
       </form>
     </div>
   );
