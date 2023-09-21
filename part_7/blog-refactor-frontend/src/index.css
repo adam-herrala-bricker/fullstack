@@ -3,6 +3,10 @@
   top: 5px;
 }
 
+.display-user {
+  margin-bottom: 10px;
+}
+
 .message {
   color: green;
   background: lightgrey;

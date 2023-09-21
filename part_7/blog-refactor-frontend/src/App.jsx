@@ -1,20 +1,12 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  forwardRef,
-  useImperativeHandle,
-} from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Blog from "./components/Blog";
 import Create from "./components/Create";
-import blogService from "./services/blogs";
-import loginService from "./services/login";
-import objectHelper from "./utils/objectHelper";
 import { useSelector, useDispatch } from 'react-redux'
-import { notifier } from './reducers/notificationReducer'
-import { initializeBlogs, createBlog } from './reducers/blogReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 import { toggleView } from './reducers/viewReducer'
+import { login, logout, setUser } from './reducers/userReducer'
+import blogService from './services/blogs'
 
 const Notification = () => {
   const notification = useSelector(i => i.notification)
@@ -30,48 +22,14 @@ const Notification = () => {
   );
 };
 
-const Blogs = ({ setBlogs, user, handleLogout }) => {
+const Blogs = () => {
   const blogs = useSelector(i => i.blog)
-  //console.log(blogs)
-  //helper function for sorting blogs
-  const sortByLikes = (obj1, obj2) => {
-    if (obj1.likes < obj2.likes) {
-      return 1;
-    } else if (obj1.likes > obj2.likes) {
-      return -1;
-    } else {
-      return 0;
-    }
-  };
-
-  //event handlers
-  /*
-  const handleLike = async (blog) => {
-    const thisID = blog.id;
-    const updatedEntry = { ...blog, likes: blog.likes + 1 };
-
-    const returnedUpdate = await blogService.update(updatedEntry);
-
-    //update currently displayed blogs
-    const replaceIndex = blogs.findIndex((i) =>
-      objectHelper.singleEqualityChecker(i, blog),
-    );
-    setBlogs(blogs.with(replaceIndex, returnedUpdate));
-  };
-  */
+  const user = useSelector(i => i.user)
 
   return (
     <div>
-      <h2>Blogs</h2>
-      <b>Logged in as {user.name} </b>
-      <button onClick={handleLogout}>log out</button>
-      <p> </p>
       {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          user={user}
-        />
+        <Blog key={blog.id} blog={blog} />
       ))}
     </div>
   );
@@ -114,29 +72,20 @@ LogIn.propTypes = {
 const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
 
   const dispatch = useDispatch()
 
   const view = useSelector(i => i.view)
+  const user = useSelector(i => i.user)
 
   //event handlers
   const handleLogin = async (event) => {
     event.preventDefault();
+    dispatch(login(username, password))
 
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      });
-      window.localStorage.setItem("loggedBlogUser", JSON.stringify(user));
-      blogService.setToken(user.token);
-      setUser(user);
-      setUsername("");
-      setPassword("");
-    } catch (exception) {
-      dispatch(notifier("username or password incorrect", "error", 5));
-    }
+    //think it makes sense to keep username and password as regular react states
+    setUsername("")
+    setPassword("")
   };
 
   const handleFormChange = (event) => {
@@ -146,29 +95,25 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    setUser(null);
+    dispatch(logout())
     setUsername("");
     setPassword("");
-    window.localStorage.clear();
   };
 
-  //effect hook originally loaded all the blogs on first go
-  //seemed like a bad strategy to load everyone's blogs to FE regardless of login
-  //changed to only load for one user once that user is login in
-  //even better version would only get from that specific user's id, not get all
-  //update: changed it back
   useEffect(() => {
     if (user !== null) {
       dispatch(initializeBlogs())
     }
   }, [user]);
 
+  
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogUser");
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
+      const savedUser = JSON.parse(loggedUserJSON);
+      //console.log(savedUser)
+      dispatch(setUser(savedUser));
+      blogService.setToken(savedUser.token);
     }
   }, []);
 
@@ -184,8 +129,13 @@ const App = () => {
         />
       ) : (
         <div>
+          <div className = 'display-user'>
+            <h2>Blogs</h2>
+            <b>Logged in as {user.name} </b>
+            <button onClick={handleLogout}>log out</button>
+          </div>
+          
           <Blogs
-            user={user}
             handleLogout={handleLogout}
           />
           {view
