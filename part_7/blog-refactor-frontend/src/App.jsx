@@ -12,7 +12,7 @@ import { toggleView } from './reducers/viewReducer'
 import { login, logout, setUser } from './reducers/userReducer'
 import { notifier } from './reducers/notificationReducer'
 import blogService from './services/blogs'
-import { Button, Container, Input, Menu, Message } from 'semantic-ui-react'
+import { Button, Container, Input, Menu, Message, Segment } from 'semantic-ui-react'
 
 const Notification = () => {
   const dispatch = useDispatch()
@@ -36,10 +36,14 @@ const Blogs = () => {
   const user = useSelector(i => i.user)
 
   return (
-    <div>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
+    <div className = 'segment-container'>
+      <Segment.Group>
+          {blogs.map((blog) => (
+            <Segment key={blog.id}>
+              <Blog blog={blog} />
+            </Segment>
+          ))}
+      </Segment.Group>
     </div>
   );
 };
@@ -94,7 +98,7 @@ const Home = ({handleLogout}) => {
         />
         {view
           ? <Create/> 
-          : <button onClick = {() => dispatch(toggleView())}>new blog</button>
+          : <Button primary onClick = {() => dispatch(toggleView())}>new blog</Button>
         }
       </div>
     )  
@@ -162,16 +166,14 @@ const App = () => {
           handleFormChange={handleFormChange}
         />
       ) : (
-        <div>
+        <div className = 'menu-container'>
           logged in as {user.name}
-          <Menu borderless>
+          <Menu borderless inverted>
+            <Menu.Item><h1>Blog app</h1></Menu.Item>
             <Menu.Item><Link className = 'good-link' to = '/'>home</Link></Menu.Item>
             <Menu.Item><Link className = 'good-link' to = '/users'>users</Link></Menu.Item>
             <Menu.Item><Button primary onClick={handleLogout}>log out</Button></Menu.Item>
           </Menu>
-          <div className = 'display-user'>
-            <h2>Blog app</h2>
-          </div>
         </div>
       )}
       <Routes>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, changeBlog } from '../reducers/blogReducer'
 import  {useParams } from 'react-router-dom'
+import { Button, Icon, Input, Segment } from 'semantic-ui-react'
 
 const SingleBlog = () => {
     const [commentField, setCommentField] = useState('')
@@ -44,29 +45,33 @@ const SingleBlog = () => {
     }
 
     return (
-        <div className="bloggy">
-          <p>
+        <div className = 'bloggy'>
+          <h3>
             {blog.title} -- {blog.author}{" "}
-          </p>
+            <Button icon basic compact onClick={handleLike}><Icon color = 'red' name = 'like'/></Button>
+          </h3>
           <p>{blog.url}</p>
           <p>
-            likes: {blog.likes} <button onClick={handleLike}>like</button>
+            likes: {blog.likes}
           </p>
           <p>{blog.user.name}</p>
-          <button
-            className={user.username === blog.user.username ? "red-button" : "ded-button"}
+          <Button
+            negative={user.username === blog.user.username ? true : false}
+            disabled={user.username === blog.user.username ? false : true}
             onClick={handleDelete}>
             remove
-          </button>
+          </Button>
           <h3>comments</h3>
           <form autoComplete="off" onSubmit = {handleComment}>
-            <input name = 'comment' value = {commentField} onChange = {handleType}/>
-            <button type = 'submit'>new comment</button>
+            <div className = 'comment-add-container'>
+                <Input name = 'comment' value = {commentField} onChange = {handleType}/>
+                <Button type = 'submit'>new comment</Button>
+            </div>
           </form>
-          <ul>
-          {blog.comments.map(i => 
-            <li key = {i}>{i}</li>)}
-          </ul>
+          <Segment.Group>
+            {blog.comments.map(i => 
+                < Segment key = {i}>{i}</Segment>)}
+          </Segment.Group>
         </div>
     )
 }

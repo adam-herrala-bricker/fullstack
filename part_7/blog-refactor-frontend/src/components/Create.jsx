@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux";
-import { notifier} from "../reducers/notificationReducer";
 import { createBlog } from "../reducers/blogReducer"
 import { toggleView } from '../reducers/viewReducer'
+import { Button, Input } from 'semantic-ui-react'
 
 const Create = () => {
   const emptyNewEntry = { title: "", author: "", url: "" };
@@ -24,33 +24,38 @@ const Create = () => {
   };
 
   return (
-    <div>
-      <h2>Create new</h2>
-      <form autoComplete="off" onSubmit={handleCreateNew}>
-        <div>
+    <form autoComplete="off" onSubmit={handleCreateNew}>
+      <div className = 'create-container'>
+        <h2>Create new</h2>
+        <div className = 'create-item'>
           title{" "}
-          <input
+          <Input
             name="title"
             value={newEntry.title}
             onChange={handleEntryChange}
+            fluid
           />
         </div>
-        <div>
+        <div className = 'create-item'>
           author{" "}
-          <input
+          <Input
             name="author"
             value={newEntry.author}
             onChange={handleEntryChange}
+            fluid
           />
         </div>
-        <div>
+        <div className = 'create-item'>
           url{" "}
-          <input name="url" value={newEntry.url} onChange={handleEntryChange} />
+          <Input name="url" value={newEntry.url} onChange={handleEntryChange} fluid/>
         </div>
-        <button type="submit">create</button>
-        <button onClick = {() => dispatch(toggleView())}>cancel</button>
-      </form>
-    </div>
+        <div>
+          <Button primary type="submit">create</Button>
+          <Button onClick = {() => dispatch(toggleView())}>cancel</Button>
+        </div>
+      </div>
+    </form>
+    
   );
 };
 
