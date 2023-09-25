@@ -5,6 +5,7 @@ import Blog from "./components/Blog";
 import Create from "./components/Create";
 import Users from './components/Users'
 import AddedBlogs from './components/AddedBlogs'
+import SingleBlog from './components/SingleBlog'
 import { useSelector, useDispatch } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { toggleView } from './reducers/viewReducer'
@@ -167,7 +168,8 @@ const App = () => {
       <Routes>
         <Route path = '/' element = {<Home handleLogout={handleLogout}/>} />
         <Route path = '/users' element = {<Users />} />
-        <Route path = 'users/:id' element = {<AddedBlogs />} />
+        <Route path = '/users/:id' element = {<AddedBlogs />} />
+        <Route path = '/blogs/:id' element = {<SingleBlog />} />
       </Routes>
     </div>
 

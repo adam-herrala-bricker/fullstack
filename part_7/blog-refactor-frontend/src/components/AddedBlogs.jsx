@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
-const AddedBlogs = ({userID}) => {
+const AddedBlogs = () => {
     const id = useParams().id
     const blogs = useSelector(i => i.blog)
 
