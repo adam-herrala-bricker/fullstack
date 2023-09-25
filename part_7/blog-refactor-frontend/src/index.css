@@ -1,34 +1,35 @@
+.login-container {
+  position: absolute;
+  top: 20vh;
+  left: 0px;
+
+  width: 100vw;
+
+  display:flex;
+  flex-direction:column;
+  row-gap: 10px;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-container {
+  position: sticky;
+  top: 10px;
+
+  display:flex;
+  justify-content: end;
+
+  padding: 5px;
+}
+
 .good-link {
   padding : 2px;
   color: black;
 }
 
-.notification-container {
-  position: sticky;
-  top: 5px;
-}
 
 .display-user {
-  margin-bottom: 10px;
-}
-
-.message {
-  color: green;
-  background: lightgrey;
-  font-size: 20px;
-  border-style: solid;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.error {
-  color: red;
-  background: lightgrey;
-  font-size: 20px;
-  border-style: solid;
-  border-radius: 5px;
-  padding: 10px;
   margin-bottom: 10px;
 }
 

@@ -10,18 +10,23 @@ import { useSelector, useDispatch } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { toggleView } from './reducers/viewReducer'
 import { login, logout, setUser } from './reducers/userReducer'
+import { notifier } from './reducers/notificationReducer'
 import blogService from './services/blogs'
+import { Button, Container, Input, Menu, Message } from 'semantic-ui-react'
 
 const Notification = () => {
+  const dispatch = useDispatch()
   const notification = useSelector(i => i.notification)
 
+  
   if (notification.message === null) {
     return null;
   }
+  
 
   return (
     <div className = 'notification-container'>
-      <div className={notification.type}>{notification.message}</div>
+      <Message compact negative = {notification.type === 'error'} header = {notification.type} content = {notification.message} onDismiss = {() => dispatch(notifier(null))}/>
     </div>
   );
 };
@@ -41,27 +46,29 @@ const Blogs = () => {
 
 const LogIn = ({ handleLogin, handleFormChange, username, password }) => {
   return (
-    <div>
-      <h2>Log in to application</h2>
       <form autoComplete="off" onSubmit={handleLogin}>
+      <div className = 'login-container'>
+      <div>
+        <h1>Log in to application</h1>
+      </div>
         <div>
           username{" "}
-          <input name="Username" value={username} onChange={handleFormChange} />
+          <Input name="Username" value={username} onChange={handleFormChange} />
         </div>
         <div>
           password{" "}
-          <input
+          <Input
             name="Password"
             type="password"
             value={password}
             onChange={handleFormChange}
           />
         </div>
-        <button id="login-button" type="submit">
+        <Button id="login-button" type="submit">
           login
-        </button>
+        </Button>
+        </div>
       </form>
-    </div>
   );
 };
 
@@ -145,7 +152,7 @@ const App = () => {
   }, []);
 
   return(
-    <div>
+    <Container>
       <Notification />
       {user === null ? (
         <LogIn
@@ -156,10 +163,12 @@ const App = () => {
         />
       ) : (
         <div>
-          <Link className = 'good-link' to = '/'>home</Link>
-          <Link className = 'good-link' to = '/users'>users</Link>
           logged in as {user.name}
-          <button onClick={handleLogout}>log out</button>
+          <Menu borderless>
+            <Menu.Item><Link className = 'good-link' to = '/'>home</Link></Menu.Item>
+            <Menu.Item><Link className = 'good-link' to = '/users'>users</Link></Menu.Item>
+            <Menu.Item><Button primary onClick={handleLogout}>log out</Button></Menu.Item>
+          </Menu>
           <div className = 'display-user'>
             <h2>Blog app</h2>
           </div>
@@ -171,7 +180,7 @@ const App = () => {
         <Route path = '/users/:id' element = {<AddedBlogs />} />
         <Route path = '/blogs/:id' element = {<SingleBlog />} />
       </Routes>
-    </div>
+    </Container>
 
   )
 }
