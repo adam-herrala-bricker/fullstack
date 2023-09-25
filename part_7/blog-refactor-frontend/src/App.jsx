@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import {Routes, Route, Link} from 'react-router-dom'
+import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 import PropTypes from "prop-types";
 import Blog from "./components/Blog";
 import Create from "./components/Create";
 import Users from './components/Users'
+import AddedBlogs from './components/AddedBlogs'
 import { useSelector, useDispatch } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { toggleView } from './reducers/viewReducer'
@@ -96,6 +97,8 @@ const App = () => {
   const dispatch = useDispatch()
   const user = useSelector(i => i.user)
 
+  const navigate = useNavigate()
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -117,8 +120,10 @@ const App = () => {
 
   const handleLogout = () => {
     dispatch(logout())
-    setUsername("");
-    setPassword("");
+    setUsername("")
+    setPassword("")
+    navigate('/')
+
   };
 
   useEffect(() => {
@@ -162,6 +167,7 @@ const App = () => {
       <Routes>
         <Route path = '/' element = {<Home handleLogout={handleLogout}/>} />
         <Route path = '/users' element = {<Users />} />
+        <Route path = 'users/:id' element = {<AddedBlogs />} />
       </Routes>
     </div>
 

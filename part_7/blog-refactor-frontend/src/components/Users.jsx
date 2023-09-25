@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const Users = () => {
     const blogs = useSelector(i => i.blog)
-    console.log(blogs)
     //array of unique users
     const users = Array.from(new Set(blogs.map(i => i.user.username)))
 
@@ -19,7 +19,7 @@ const Users = () => {
                 <tbody>
                     {users.map(i =>
                     <tr key = {i}>
-                        <td>{i}</td>
+                        <td><Link className = 'good-link' to = {`/users/${i}`}>{i}</Link></td>
                         <td>{blogs.filter(j => j.user.username === i).length}</td>
                     </tr>
                     )}
