@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import {Routes, Route, Link} from 'react-router-dom'
 import PropTypes from "prop-types";
 import Blog from "./components/Blog";
 import Create from "./components/Create";
+import Users from './components/Users'
 import { useSelector, useDispatch } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { toggleView } from './reducers/viewReducer'
@@ -69,14 +71,33 @@ LogIn.propTypes = {
   password: PropTypes.string.isRequired,
 };
 
-const App = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
+const Home = ({handleLogout}) => {
   const dispatch = useDispatch()
 
   const view = useSelector(i => i.view)
   const user = useSelector(i => i.user)
+
+  if (user) {
+    return (
+      <div>
+        <Blogs
+          handleLogout={handleLogout}
+        />
+        {view
+          ? <Create/> 
+          : <button onClick = {() => dispatch(toggleView())}>new blog</button>
+        }
+      </div>
+    )  
+  }
+}
+
+const App = () => {
+  const dispatch = useDispatch()
+  const user = useSelector(i => i.user)
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   //event handlers
   const handleLogin = async (event) => {
@@ -117,7 +138,7 @@ const App = () => {
     }
   }, []);
 
-  return (
+  return(
     <div>
       <Notification />
       {user === null ? (
@@ -129,23 +150,22 @@ const App = () => {
         />
       ) : (
         <div>
+          <Link className = 'good-link' to = '/'>home</Link>
+          <Link className = 'good-link' to = '/users'>users</Link>
           <div className = 'display-user'>
             <h2>Blogs</h2>
             <b>Logged in as {user.name} </b>
             <button onClick={handleLogout}>log out</button>
           </div>
-          
-          <Blogs
-            handleLogout={handleLogout}
-          />
-          {view
-            ? <Create/> 
-            : <button onClick = {() => dispatch(toggleView())}>new blog</button>
-          }
         </div>
       )}
+      <Routes>
+        <Route path = '/' element = {<Home handleLogout={handleLogout}/>} />
+        <Route path = '/users' element = {<Users />} />
+      </Routes>
     </div>
-  );
-};
+
+  )
+}
 
 export default App;
