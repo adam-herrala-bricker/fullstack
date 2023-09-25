@@ -158,10 +158,10 @@ const App = () => {
         <div>
           <Link className = 'good-link' to = '/'>home</Link>
           <Link className = 'good-link' to = '/users'>users</Link>
+          logged in as {user.name}
+          <button onClick={handleLogout}>log out</button>
           <div className = 'display-user'>
-            <h2>Blogs</h2>
-            <b>Logged in as {user.name} </b>
-            <button onClick={handleLogout}>log out</button>
+            <h2>Blog app</h2>
           </div>
         </div>
       )}
