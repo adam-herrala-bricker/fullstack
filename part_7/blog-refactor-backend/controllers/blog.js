@@ -90,6 +90,7 @@ blogsRouter.put("/:id", async (request, response) => {
     url: body.url,
     likes: body.likes,
     user: body.user.id,
+    comments: body.comments
   };
 
   const savedUpdates = await Blog.findByIdAndUpdate(thisID, updates, {

@@ -85,11 +85,11 @@ export const deleteBlog = (blog) => {
     }
 }
 
-export const likeBlog = (blog) => {
+export const changeBlog = (blog) => {
     return async dispatch => {
-        const newBlog = {...blog, likes : blog.likes + 1}
+
         try {
-            const returnedBlog = await blogService.update(newBlog)
+            const returnedBlog = await blogService.update(blog)
             dispatch(updateBlog(returnedBlog))
             dispatch(sortBlogs()) 
         } catch (exception) {
