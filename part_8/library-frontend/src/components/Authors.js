@@ -2,11 +2,17 @@ import { useQuery } from '@apollo/client'
 import {ALL_AUTHORS} from '../queries'
 
 const Authors = ({ show }) => {
+
+  //NOTE THAT THE ATTRIBUTES OF RESULT WILL CHANGE AS IT FETCHES THE DATA!!!
+  //This means that you can't manipulate the fetched data up here.
   const result = useQuery(ALL_AUTHORS)
-  const authors = result.data.allAuthors
 
   if (!show) {
     return null
+  }
+
+  if (result.loading) {
+    return <div>loading...</div>
   }
 
   return (
@@ -19,7 +25,7 @@ const Authors = ({ show }) => {
             <th>born</th>
             <th>books</th>
           </tr>
-          {authors.map((a) => (
+          {result.data.allAuthors.map((a) => (
             <tr key={a.name}>
               <td>{a.name}</td>
               <td>{a.born}</td>
