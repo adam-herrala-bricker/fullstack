@@ -2,18 +2,30 @@ import { useState } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
 import { ALL_AUTHORS, SET_BIRTHDATE } from '../queries'
 
-const BirthYear = () => {
-  const [name, setName] = useState('')
+const BirthYear = ({ result }) => {
+  const [name, setName] = useState(result.data.allAuthors[0].name) //prevent bug when trying to update the first author without changing the menu
   const [birthyear, setBirthyear] = useState('')
 
   const [addBirthyear] = useMutation(SET_BIRTHDATE, {refetchQueries : [{query : ALL_AUTHORS}]})
 
   //event handlers
+  const handleYearChange = (event) => {
+    event.preventDefault()
+
+    const thisEntry = parseInt(event.target.value)
+
+    if (thisEntry) {
+      setBirthyear(thisEntry)
+    } else if (event.target.value === '') {
+      setBirthyear('')
+    }
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault()
     addBirthyear({ variables : { name, setBornTo : birthyear}})
 
-    setName('')
+    setName(result.data.allAuthors[0].name)
     setBirthyear('')
 
   }
@@ -22,11 +34,13 @@ const BirthYear = () => {
     <div>
       <h3>Set birthyear</h3>
       <form onSubmit = {handleSubmit}>
+        <select value = {name} onChange = {(event) => setName(event.target.value)}>
+          {result.data.allAuthors.map(i => 
+            <option key = {i.name} value = {i.name}>{i.name}</option>
+          )}
+        </select>
         <div>
-          name <input id = 'name' value = {name} onChange = {(event) => setName(event.target.value)}/>
-        </div>
-        <div>
-          birthyear <input id = 'birthyear' value = {birthyear} onChange = {(event) => setBirthyear(parseInt(event.target.value))}/>
+          birthyear <input id = 'birthyear' value = {birthyear} onChange = {handleYearChange} autoComplete='off'/>
         </div>
         <div>
           <button type = 'submit'>add birthyear</button>
@@ -70,7 +84,7 @@ const Authors = ({ show }) => {
           ))}
         </tbody>
       </table>
-      <BirthYear />
+      <BirthYear result = { result }/>
     </div>
   )
 }
