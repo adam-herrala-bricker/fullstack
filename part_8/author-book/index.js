@@ -1,6 +1,6 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
-const { v1: uuid } = require('uuid')
+const { GraphQLError} = require('graphql')
 
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
@@ -173,16 +173,37 @@ const resolvers = {
           const thisAuthor = args.author
           if (!authors.map(i => i.name).includes(thisAuthor)) {
             const newAuthor = new Author({name: thisAuthor})
-            await newAuthor.save()
+            try {
+              await newAuthor.save()
+            } catch (error) {
+              throw new GraphQLError('Adding author failed', {
+                extensions : {
+                  code: 'BAD_USER_INPUT',
+                  invalidArgs: args.author,
+                  error
+                }
+              })
+            }
           }
 
           //need author DB entry bc "author" field in book DB isn't string, but mongo entry
           const authorEntry = await Author.find({name : args.author})
 
           const newBook = new Book({...args, author : authorEntry[0]._id})
-          await newBook.save()
-          await newBook.populate('author', {name : 1, born : 1})
 
+          try {
+            await newBook.save()
+            await newBook.populate('author', {name : 1, born : 1})
+          } catch (error) {
+            throw new GraphQLError('Adding book failed', {
+              extensions : {
+                code: 'BAD_USER_INPUT',
+                invalidArgs: args.title, 
+                error
+              }
+            })
+          }
+        
           return newBook
         },
 
