@@ -21,23 +21,38 @@ Content-Type: application/json
     "query" : "query { authorCount }"
 }
 
-###
+### NOTICE THAT THE ENTIRE QUERY HAS TO BE ON A SINGLE LINE!! OTHERWISE IT WON'T WORK
 POST http://localhost:4000/graphql
 Content-Type: application/json
+Authorization: Bearer 
 
 {
-    "query" : "mutation ($title: String!, $published: Int, $author: String!, $genres: [String!]!) {
-        addBook(
-            title: $title,
-            published: $published,
-            author: $author,
-            genres: $genres
-        ) {
-            title
-            author
-        }
-    }",
-    "variables" : {"title" : "Clean Code", "published" : 2008, "author" : "Robert Martin", "genres" : ["refactoring"]}    
+    "operationName": "setBirthyear",
+    "variables": {
+        "name": "Alan Anderson",
+        "setBornTo": 1922
+    },
+    "query": "mutation setBirthyear($name: String!, $setBornTo: Int!) {editAuthor(name: $name, setBornTo: $setBornTo) {name born bookCount}}"
+
 }
 
 
+### This won't work, bc it's not all on one line.
+POST http://localhost:4000/graphql
+Content-Type: application/json
+Authorization: Bearer 
+
+{
+    "query" : "mutation setBirthyear($name: String!, $setBornTo: Int!) {
+        editAuthor(name: $name, setBornTo: $setBornTo) {
+            name
+            born
+            bookCount
+        }
+    }",
+    "operation name" : "setBirthyear",
+    "variables" : {
+        "name": "Alan Anderson",
+        "setBornTo": 1920
+    }
+}
