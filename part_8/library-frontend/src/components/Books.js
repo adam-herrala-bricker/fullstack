@@ -11,7 +11,7 @@ const Books = ({ show }) => {
   const handleGenreChange = (genre) => {
      //special handling for recommend --> only show the user's favorite genre
      if (genre === 'recommend'){
-      if (user) {
+      if (user.data.me) {
         setShownGenres([user.data.me.favoriteGenre])
       } else {
         //why not
