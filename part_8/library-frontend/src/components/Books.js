@@ -1,15 +1,25 @@
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../queries'
+import { ALL_BOOKS, ME } from '../queries'
 
 const Books = ({ show }) => {
   const [shownGenres, setShownGenres] = useState(null)
   const result = useQuery(ALL_BOOKS)
+  const user = useQuery(ME)
 
   //event handler
   const handleGenreChange = (genre) => {
+     //special handling for recommend --> only show the user's favorite genre
+     if (genre === 'recommend'){
+      if (user) {
+        setShownGenres([user.data.me.favoriteGenre])
+      } else {
+        //why not
+        setShownGenres(['funny'])
+      }
+    }
     //view all is a special case we handle by setting shownGenres to null
-    if (genre === 'view all') {
+    else if (genre === 'view all') {
       setShownGenres(null)
       //adding first genre to list
     } else if (!shownGenres) {
@@ -30,7 +40,7 @@ const Books = ({ show }) => {
     return null
   }
 
-  if (result.loading) {
+  if (result.loading | user.loading) {
     return <div>loading...</div>
   }
 
@@ -52,7 +62,7 @@ const Books = ({ show }) => {
 
     return [...accumulator, ...newGenres]
 
-  }, ['view all'])
+  }, ['view all', 'recommend'])
 
   const books = shownGenres 
     ? result.data.allBooks.filter(i => i.genres.some(j => shownGenres.includes(j)))
