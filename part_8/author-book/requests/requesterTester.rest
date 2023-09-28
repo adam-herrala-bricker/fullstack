@@ -10,7 +10,34 @@ POST http://localhost:4000/graphql
 Content-Type: application/json
 
 {
-    "query" : "query { allBooks {title author} }"
+    "query" : "query { allBooks {title} }"
+}
+
+###
+POST http://localhost:4000/graphql
+Content-Type: application/json
+
+{
+    "query" : "query { authorCount }"
+}
+
+###
+POST http://localhost:4000/graphql
+Content-Type: application/json
+
+{
+    "query" : "mutation ($title: String!, $published: Int, $author: String!, $genres: [String!]!) {
+        addBook(
+            title: $title,
+            published: $published,
+            author: $author,
+            genres: $genres
+        ) {
+            title
+            author
+        }
+    }",
+    "variables" : {"title" : "Clean Code", "published" : 2008, "author" : "Robert Martin", "genres" : ["refactoring"]}    
 }
 
 

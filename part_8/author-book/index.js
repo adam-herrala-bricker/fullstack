@@ -2,6 +2,26 @@ const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { v1: uuid } = require('uuid')
 
+const mongoose = require('mongoose')
+mongoose.set('strictQuery', false)
+const Author = require('./models/authorModel')
+const Book = require('./models/bookModel')
+
+require('dotenv').config()
+
+const MONGODB_URI = process.env.MONGODB_URI
+
+console.log('connecting to', MONGODB_URI)
+
+mongoose.connect(MONGODB_URI)
+  .then(() => {
+    console.log('connected to MongoDB!')
+  })
+  .catch((error) => {
+    console.log('error connecting to MongoDB :(', error.message)
+  })
+
+/*
 let authors = [
     {
       name: 'Robert Martin',
@@ -81,6 +101,8 @@ let books = [
     },
   ]
 
+*/
+
 const typeDefs = `
     type Author {
         name: String!
@@ -92,7 +114,7 @@ const typeDefs = `
     type Book {
         title: String!
         published: Int
-        author: String!
+        author: Author!
         genres: [String!]!
         id: ID!
     }
@@ -117,12 +139,13 @@ const typeDefs = `
 
 const resolvers = {
     Query: {
-        bookCount: () => books.length,
-        authorCount: () => authors.length,
-        allBooks: (root, args) => {
-            let returnBooks = books
+        bookCount: async () => Book.collection.countDocuments(),
+        authorCount: async () => Author.collection.countDocuments(),
+        allBooks: async (root, args) => {
+            let returnBooks = await Book.find({}).populate('author', {name : 1, born : 1})
+            
             if (args.author) {
-                returnBooks = returnBooks.filter(i => i.author === args.author)
+                returnBooks = returnBooks.filter(i => i.author.name === args.author)
             }
 
             if (args.genre) {
@@ -132,41 +155,48 @@ const resolvers = {
             return returnBooks
         },
         
-        allAuthors: () => authors
+        allAuthors: async () => await Author.find({})
     },
 
     //adding custom resolver
     Author: {
-        bookCount: (root) => books.filter(i => i.author === root.name).length
+        bookCount: async (root) => {
+          const books = await Book.find({}).populate('author', {name : 1, born : 1})
+          return books.filter(i => i.author.name === root.name).length
+        }
      },
 
      Mutation: {
-        addBook: (root, args) => {
-            const newBook = {...args, id: uuid()}
-            books = books.concat(newBook)
+        addBook: async (root, args) => {
+          //first check to see if author is already in DB
+          const authors = await Author.find({})
+          const thisAuthor = args.author
+          if (!authors.map(i => i.name).includes(thisAuthor)) {
+            const newAuthor = new Author({name: thisAuthor})
+            await newAuthor.save()
+          }
 
-            //also add author if not already on server
-            if (!authors.map(i => i.name).includes(args.author)) {
-                const newAuthor = {name : args.author, id: uuid()}
-                authors = authors.concat(newAuthor)
-            }
+          //need author DB entry bc "author" field in book DB isn't string, but mongo entry
+          const authorEntry = await Author.find({name : args.author})
 
-            return newBook
+          const newBook = new Book({...args, author : authorEntry[0]._id})
+          await newBook.save()
+          await newBook.populate('author', {name : 1, born : 1})
+
+          return newBook
         },
 
-        editAuthor: (root, args) => {
-            //author not found
-            if (!authors.map(i => i.name).includes(args.name)) {
-                return null
-            }
+        editAuthor: async (root, args) => {
+          const thisAuthor = (await Author.find({})).filter(i => i.name === args.name)[0]
+          
+          //author not found
+          if (!thisAuthor) {
+              return null
+          }
 
-            const replaceIndex = authors.findIndex(i => i.name === args.name)
-            const oldEntry = authors[replaceIndex]
+          const updatedEntry = await Author.findByIdAndUpdate(thisAuthor._id, {born : args.setBornTo}, {new: true})
 
-            const updatedEntry = {...oldEntry, born : args.setBornTo}
-            authors[replaceIndex] = updatedEntry
-
-            return updatedEntry
+          return updatedEntry
         }
      }
 }
