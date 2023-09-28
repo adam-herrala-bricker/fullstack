@@ -51,7 +51,7 @@ const BirthYear = ({ result }) => {
 }
 
 
-const Authors = ({ show }) => {
+const Authors = ({ show, token }) => {
 
   //NOTE THAT THE ATTRIBUTES OF RESULT WILL CHANGE AS IT FETCHES THE DATA!!!
   //This means that you can't manipulate the fetched data up here.
@@ -84,7 +84,7 @@ const Authors = ({ show }) => {
           ))}
         </tbody>
       </table>
-      <BirthYear result = { result }/>
+      {token && <BirthYear result = { result }/>}
     </div>
   )
 }
