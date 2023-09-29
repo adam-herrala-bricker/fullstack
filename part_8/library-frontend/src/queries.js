@@ -22,6 +22,20 @@ export const ALL_BOOKS = gql`
         }
     }
 `
+//this is a 'named query'
+export const BOOKS_BY_GENRE = gql`
+    query booksByGenre($genres: [String]) {
+        allBooks(genres: $genres) {
+            title
+            author {
+                name
+                born
+            }
+            published
+            genres
+        }
+    }
+`
 
 //super unclear to me why user and token aren't both returned on login, rather than handling them seperately
 export const ME = gql`

@@ -1,10 +1,15 @@
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
-import { ALL_BOOKS, ME } from '../queries'
+import { ALL_BOOKS, BOOKS_BY_GENRE, ME } from '../queries'
 
 const Books = ({ show }) => {
   const [shownGenres, setShownGenres] = useState(null)
-  const result = useQuery(ALL_BOOKS)
+  const result = useQuery(BOOKS_BY_GENRE, {
+    variables : {genres: shownGenres}})
+
+  //making a query to get the full list of genres every time
+  const resultForGenres = useQuery(ALL_BOOKS)
+  
   const user = useQuery(ME)
 
   //event handler
@@ -40,13 +45,13 @@ const Books = ({ show }) => {
     return null
   }
 
-  if (result.loading | user.loading) {
+  if (result.loading | user.loading | resultForGenres.loading) {
     return <div>loading...</div>
   }
 
   //putting this down here so it is only computed when the loading is over
   //not sure if there's a fast way, but this does give us a unique list of genres
-  const genres = result.data.allBooks.reduce((accumulator, book) => {
+  const genres = resultForGenres.data.allBooks.reduce((accumulator, book) => {
     const newGenres = []
     
     book.genres.forEach(i => {
@@ -64,9 +69,13 @@ const Books = ({ show }) => {
 
   }, ['view all', 'recommend'])
 
+  /*
   const books = shownGenres 
     ? result.data.allBooks.filter(i => i.genres.some(j => shownGenres.includes(j)))
     : result.data.allBooks
+  */
+
+  const books = result.data.allBooks
 
   return (
     <div>
