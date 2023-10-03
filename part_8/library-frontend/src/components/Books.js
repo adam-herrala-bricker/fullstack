@@ -5,8 +5,7 @@ import { ALL_BOOKS, BOOKS_BY_GENRE, ME } from '../queries'
 const Books = ({ show }) => {
   const [shownGenres, setShownGenres] = useState(null)
   const result = useQuery(BOOKS_BY_GENRE, {
-    variables : {genres: shownGenres},
-    fetchPolicy : 'network-only'
+    variables : {genres: shownGenres}
   })
 
   //making a query to get the full list of genres every time

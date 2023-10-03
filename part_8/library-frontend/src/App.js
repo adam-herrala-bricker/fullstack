@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
+import { useSubscription } from '@apollo/client'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LogIn from './components/LogIn'
+import { ALL_BOOKS, BOOK_ADDED } from './queries'
 
 const App = () => {
   const [page, setPage] = useState('authors')
@@ -14,11 +16,27 @@ const App = () => {
     localStorage.removeItem('library-user-token')
   }
 
-//check local storage for token
-useEffect(() => {
-  const foundToken = localStorage.getItem('library-user-token')
-  foundToken && setToken(foundToken)
-}, [])
+  //check local storage for token
+  useEffect(() => {
+    const foundToken = localStorage.getItem('library-user-token')
+    foundToken && setToken(foundToken)
+  }, [])
+
+  //subscription
+  useSubscription(BOOK_ADDED, {
+    //note: error in fullstack example: missing client param
+    onData: ({client, data}) => {
+      const addedBook = data.data.bookAdded
+      window.alert(`${addedBook.title} added`)
+      console.log('new data', data)
+
+      client.cache.updateQuery({ query : ALL_BOOKS}, ({allBooks}) => {
+        return {
+          allBooks: allBooks.concat(addedBook)
+        }
+      })
+    }
+  })
 
   return (
     <div>
