@@ -4,7 +4,7 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LogIn from './components/LogIn'
-import { ALL_BOOKS, BOOK_ADDED } from './queries'
+import { ALL_BOOKS, BOOKS_BY_GENRE, BOOK_ADDED } from './queries'
 
 const App = () => {
   const [page, setPage] = useState('authors')
@@ -29,6 +29,8 @@ const App = () => {
       const addedBook = data.data.bookAdded
       window.alert(`${addedBook.title} added`)
       console.log('new data', data)
+      
+      console.log('cache', client.cache)
 
       client.cache.updateQuery({ query : ALL_BOOKS}, ({allBooks}) => {
         return {
