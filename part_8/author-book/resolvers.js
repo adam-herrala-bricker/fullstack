@@ -10,10 +10,20 @@ const pubsub = new PubSub()
 
 const resolvers = {
     Query: {
-        bookCount: async () => Book.collection.countDocuments(),
-        authorCount: async () => Author.collection.countDocuments(),
+        bookCount: async () => {
+          const bookNumber = await Book.collection.countDocuments()
+
+          console.log('new request: bookCount')
+          return bookNumber
+          
+          },
+        authorCount: async () => {
+          const authorNumber = await Author.collection.countDocuments()
+          
+          console.log('new request: authorCount')
+          return authorNumber},
         allBooks: async (root, args) => {
-            let returnBooks = await Book.find({}).populate('author', {name : 1, born : 1})
+            let returnBooks = await Book.find({}).populate('author', {name : 1, born : 1, bookList : 1})
             
             if (args.author) {
                 returnBooks = returnBooks.filter(i => i.author.name === args.author)
@@ -23,18 +33,29 @@ const resolvers = {
                 returnBooks = returnBooks.filter(i => i.genres.some(j => args.genres.includes(j)))
             }
 
+            console.log('new request: allBooks')
             return returnBooks
         },
         
-        allAuthors: async () => await Author.find({}),
-        me: (root, args, context) => {return context.currentUser}
+        allAuthors: async () => {
+          const authors = await Author.find({})
+          
+          console.log('new request: allAuthors')
+          return authors
+        },
+        me: (root, args, context) => {
+          console.log('new request: me')
+          return context.currentUser
+        }
     },
 
     //adding custom resolver
     Author: {
-        bookCount: async (root) => {
-          const books = await Book.find({}).populate('author', {name : 1, born : 1})
-          return books.filter(i => i.author.name === root.name).length
+        bookCount: (root) => {
+          console.log(root)
+
+          console.log('new request: bookCount')
+          return root.bookList.length
         }
      },
 
@@ -68,12 +89,21 @@ const resolvers = {
 
           //need author DB entry bc "author" field in book DB isn't string, but mongo entry
           const authorEntry = await Author.find({name : args.author})
+          const authorID = authorEntry[0]._id
+          const authorBookList = authorEntry[0].bookList
 
-          const newBook = new Book({...args, author : authorEntry[0]._id})
+          const newBook = new Book({...args, author : authorID})
 
           try {
             await newBook.save()
-            await newBook.populate('author', {name : 1, born : 1})
+            await newBook.populate('author', {name : 1, born : 1, bookList : 1})
+
+            console.log('new book ID', newBook._id)
+            console.log('author ID', authorID)
+            console.log('authorBookList', authorBookList)
+            //update author entry to include book id
+            await Author.findByIdAndUpdate(authorID, {bookList : [...authorBookList, newBook._id]}, {new: true})
+
           } catch (error) {
             throw new GraphQLError('Adding book failed', {
               extensions : {
@@ -139,6 +169,7 @@ const resolvers = {
           //create and return token
           const userForToken = {username: user.username, id: user._id}
 
+          console.log('new request: login')
           return {value: jwt.sign(userForToken, process.env.SECRET)} 
         }
      },

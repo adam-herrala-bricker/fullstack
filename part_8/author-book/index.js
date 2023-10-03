@@ -33,6 +33,8 @@ mongoose.connect(MONGODB_URI)
     console.log('error connecting to MongoDB :(', error.message)
   })
 
+//mongoose.set('debug', true)
+
 //start is all in one function
 //Note: If you're not doing subscriptions, this bulky config can be avoided
 //see ex. 8.22 for that.
