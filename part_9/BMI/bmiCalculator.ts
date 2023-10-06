@@ -10,9 +10,8 @@ const bmiCategories = [
     {lowerLimit : 40, upperLimit : Infinity, category : "Obese (Class III)"}
 ]
 
-const calculateBmi = (height: number, mass: number) => {
+const calculateBmi = (height: number, mass: number): string => {
     const bmi = (mass)/((height/100)**2)
-    console.log(bmi)
     let thisCategory = 'no BMI calculated'
 
     bmiCategories.forEach(i => {
