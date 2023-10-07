@@ -2,8 +2,19 @@ type Rating = 1 | 2 | 3
 
 type Message = 'abject failure' | 'bare minimum' | 'good job!'
 
-type RatingPair = {rating: Rating, message: Message}
+//pair of values that constitute the rating
+interface RatingPair {
+    rating: Rating, 
+    message: Message
+}
 
+//input values
+interface LogValues {
+    target: number,
+    exerciseLog: number[]
+}
+
+//output values
 interface ExerciseValues {
     totalDays: number,
     trainingDays: number,
@@ -25,17 +36,19 @@ const getRating = (average: number, target: number): RatingPair => {
         {lowerLimit: target * buffer, upperLimit: Infinity, rating: 3, message: 'good job!'}
     ]
 
-    //default
-    let pairOut = {rating: 99 as Rating, message: 'rating not loaded' as Message}
-
+    let pairOut = null
+    
     exerciseRatings.forEach(i => {
         if (i.lowerLimit <= average && average < i.upperLimit) {
-            pairOut = {rating: i.rating as Rating, message: i.message as Message}
+            pairOut = {rating: i.rating, message: i.message}
         }
     })
 
-    return pairOut
-
+    try {
+        return pairOut
+    } catch (error: unknown) {
+        throw new Error('an unknown error has occured in computing the ratings')
+    }
 }
 
 //helper function for calculating sum of array
@@ -47,10 +60,9 @@ const sum = (arr: number[]): number => {
     return thisSum
 }
 
+//function to calculate final output
 //note how ExerciseValues sets the type for the returned value
-const calculateExercises = (exerciseLog: number[]): ExerciseValues => {
-    //hard code for now
-    const targetValue = 2
+const calculateExercise = (exerciseLog: number[], targetValue: number): ExerciseValues => {
     
     const totalDays = exerciseLog.length
     const trainingDays = exerciseLog.filter(i => i > 0).length
@@ -71,5 +83,40 @@ const calculateExercises = (exerciseLog: number[]): ExerciseValues => {
     }
 }
 
+//helper function to check that all the passed values are (convertible to) numbers + are between 0 and 24 inclusive (since they denote hours in a day)
+const numberCheck = (arr: string[]): boolean => {
+    const isHourNumber = arr.reduce((accumulator, item) => {
+        return accumulator && !isNaN(Number(item)) && Number(item) >= 0 && Number(item) <= 24
+    }, true)
 
-console.log(calculateExercises([-3, 0, 2, -4.5, 0, 3, 1]))
+    return isHourNumber
+}
+
+//function to parse args (unclear why this can't share the name of a function in a SEPERATE FILE)
+const parseArgs2 = (args: string[]): LogValues => {
+    //need at least 4 arguments
+    if (args.length < 4) throw new Error('too few arguments')
+
+    //everything is a number
+    if (numberCheck(args.slice(2))) {
+        return {
+            target: Number(args[2]),
+            exerciseLog: args.slice(3).map(i => Number(i))
+        }
+    } else {
+        throw new Error('all entries must be numbers in range [0, 24]')
+    }
+}
+
+//ouput to console
+try {
+    const {target, exerciseLog} = parseArgs2(process.argv)
+    const output = calculateExercise(exerciseLog, target)
+    console.log(output)
+} catch (error: unknown) {
+    let errorMessage = 'Indeterminate error'
+    if (error instanceof Error) {
+        errorMessage = 'Error: ' + error.message
+    }
+    console.log(errorMessage)
+}

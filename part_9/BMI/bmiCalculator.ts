@@ -10,6 +10,27 @@ const bmiCategories = [
     {lowerLimit : 40, upperLimit : Infinity, category : "Obese (Class III)"}
 ]
 
+interface BmiValues {
+    height: number,
+    weight: number
+}
+
+//get arguments from command line
+const parseArgs = (args: string[]): BmiValues => {
+    //check for incorrect number of arguments
+    if (args.length < 4) throw new Error ('too few arguments')
+    if (args.length >4) throw new Error('too many arguments')
+
+    if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
+        return {
+            height: Number(args[2]),
+            weight: Number(args[3])
+        }
+    } else {
+        throw new Error('height and weight must be numbers')
+    }
+}
+
 const calculateBmi = (height: number, mass: number): string => {
     const bmi = (mass)/((height/100)**2)
     let thisCategory = 'no BMI calculated'
@@ -24,5 +45,16 @@ const calculateBmi = (height: number, mass: number): string => {
     return thisCategory
 }
 
-console.log(calculateBmi(180, 74))
+//output to console
+try {
+    const { height, weight } = parseArgs(process.argv)
+    const thisBmi = calculateBmi(height, weight)
+    console.log(thisBmi)
+} catch (error : unknown) {
+    let errorMessage = 'Indeterminate error'
+    if (error instanceof Error) {
+        errorMessage = 'Error: ' + error.message
+    }
+    console.log(errorMessage)
+}
 
