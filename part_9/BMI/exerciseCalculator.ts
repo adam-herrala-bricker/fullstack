@@ -44,9 +44,9 @@ const getRating = (average: number, target: number): RatingPair => {
         }
     })
 
-    try {
+    if (pairOut) {
         return pairOut
-    } catch (error: unknown) {
+    } else {
         throw new Error('an unknown error has occured in computing the ratings')
     }
 }
