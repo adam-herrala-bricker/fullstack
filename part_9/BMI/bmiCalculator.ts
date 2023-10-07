@@ -19,7 +19,7 @@ interface BmiValues {
 const parseArgs = (args: string[]): BmiValues => {
     //check for incorrect number of arguments
     if (args.length < 4) throw new Error ('too few arguments')
-    if (args.length >4) throw new Error('too many arguments')
+    if (args.length > 4) throw new Error('too many arguments')
 
     if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
         return {
@@ -31,9 +31,9 @@ const parseArgs = (args: string[]): BmiValues => {
     }
 }
 
-const calculateBmi = (height: number, mass: number): string => {
+export const calculateBmi = (height: number, mass: number): string => {
     const bmi = (mass)/((height/100)**2)
-    let thisCategory = 'no BMI calculated'
+    let thisCategory = 'error'
 
     bmiCategories.forEach(i => {
         if (i.lowerLimit <= bmi && bmi < i.upperLimit) {
@@ -43,18 +43,22 @@ const calculateBmi = (height: number, mass: number): string => {
     })
 
     return thisCategory
+   
 }
 
 //output to console
-try {
-    const { height, weight } = parseArgs(process.argv)
-    const thisBmi = calculateBmi(height, weight)
-    console.log(thisBmi)
-} catch (error : unknown) {
-    let errorMessage = 'Indeterminate error'
-    if (error instanceof Error) {
-        errorMessage = 'Error: ' + error.message
+if (require.main === module) { // only do this if run directly
+    try {
+        const { height, weight } = parseArgs(process.argv)
+        const thisBmi = calculateBmi(height, weight)
+        console.log(thisBmi)
+    } catch (error : unknown) {
+        let errorMessage = 'Indeterminate error'
+        if (error instanceof Error) {
+            errorMessage = 'Error: ' + error.message
+        }
+        console.log(errorMessage)
     }
-    console.log(errorMessage)
 }
+
 
