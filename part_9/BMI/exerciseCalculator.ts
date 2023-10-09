@@ -62,7 +62,7 @@ const sum = (arr: number[]): number => {
 
 //function to calculate final output
 //note how ExerciseValues sets the type for the returned value
-const calculateExercise = (exerciseLog: number[], targetValue: number): ExerciseValues => {
+export const calculateExercise = (exerciseLog: number[], targetValue: number): ExerciseValues => {
     
     const totalDays = exerciseLog.length;
     const trainingDays = exerciseLog.filter(i => i > 0).length;
@@ -84,7 +84,7 @@ const calculateExercise = (exerciseLog: number[], targetValue: number): Exercise
 };
 
 //helper function to check that all the passed values are (convertible to) numbers + are between 0 and 24 inclusive (since they denote hours in a day)
-const numberCheck = (arr: string[]): boolean => {
+export const numberCheck = (arr: string[]): boolean => {
     const isHourNumber = arr.reduce((accumulator, item) => {
         return accumulator && !isNaN(Number(item)) && Number(item) >= 0 && Number(item) <= 24;
     }, true);

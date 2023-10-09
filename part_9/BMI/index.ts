@@ -1,5 +1,6 @@
 import express from 'express';
 import { calculateBmi } from './bmiCalculator';
+import { calculateExercise, numberCheck } from './exerciseCalculator';
 
 const app = express();
 app.use(express.json());
@@ -21,6 +22,27 @@ app.get('/bmi', (req, res) => {
             weight,
             height,
             bmi: calculateBmi(Number(height), Number(weight))});
+    }
+});
+
+app.post('/exercises', (req, res) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { log , target } = req.body;
+
+    if (!log || !target) {
+        res.status(400).json({error: "parameters missing"});
+    }
+
+    if (!numberCheck(log as string[])) {
+        res.status(400).json({error: "hours logged must be in range [0,24]"});
+    }
+
+    try {
+        const output = calculateExercise(log as number[], target as number);
+        res.json({output});
+    } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        res.status(400).json({error: "malformatted inputs"});
     }
 });
 
