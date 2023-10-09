@@ -1,5 +1,6 @@
 import express from 'express';
 import { getPatientsNonsensitive, addPatient } from '../services/patientsServices';
+import toNewPatientEntry from '../utils';
 
 const router = express.Router();
 
@@ -9,9 +10,18 @@ router.get('/', (_req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const { name, dateOfBirth, ssn, gender, occupation } = req.body
-    const addedEntry = addPatient(name, dateOfBirth, ssn, gender, occupation);
-    res.send(addedEntry);
+    try {
+        const newEntry = toNewPatientEntry(req.body);
+        const addedEntry = addPatient(newEntry);
+        res.json(addedEntry);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            res.status(400).send(error.message);
+        } else {
+            res.status(400).json({error: "an unknown error has occured"});
+        }
+        
+    }
 });
 
 export default router;
