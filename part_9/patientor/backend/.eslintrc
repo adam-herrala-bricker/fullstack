@@ -25,6 +25,6 @@
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-      "project": "./tsconfig.json"
+      "project": "/Users/ambric/Development/fullstack/part_9/patientor/backend/tsconfig.json"
     }
   }
