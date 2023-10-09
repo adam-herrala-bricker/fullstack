@@ -8,7 +8,7 @@ const bmiCategories = [
     {lowerLimit : 30, upperLimit : 35, category : "Obese (Class I)"},
     {lowerLimit : 35, upperLimit : 40, category : "Obese (Class II)"},
     {lowerLimit : 40, upperLimit : Infinity, category : "Obese (Class III)"}
-]
+];
 
 interface BmiValues {
     height: number,
@@ -18,46 +18,46 @@ interface BmiValues {
 //get arguments from command line
 const parseArgs = (args: string[]): BmiValues => {
     //check for incorrect number of arguments
-    if (args.length < 4) throw new Error ('too few arguments')
-    if (args.length > 4) throw new Error('too many arguments')
+    if (args.length < 4) throw new Error ('too few arguments');
+    if (args.length > 4) throw new Error('too many arguments');
 
     if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
         return {
             height: Number(args[2]),
             weight: Number(args[3])
-        }
+        };
     } else {
-        throw new Error('height and weight must be numbers')
+        throw new Error('height and weight must be numbers');
     }
-}
+};
 
 export const calculateBmi = (height: number, mass: number): string => {
-    const bmi = (mass)/((height/100)**2)
-    let thisCategory = 'error'
+    const bmi = (mass)/((height/100)**2);
+    let thisCategory = 'error';
 
     bmiCategories.forEach(i => {
         if (i.lowerLimit <= bmi && bmi < i.upperLimit) {
             
-            thisCategory = i.category
+            thisCategory = i.category;
         }
-    })
+    });
 
-    return thisCategory
+    return thisCategory;
    
-}
+};
 
 //output to console
 if (require.main === module) { // only do this if run directly
     try {
-        const { height, weight } = parseArgs(process.argv)
-        const thisBmi = calculateBmi(height, weight)
-        console.log(thisBmi)
+        const { height, weight } = parseArgs(process.argv);
+        const thisBmi = calculateBmi(height, weight);
+        console.log(thisBmi);
     } catch (error : unknown) {
-        let errorMessage = 'Indeterminate error'
+        let errorMessage = 'Indeterminate error';
         if (error instanceof Error) {
-            errorMessage = 'Error: ' + error.message
+            errorMessage = 'Error: ' + error.message;
         }
-        console.log(errorMessage)
+        console.log(errorMessage);
     }
 }
 
