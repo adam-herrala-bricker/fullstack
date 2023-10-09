@@ -5,3 +5,15 @@ GET http://localhost:3000/api/patients
 
 ###
 GET http://localhost:3000/api/ping
+
+###
+POST http://localhost:3000/api/patients
+Content-Type: application/json
+
+{
+    "name": "Jimmy",
+    "dateOfBirth": "1984-02-10",
+     "ssn": "021084-888A",
+     "gender": "female",
+     "occupation": "consultant"
+}
