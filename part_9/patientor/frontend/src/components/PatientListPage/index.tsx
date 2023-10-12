@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Box, Table, Button, TableHead, Typography, TableCell, TableRow, TableBody } from '@mui/material';
 import axios from 'axios';
 
@@ -54,21 +55,21 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
           Patient list
         </Typography>
       </Box>
-      <Table style={{ marginBottom: "1em" }}>
+      <Table style={{ marginBottom: "1em"}}>
         <TableHead>
           <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Gender</TableCell>
-            <TableCell>Occupation</TableCell>
-            <TableCell>Health Rating</TableCell>
+            <TableCell style = {{color: 'white'}}>Name</TableCell>
+            <TableCell style = {{color: 'white'}}>Gender</TableCell>
+            <TableCell style = {{color: 'white'}}>Occupation</TableCell>
+            <TableCell style = {{color: 'white'}}>Health Rating</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {Object.values(patients).map((patient: Patient) => (
             <TableRow key={patient.id}>
-              <TableCell>{patient.name}</TableCell>
-              <TableCell>{patient.gender}</TableCell>
-              <TableCell>{patient.occupation}</TableCell>
+              <TableCell><Button component = {Link} to = {`/patients/${patient.id}`} variant="outlined" color="info">{patient.name}</Button></TableCell>
+              <TableCell style = {{color: 'white'}}>{patient.gender}</TableCell>
+              <TableCell style = {{color: 'white'}}>{patient.occupation}</TableCell>
               <TableCell>
                 <HealthRatingBar showText={false} rating={1} />
               </TableCell>
