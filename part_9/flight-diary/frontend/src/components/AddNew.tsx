@@ -8,10 +8,12 @@ const AddNew = ({diaries, setDiaries, setMessage}:
     {
         diaries: DiaryEntry[], 
         setDiaries: React.Dispatch<React.SetStateAction<Array<DiaryEntry>>>, 
-        setMessage: React.Dispatch<React.SetStateAction<string | null>>}) => {
+        setMessage: React.Dispatch<React.SetStateAction<string | null>>}) => 
+    {
     //note you have to type the key as a string to get the indexing to work below (something something 'index signature'?)
     const defaultFormData: {[key: string]: string} = { date: '', visibility: '', weather: '', comment: ''}
     const [formData, setFormData] = useState(defaultFormData)
+    console.log(formData)
 
     //event handler
     const handleSubmit = async (event: React.SyntheticEvent) => {
@@ -40,11 +42,28 @@ const AddNew = ({diaries, setDiaries, setMessage}:
     return(
         <div>
             <form onSubmit={handleSubmit}>
-                {Object.keys(defaultFormData).map(i =>
-                    <div key = {i}>
-                        {i} <input value = {formData[i]} onChange = {(event) => setFormData({...formData, [i]: event.target.value})}/>
-                    </div>
-                    )}
+                <div>
+                    <input type = 'date' value = {formData.date} onChange = {(event) => setFormData({...formData, date: event.target.value})}/>
+                </div>
+                <div>
+                    visibility:
+                    great <input type = 'radio' name = 'visibility' value = 'great' onClick={() => setFormData({...formData, visibility: 'great'})}/>
+                    good <input type = 'radio' name = 'visibility' value = 'good' onClick={() => setFormData({...formData, visibility: 'good'})}/>
+                    ok <input type = 'radio' name = 'visibility' value = 'ok' onClick={() => setFormData({...formData, visibility: 'ok'})}/>
+                    poor <input type = 'radio' name = 'visibility' value = 'poor' onClick={() => setFormData({...formData, visibility: 'poor'})}/>
+                </div>
+                <div>
+                    weather:
+                    sunny <input type = 'radio' name = 'weather' value = 'sunny' onClick={() => setFormData({...formData, weather: 'sunny'})}/>
+                    rainy <input type = 'radio' name = 'weather' value = 'rainy' onClick={() => setFormData({...formData, weather: 'rainy'})}/>
+                    cloudy <input type = 'radio' name = 'weather' value = 'cloudy' onClick={() => setFormData({...formData, weather: 'cloudy'})}/>
+                    stormy <input type = 'radio' name = 'weather' value = 'stormy' onClick={() => setFormData({...formData, weather: 'stormy'})}/>
+                    windy <input type = 'radio' name = 'weather' value = 'windy' onClick={() => setFormData({...formData, weather: 'windy'})}/>
+                </div>
+                <div>
+                    comments: <input value = {formData.comment} onChange = {(event) => setFormData({...formData, comment: event.target.value})}/>
+                </div>
+                    
                 <button type = 'submit'>add</button>
             </form>
         </div>
