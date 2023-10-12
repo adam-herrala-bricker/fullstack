@@ -16,6 +16,18 @@ export const getPatientsNonsensitive = (): NonSensitivePatientData[] => {
     }));
 };
 
+//for a single patient
+export const getSingleNonsensitive = (id: string): NonSensitivePatientData => {
+    const allData = getPatients();
+    const thisData = allData.find(i => i.id === id);
+
+    if (thisData) {
+        return thisData;
+    } else {
+        throw new Error('There is no patient with that id in the database.');
+    }
+};
+
 export const addPatient = (entry: NewPatientEntry): Patient => {
     const newPatient: Patient = { ...entry, id : uuid()};
     
