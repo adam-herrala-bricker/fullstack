@@ -1,19 +1,7 @@
-import { useState, useEffect } from 'react'
-import { getAll } from '../services/diaryServices'
 import { DiaryEntry } from '../../../backend/src/types'
 
-const Diaries = () => {
-    const [diaries, setDiaries] = useState<DiaryEntry[]>([])
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const foundData = await getAll()
-            setDiaries(foundData)
-            
-        }
-        fetchData()
-    }, [])
-    console.log('diaries', diaries)
+const Diaries = ({diaries}: {diaries: DiaryEntry[]}) => {
+   
 
     return(
         <div>
