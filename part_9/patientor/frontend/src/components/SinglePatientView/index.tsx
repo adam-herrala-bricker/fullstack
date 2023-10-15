@@ -4,10 +4,10 @@ import { Typography } from '@mui/material';
 import { Male, Female } from '@mui/icons-material';
 
 //pulling type from backend
-import { Patient } from '../../../../backend/types';
+import { Patient, Diagnosis } from '../../types';
 import patientServices from '../../services/patients';
 
-const Entries = ( { thisPatient }: {thisPatient: Patient }) => {
+const Entries = ( { thisPatient, diagnoses }: {thisPatient: Patient, diagnoses: Diagnosis[] }) => {
 
     if (!thisPatient.entries || thisPatient.entries.length < 1) {
         return null;
@@ -21,7 +21,7 @@ const Entries = ( { thisPatient }: {thisPatient: Patient }) => {
                     {i.date}: {i.description}
                     <ul>
                     {i.diagnosisCodes?.map(j => 
-                        <li key = {j}>{j}</li>)}
+                        <li key = {j}>{j}: {diagnoses.find(k => k.code === j)?.name}</li>)}
                     </ul>
                 </div>
                 )}
@@ -30,7 +30,7 @@ const Entries = ( { thisPatient }: {thisPatient: Patient }) => {
     );
 };
 
-const SinglePatientView = () => {
+const SinglePatientView = ({ diagnoses }: {diagnoses: Diagnosis[]}) => {
     const [thisPatient, setThisPatient] = useState<Patient | null>(null);
     const id = useParams().id as string;
 
@@ -58,7 +58,7 @@ const SinglePatientView = () => {
                 <div><b>occupation: </b>{thisPatient.occupation}</div>
             </div>
             <div className = 'single-container'>
-                <Entries thisPatient = {thisPatient}/>
+                <Entries thisPatient = {thisPatient} diagnoses = {diagnoses}/>
             </div>
         </div>
     );
