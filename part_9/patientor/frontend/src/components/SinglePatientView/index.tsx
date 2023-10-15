@@ -3,11 +3,53 @@ import { useParams } from "react-router-dom";
 import { Typography } from '@mui/material';
 import { Male, Female } from '@mui/icons-material';
 
-//pulling type from backend
-import { Patient, Diagnosis } from '../../types';
+import { Patient, Diagnosis, Entry, OccupationalHealthEntry, HealthCheckEntry } from '../../types';
 import patientServices from '../../services/patients';
 
-const Entries = ( { thisPatient, diagnoses }: {thisPatient: Patient, diagnoses: Diagnosis[] }) => {
+//helper function
+const assertNever = (value: never): never => {
+    throw new Error(
+      `Unhandled discriminated union member: ${JSON.stringify(value)}`
+    );
+};
+
+const HospitalEntry = () => {
+    return(
+       null
+    );
+};
+
+const OccupationalEntry = ({entry}: {entry: OccupationalHealthEntry}) => {
+    return(
+        <div>
+            employer: {entry.employerName}
+        </div>
+    );
+};
+
+const HealthcheckEntry = ({entry}: {entry: HealthCheckEntry}) => {
+    return(
+        <div>
+            healthcheck rating: {entry.healthCheckRating}
+        </div>
+    );
+};
+
+//completely unnecessary prop drilling using this structure, so we're going to skip making it look nice
+const EntryDetails = ({entry}: {entry: Entry}) => {
+    switch (entry.type) {
+        case 'Hospital':
+            return <HospitalEntry />;
+        case 'OccupationalHealthcare':
+            return <OccupationalEntry entry = {entry} />;
+        case 'HealthCheck':
+            return <HealthcheckEntry entry = {entry} />;
+        default:
+            return assertNever(entry);
+    }
+};
+
+const Entries = ( { thisPatient, diagnoses }: {thisPatient: Patient, diagnoses: Diagnosis[]}) => {
 
     if (!thisPatient.entries || thisPatient.entries.length < 1) {
         return null;
@@ -18,7 +60,10 @@ const Entries = ( { thisPatient, diagnoses }: {thisPatient: Patient, diagnoses: 
             <Typography variant = 'h5' component = 'h2'>Entries</Typography>
             {thisPatient.entries.map(i => 
                 <div key = {i.date}>
-                    {i.date}: {i.description}
+                    <div>{i.date}: {i.description}</div>
+                    <div>{i.type}</div>
+                    <div>specialist: {i.specialist}</div>
+                    <EntryDetails entry = {i} />
                     <ul>
                     {i.diagnosisCodes?.map(j => 
                         <li key = {j}>{j}: {diagnoses.find(k => k.code === j)?.name}</li>)}
