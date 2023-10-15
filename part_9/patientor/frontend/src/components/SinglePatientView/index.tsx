@@ -3,8 +3,32 @@ import { useParams } from "react-router-dom";
 import { Typography } from '@mui/material';
 import { Male, Female } from '@mui/icons-material';
 
-import { Patient } from '../../types';
+//pulling type from backend
+import { Patient } from '../../../../backend/types';
 import patientServices from '../../services/patients';
+
+const Entries = ( { thisPatient }: {thisPatient: Patient }) => {
+
+    if (!thisPatient.entries || thisPatient.entries.length < 1) {
+        return null;
+    }
+
+    return(
+        <div>
+            <Typography variant = 'h5' component = 'h2'>Entries</Typography>
+            {thisPatient.entries.map(i => 
+                <div key = {i.date}>
+                    {i.date}: {i.description}
+                    <ul>
+                    {i.diagnosisCodes?.map(j => 
+                        <li key = {j}>{j}</li>)}
+                    </ul>
+                </div>
+                )}
+        </div>
+        
+    );
+};
 
 const SinglePatientView = () => {
     const [thisPatient, setThisPatient] = useState<Patient | null>(null);
@@ -23,14 +47,19 @@ const SinglePatientView = () => {
     }
 
     return(
-        <div className = 'single-container'>
-            <div className='flex-row'>
-                <Typography variant = 'h5' component = 'h2'>{thisPatient.name}</Typography>
-                {thisPatient.gender === 'male' && <Male />}
-                {thisPatient.gender === 'female' && <Female />}
+        <div>
+            <div className = 'single-container'>
+                <div className='flex-row'>
+                    <Typography variant = 'h5' component = 'h2'>{thisPatient.name}</Typography>
+                    {thisPatient.gender === 'male' && <Male />}
+                    {thisPatient.gender === 'female' && <Female />}
+                </div>
+                <div><b>ssn: </b>{thisPatient.ssn}</div>
+                <div><b>occupation: </b>{thisPatient.occupation}</div>
             </div>
-            <div><b>ssn: </b>{thisPatient.ssn}</div>
-            <div><b>occupation: </b>{thisPatient.occupation}</div>
+            <div className = 'single-container'>
+                <Entries thisPatient = {thisPatient}/>
+            </div>
         </div>
     );
 };
