@@ -1,9 +1,11 @@
-import { View, StyleSheet, Pressable, Text } from 'react-native';
+import { View, ScrollView, StyleSheet, Pressable, Text } from 'react-native';
+import { Link } from 'react-router-native';
 import Constants from 'expo-constants';
 import theme from '../theme'
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
     marginTop: Constants.statusBarHeight,
     paddingTop: 10,
     paddingBottom: 10,
@@ -13,19 +15,31 @@ const styles = StyleSheet.create({
   text: {
     color: theme.colors.textWhite,
     fontSize: theme.fontSizes.heading,
-    fontWeight: theme.fontWeights.bold
+    fontWeight: theme.fontWeights.bold,
+    marginRight: 15
   }
 });
 
+const BarItem = ({label, path}) => {
+    return (
+        <Pressable>
+            <Link to = {path}>
+                <Text style = {styles.text}>
+                    {label}
+                </Text>
+            </Link>
+        </Pressable>
+    );
+};
+
 const AppBar = () => {
   return (
-  <View style={styles.container}>
-    <Pressable>
-        <Text style = {styles.text}>
-            Repositories
-        </Text>
-    </Pressable>
-</View>
+    <View style={styles.container}>
+        <ScrollView horizontal>
+            <BarItem label = 'Repositories' path = '/' />
+            <BarItem label = 'Login' path = '/login'/>
+        </ScrollView>
+    </View>
   );
 };
 
