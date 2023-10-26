@@ -5,7 +5,6 @@ import theme from '../theme'
 const styles = StyleSheet.create({
   container: {
     marginTop: Constants.statusBarHeight,
-    marginBottom: 5,
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 3,
