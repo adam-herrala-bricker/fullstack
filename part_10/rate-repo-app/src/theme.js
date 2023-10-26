@@ -6,7 +6,8 @@ const theme = {
         backgroundSecondary: '#145366',
         backgroundBright: '#66DBFF',
         textWhite: '#FFFFFF',
-        textPrimary: '#007598'
+        textPrimary: '#007598',
+        error: '#d73a4a'
     },
     fontSizes: {
         heading: 20,

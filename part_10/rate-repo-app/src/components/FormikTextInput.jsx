@@ -3,13 +3,35 @@
 
 import { StyleSheet, Text } from 'react-native';
 import { useField } from 'formik';
-
 import TextInput from './TextInput';
+import theme from '../theme'
 
 const styles = StyleSheet.create({
-  errorText: {
-    marginTop: 5,
-  },
+    errorText: {
+    marginLeft: 10,
+    color: theme.colors.error,
+    },
+
+    boxCommon: {
+        margin: 8,
+        padding: 10,
+
+        borderRadius: theme.radii.subtleRadius,
+        borderStyle: 'solid',
+        borderWidth: 1,
+
+        fontSize: theme.fontSizes.subheading
+    },
+
+    textBox: {
+        borderColor: theme.colors.backgroundDark,
+    },
+
+    errorBox: {
+        borderColor: theme.colors.error,
+        
+    }
+
 });
 
 const FormikTextInput = ({ name, ...props }) => {
@@ -19,6 +41,7 @@ const FormikTextInput = ({ name, ...props }) => {
   return (
     <>
       <TextInput
+        style = {showError ? [styles.boxCommon, styles.errorBox] : [styles.boxCommon, styles.textBox]}
         onChangeText={value => helpers.setValue(value)}
         onBlur={() => helpers.setTouched(true)}
         value={field.value}
