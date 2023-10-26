@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     },
 
     nameText: {
+        fontFamily: theme.fontFamily,
         fontSize: theme.fontSizes.heading,
         fontWeight: theme.fontWeights.bold,
         color: theme.colors.textPrimary,
@@ -43,18 +44,21 @@ const styles = StyleSheet.create({
     },
 
     descriptionText: {
+        fontFamily: theme.fontFamily,
         fontSize: theme.fontSizes.small,
         fontWeight: theme.fontWeights.thin
     },
 
     languageText: {
         padding: 6,
+        fontFamily: theme.fontFamily,
         color: theme.colors.textWhite,
         fontSize: theme.fontSizes.subheading,
         fontWeight: theme.fontWeights.bold,
     },
 
     statText: {
+        fontFamily: theme.fontFamily,
         fontWeight: theme.fontWeights.bold,
     },
 

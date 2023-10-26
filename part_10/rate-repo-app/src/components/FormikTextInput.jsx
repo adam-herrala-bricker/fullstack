@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     errorText: {
     marginLeft: 10,
     color: theme.colors.error,
+    fontFamily: theme.fontFamily
     },
 
     boxCommon: {
@@ -20,7 +21,8 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
         borderWidth: 1,
 
-        fontSize: theme.fontSizes.subheading
+        fontSize: theme.fontSizes.subheading,
+        fontFamily: theme.fontFamily
     },
 
     textBox: {

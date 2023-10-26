@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textWhite,
     fontSize: theme.fontSizes.heading,
     fontWeight: theme.fontWeights.bold,
+    fontFamily: theme.fontFamily,
     marginRight: 15
   }
 });
