@@ -4,6 +4,7 @@ const theme = {
         backgroudLight: '#D1D1D1',
         backgroupWhite: '#FFFFFF',
         backgroundSecondary: '#145366',
+        backgroundBright: '#66DBFF',
         textWhite: '#FFFFFF',
         textPrimary: '#007598'
     },

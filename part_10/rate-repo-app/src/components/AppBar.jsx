@@ -37,7 +37,7 @@ const AppBar = () => {
     <View style={styles.container}>
         <ScrollView horizontal>
             <BarItem label = 'Repositories' path = '/' />
-            <BarItem label = 'Login' path = '/login'/>
+            <BarItem label = 'Log in' path = '/login'/>
         </ScrollView>
     </View>
   );
