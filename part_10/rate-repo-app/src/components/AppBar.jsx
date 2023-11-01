@@ -1,5 +1,8 @@
 import { View, ScrollView, StyleSheet, Pressable, Text } from 'react-native';
 import { Link } from 'react-router-native';
+import { useApolloClient, useQuery } from '@apollo/client';
+import { GET_ME } from '../graphql/queries';
+import useAuthStorage from '../hooks/useAuthStorage';
 import Constants from 'expo-constants';
 import theme from '../theme'
 
@@ -33,12 +36,36 @@ const BarItem = ({label, path}) => {
     );
 };
 
+const SignOut = () => {
+  const authStorage = useAuthStorage()
+  const apolloClient = useApolloClient()
+  
+  //event handler
+  const handleLogout = () => {
+    //note: it seems quite important that the token is removed from local storage BEFORE the store is reset
+    authStorage.removeAccessToken()
+    apolloClient.resetStore()
+  }
+
+  return (
+    <Pressable onPress={handleLogout}>
+      <Text style = {styles.text}>
+        Log out
+      </Text>
+    </Pressable>
+  )
+}
+
 const AppBar = () => {
+  const response = useQuery(GET_ME, {fetchPolicy: 'cache-and-network'})
+  const thisUser = response.data.me
+  console.log('this user: ', thisUser)
+
   return (
     <View style={styles.container}>
         <ScrollView horizontal>
             <BarItem label = 'Repositories' path = '/' />
-            <BarItem label = 'Log in' path = '/login'/>
+            {thisUser ? <SignOut /> : <BarItem label = 'Log in' path = '/login'/> }
         </ScrollView>
     </View>
   );
