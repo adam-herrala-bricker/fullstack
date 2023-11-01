@@ -1,10 +1,10 @@
 import { View, Pressable, Text, StyleSheet } from 'react-native'
+import { useNavigate } from 'react-router-native';
 import { Formik } from 'formik'
 import FormikTextInput  from './FormikTextInput'
 import * as yup from 'yup'
 
 import useSignIn from '../hooks/useSignIn'
-import AuthStorage from '../utils/authStorage'
 
 import theme from '../theme';
 
@@ -54,21 +54,16 @@ const SignInForm = ({ onSubmit }) => {
 const SignIn = () => {
     const initialValues = {username: '', password: ''}
     const [signIn] = useSignIn()
-
-    const thisAuth = new AuthStorage('thisUser')
+    const navigate = useNavigate()
     
     const onSubmit = async (values) => {
         const { username, password } = values
         console.log(values);
         
         try {
-            const result = await signIn({ username, password })
-            const thisToken = result.data.authenticate.accessToken
-            console.log('token recieved from BE:', thisToken)
-            await thisAuth.setAccessToken(thisToken)
-            //await thisAuth.removeAccessToken()
-            const tokenFromStorage = await thisAuth.getAccessToken()
-            console.log('token in storage:', tokenFromStorage)
+            await signIn({ username, password })
+            navigate('/')
+
         } catch (error) {
             console.log(error)
         }
