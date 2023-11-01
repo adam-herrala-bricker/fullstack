@@ -4,6 +4,8 @@ import FormikTextInput  from './FormikTextInput'
 import * as yup from 'yup'
 
 import useSignIn from '../hooks/useSignIn'
+import AuthStorage from '../utils/authStorage'
+
 import theme from '../theme';
 
 const styles = StyleSheet.create({
@@ -52,6 +54,8 @@ const SignInForm = ({ onSubmit }) => {
 const SignIn = () => {
     const initialValues = {username: '', password: ''}
     const [signIn] = useSignIn()
+
+    const thisAuth = new AuthStorage('thisUser')
     
     const onSubmit = async (values) => {
         const { username, password } = values
@@ -59,7 +63,12 @@ const SignIn = () => {
         
         try {
             const result = await signIn({ username, password })
-            console.log(result.data.authenticate.accessToken)
+            const thisToken = result.data.authenticate.accessToken
+            console.log('token recieved from BE:', thisToken)
+            await thisAuth.setAccessToken(thisToken)
+            //await thisAuth.removeAccessToken()
+            const tokenFromStorage = await thisAuth.getAccessToken()
+            console.log('token in storage:', tokenFromStorage)
         } catch (error) {
             console.log(error)
         }
