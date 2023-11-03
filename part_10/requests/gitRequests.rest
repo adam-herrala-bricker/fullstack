@@ -1,0 +1,2 @@
+//this is purely for testing requests to github
+GET https://github.com/adam-herrala-bricker/

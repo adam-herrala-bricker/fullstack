@@ -8,7 +8,7 @@ import useSignIn from '../hooks/useSignIn'
 
 import theme from '../theme';
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
 
     buttonContainer: {
         flexDirection:'row',
