@@ -9,6 +9,7 @@ const theme = {
         backgroundBright: '#66DBFF',
         textWhite: '#FFFFFF',
         textPrimary: '#007598',
+        textLight: '#57666D',
         error: '#d73a4a'
     },
 

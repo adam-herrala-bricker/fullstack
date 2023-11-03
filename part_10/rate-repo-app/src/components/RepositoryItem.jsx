@@ -1,5 +1,6 @@
-import { StyleSheet, Image, View, Text } from 'react-native';
-import { shortenInteger } from '../utils/helperFunctions'
+import { StyleSheet, Pressable, Image, View, Text } from 'react-native';
+import { openURL } from 'expo-linking'; //for opening urls in another app
+import { shortenInteger } from '../utils/helperFunctions';
 import theme from '../theme';
 
 const styles = StyleSheet.create({
@@ -11,7 +12,7 @@ const styles = StyleSheet.create({
     },
 
     flexContainerRow: {
-        flexDirection: 'row',
+        flexDirection: 'row'
     },
 
     flexContainerColumn: {
@@ -19,6 +20,7 @@ const styles = StyleSheet.create({
         alignItems: 'left',
         justifyContent: 'center',
         marginLeft: 10,
+        flex: 1
     },
 
     flexStretch: {
@@ -33,6 +35,13 @@ const styles = StyleSheet.create({
     containerLanguage: {
         margin: 10,
         backgroundColor: theme.colors.backgroundSecondary,
+        borderRadius: theme.radii.subtleRadius
+    },
+
+    containerLink: {
+        margin: 10,
+        flexGrow: 1,
+        backgroundColor: theme.colors.backgroundDark,
         borderRadius: theme.radii.subtleRadius
     },
 
@@ -51,6 +60,7 @@ const styles = StyleSheet.create({
     },
 
     languageText: {
+        alignSelf: 'center',
         padding: 6,
         fontFamily: theme.fontFamily,
         color: theme.colors.textWhite,
@@ -75,12 +85,16 @@ const Header = ({item}) => {
         <View style = {styles.flexContainerRow}>
             <Image style = {styles.tinyLogo} source = {{uri: item.ownerAvatarUrl}}/>
             <View style = {styles.flexContainerColumn}>
-                <Text style = {styles.nameText}>
-                    {item.fullName}
-                </Text> 
-                <Text style = {styles.descriptionText}>
-                    {item.description}
-                </Text>
+                <View>
+                    <Text style = {styles.nameText}>
+                        {item.fullName}
+                    </Text>
+                </View>
+                <View>
+                    <Text style = {styles.descriptionText}>
+                        {item.description}
+                    </Text>
+                </View> 
             </View>
         </View>
     );
@@ -114,7 +128,25 @@ const ItemStats = ({entry, label}) => {
     )
 }
 
-const RepositoryItem = ({item}) => {
+const ItemLink = ({url}) => {
+    //event handler
+    const handlePress = () => {
+        console.log('pressed!')
+        openURL(url)
+    }
+
+    return(
+        <Pressable onPress = {handlePress} style = {styles.containerLink}>
+            <Text style = {styles.languageText}>
+                Open in GitHub
+            </Text>
+        </Pressable>
+    )
+}
+
+//isSingle tracks whether this is the "single view" --> shows the url link
+const RepositoryItem = ({ item, isSingle }) => {
+
     return(
         <View style = {styles.container} testID = 'repositoryItem'>
             <Header item = {item} />
@@ -126,6 +158,9 @@ const RepositoryItem = ({item}) => {
                 <ItemStats entry = {item.forksCount} label = 'Forks'/>
                 <ItemStats entry = {item.reviewCount} label = 'Reviews'/>
                 <ItemStats entry = {item.ratingAverage} label = 'Rating'/>
+            </View>
+            <View style = {[styles.flexContainerRow, styles.flexStretch]}>
+                {isSingle && <ItemLink url = {item.url}/>}
             </View>
         </View>
     )
