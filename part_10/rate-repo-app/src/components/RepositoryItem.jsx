@@ -1,4 +1,5 @@
 import { StyleSheet, Image, View, Text } from 'react-native';
+import { shortenInteger } from '../utils/helperFunctions'
 import theme from '../theme';
 
 const styles = StyleSheet.create({
@@ -96,19 +97,7 @@ const LanguageButton = ({language}) => {
 };
 
 const ItemStats = ({entry, label}) => {
-    //for shortening integers over 1,000 to ...k (always returns string)
-    const shortenInteger = (integer) => {
-        if (integer > 1000) {
-            //note: doing two steps bc we still want the 10ths in the final string, and idk if js round can round to 10ths
-            const divByHundo = integer/100
-            const divByThou = Math.round(divByHundo)/10
-            const stringOut = divByThou + 'k'
-
-            return stringOut
-        }
-
-        return integer.toString()
-    }
+   
     return(
         <View>
             <View style = {styles.centerItem}>
@@ -127,7 +116,7 @@ const ItemStats = ({entry, label}) => {
 
 const RepositoryItem = ({item}) => {
     return(
-        <View style = {styles.container}>
+        <View style = {styles.container} testID = 'repositoryItem'>
             <Header item = {item} />
             <View style = {styles.flexContainerRow}>
                 <LanguageButton language = {item.language}/>

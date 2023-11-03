@@ -58,7 +58,7 @@ const SignOut = () => {
 
 const AppBar = () => {
   const response = useQuery(GET_ME, {fetchPolicy: 'cache-and-network'})
-  const thisUser = response.data.me
+  const thisUser = response.data ? response.data.me : null
   console.log('this user: ', thisUser)
 
   return (

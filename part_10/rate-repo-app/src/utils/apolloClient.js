@@ -6,6 +6,8 @@ const httpLink = createHttpLink({
     uri: Constants.manifest.extra.uri
 });
 
+console.log(Constants.manifest.extra.uri)
+
 const createApolloClient = (authStorage) => {
     const authLink = setContext(async (_, { headers}) => {
         try {

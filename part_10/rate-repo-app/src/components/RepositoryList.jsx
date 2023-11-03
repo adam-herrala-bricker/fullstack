@@ -15,15 +15,14 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-const RepositoryList = () => {
-  const { repositories } = useRepositories();
+//seperating out container for purely for testing purposes (efficient!)
+export const RepositoryListContainer = ({ repositories }) => {
+   //need to get the "nodes" from the "edges" array
+   const repositoryNodes = repositories
+   ? repositories.edges.map(edge => edge.node)
+   : [];
 
-  //need to get the "nodes" from the "edges" array
-  const repositoryNodes = repositories
-    ? repositories.edges.map(edge => edge.node)
-    : [];
-
-  return (
+   return (
     <FlatList
       style = {styles.container}
       data={repositoryNodes}
@@ -31,6 +30,17 @@ const RepositoryList = () => {
       renderItem = {({item}) => <RepositoryItem item = {item}/>}
       keyExtractor = {item => item.id}
     />
+    )
+
+
+};
+
+const RepositoryList = () => {
+  //this "side effect" would make testing harder
+  const { repositories } = useRepositories();
+
+  return (
+    <RepositoryListContainer repositories = { repositories }/>
   );
 };
 
