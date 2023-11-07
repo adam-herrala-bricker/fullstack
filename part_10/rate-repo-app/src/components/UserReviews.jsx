@@ -7,7 +7,7 @@ import theme from '../theme'
 
 const styles = StyleSheet.create({
     separator: {
-        height: 3,
+        height: 5,
         backgroundColor: theme.colors.backgroudLight
     }
 })
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 const UserReviews = () => {
-    const {data, loading} = useQuery(
+    const {data, loading, refetch} = useQuery(
         GET_ME,
         {
             variables: { includeReviews: true },
@@ -32,7 +32,7 @@ const UserReviews = () => {
         <FlatList 
             data = {reviews}
             ItemSeparatorComponent={ItemSeparator}
-            renderItem = {({item}) => <ReviewItem review = {item} showUser = {false}/>}/>
+            renderItem = {({item}) => <ReviewItem review = {item} refetch = {refetch} isSingleView = {false}/>}/>
         
     )
 }

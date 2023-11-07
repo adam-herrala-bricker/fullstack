@@ -1,8 +1,10 @@
 //for the single view of repository items
-import { Text, FlatList, View, StyleSheet } from 'react-native'
+import { Alert, Text, FlatList, View, Pressable, StyleSheet } from 'react-native'
 import { useParams } from 'react-router-native'
-import { useQuery } from '@apollo/client'
+import { useQuery, useMutation } from '@apollo/client'
 import { GET_REPOSITORY } from '../graphql/queries'
+import { DELETE_REVIEW } from '../graphql/mutations'
+import { openURL } from 'expo-linking'
 import RepositoryItem from './RepositoryItem'
 import theme from '../theme'
 
@@ -53,6 +55,11 @@ const styles = StyleSheet.create({
         marginTop: 4
     },
 
+    containerButton: {
+        flexDirection: 'row',
+        padding: 3
+    },
+
     textRating: {
         color: theme.colors.textPrimary,
         fontSize: theme.fontSizes.heading,
@@ -72,39 +79,106 @@ const styles = StyleSheet.create({
     textReview: {
         flex: 1,
         flexWrap: 'wrap'
+    },
+
+    textButton: {
+        fontSize: theme.fontSizes.subheading,
+        fontWeight: theme.fontWeights.bold,
+        color: theme.colors.textWhite
+
+    },
+
+    button: {
+        padding: 6,
+        margin: 3,
+
+        flex: 1,
+        alignItems: 'center',
+
+        borderRadius: theme.radii.subtleRadius
+    },
+
+    buttonView: {
+        backgroundColor: theme.colors.backgroundSecondary
+    },
+    buttonDelete: {
+        backgroundColor: theme.colors.error
     }
 })
 
-export const ReviewItem = ({ review, showUser }) => {
+const ReviewButtons = ({review, refetch}) => {
+    const url = review.repository.url
+    const repositoryName = review.repository.name
+    const reviewID = review.id
+    const [deleteReviewByID] = useMutation(DELETE_REVIEW)
+     
+    //event handlers
+    const handleView = () => {
+        openURL(url)
+    }
+
+    const deletails = async () => {
+        console.log(reviewID)
+        await deleteReviewByID({variables: {deleteReviewID: reviewID}})
+        refetch()
+    }
+
+    const handleDelete = async () => {
+        Alert.alert(
+            'Delete review', 
+            `Are you sure that you want to delete your review for ${repositoryName}?`,
+            [
+                {text: 'delete', onPress: () => deletails()},
+                {text: 'cancel', onPress: () => console.log('deleted!')}
+            ])
+    }
+    
+        return (
+            <View style = {styles.containerButton}>
+                <Pressable style = {[styles.button, styles.buttonView]}onPress = {handleView}>
+                    <Text style = {styles.textButton}>View on GitHub</Text>
+                </Pressable>
+                <Pressable style = {[styles.button, styles.buttonDelete]} onPress = {handleDelete}>
+                    <Text style = {styles.textButton}>Delete review</Text>
+                </Pressable>
+            </View>
+        )
+}
+
+export const ReviewItem = ({ review, isSingleView, refetch }) => {
 
     return(
-        <View style = {styles.containerMain}>
-            <View style = {styles.containerRating}>
-                <View style = {styles.containerCircle}>
-                    <Text style = {styles.textRating}>
-                        {review.rating}
-                    </Text>
+        <View>
+            <View style = {styles.containerMain}>
+                <View style = {styles.containerRating}>
+                    <View style = {styles.containerCircle}>
+                        <Text style = {styles.textRating}>
+                            {review.rating}
+                        </Text>
+                    </View>
+                    
                 </View>
-                
+                <View style = {styles.containerBody}>
+                    <View>
+                        <Text style = {styles.textUser}>
+                            {isSingleView? review.user.username : review.repositoryId}
+                        </Text>
+                    </View>
+                    <View>
+                        <Text style = {styles.textDate}>
+                            {review.createdAt.split('T')[0]}
+                        </Text>
+                    </View>
+                    <View style = {styles.containerReviewText}>
+                        <Text style = {styles.textReview}>
+                            {review.text}
+                        </Text>
+                    </View>
+                </View>
             </View>
-            <View style = {styles.containerBody}>
-                <View>
-                    <Text style = {styles.textUser}>
-                        {showUser ? review.user.username : review.repositoryId}
-                    </Text>
-                </View>
-                <View>
-                    <Text style = {styles.textDate}>
-                        {review.createdAt.split('T')[0]}
-                    </Text>
-                </View>
-                <View style = {styles.containerReviewText}>
-                    <Text style = {styles.textReview}>
-                        {review.text}
-                    </Text>
-                </View>
-            </View>
-        </View>
+            {!isSingleView && <ReviewButtons review = {review} refetch = {refetch} />}
+    </View>
+
         
     )
 }
@@ -136,7 +210,7 @@ const RepositoryItemSingle = () => {
             <RepositoryItem item = {data.repository} isSingle = {true}/>
             <FlatList
                 data = {reviewData}
-                renderItem = {({ item }) => <ReviewItem review = {item} showUser = {true}/>}
+                renderItem = {({ item }) => <ReviewItem review = {item} isSingleView = {true}/>}
                 keyExtractor = {({ id }) => id} 
                 style = {styles.containerOuter}
             />

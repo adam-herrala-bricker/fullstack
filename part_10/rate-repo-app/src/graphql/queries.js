@@ -14,6 +14,10 @@ query ($includeReviews: Boolean = false){
                     text
                     rating
                     createdAt
+                    repository {
+                        url
+                        name
+                    }
                     user {
                         id
                         username
