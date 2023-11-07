@@ -111,6 +111,7 @@ const ReviewItem = ({ review }) => {
 
 const RepositoryItemSingle = () => {
     const { id } = useParams()
+    console.log('id', id)
     const { data, loading } = useQuery(
         GET_REPOSITORY, 
         {

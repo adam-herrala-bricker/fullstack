@@ -131,7 +131,6 @@ const ItemStats = ({entry, label}) => {
 const ItemLink = ({url}) => {
     //event handler
     const handlePress = () => {
-        console.log('pressed!')
         openURL(url)
     }
 

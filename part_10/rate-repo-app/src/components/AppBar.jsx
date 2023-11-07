@@ -65,7 +65,7 @@ const AppBar = () => {
     <View style={styles.container}>
         <ScrollView horizontal>
             <BarItem label = 'Repositories' path = '/' />
-            <BarItem label = 'New Review' path = '/review'/>
+            {thisUser && <BarItem label = 'New Review' path = '/review'/>}
             {thisUser ? <SignOut /> : <BarItem label = 'Log in' path = '/login'/> }
         </ScrollView>
     </View>

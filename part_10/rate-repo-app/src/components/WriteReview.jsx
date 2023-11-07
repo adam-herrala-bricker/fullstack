@@ -1,5 +1,7 @@
 import { Pressable, Text, View } from 'react-native'
 import { useNavigate } from 'react-router-native'
+import { useMutation } from '@apollo/client'
+import { NEW_REVIEW } from '../graphql/mutations'
 import { Formik } from 'formik'
 import FormikTextInput  from './FormikTextInput'
 import * as yup from 'yup'
@@ -19,17 +21,11 @@ const isRepo = async (value, context) => {
     const owner = context.from[0].value.owner
     const url = `https://github.com/${owner}/${value}`
     const response = await fetch(url)
-    console.log(context.path)
 
     return(
         response.status === 200 || 
         context.createError({message: `${owner}/${value} not found on github`})
     )
-}
-
-const repoError = (context) => {
-    console.log(context)
-    return('7')
 }
 
 const validationSchema = yup.object().shape({
@@ -85,12 +81,20 @@ const ReviewForm = ({onSubmit}) => {
 
 const WriteReview = () => {
     const initialValues = { owner: '', repository: '', rating: 0, comments: '' }
+    const [createNewReview, result] = useMutation(NEW_REVIEW)
     const navigate = useNavigate()
 
     //event handler
     const handleSubmit = async (values) => {
         console.log(values)
-        //navigate('/')
+        const response = await createNewReview({variables: {
+            ownerName: values.owner, 
+            repositoryName: values.repository, 
+            rating: parseInt(values.rating), 
+            text: values.comments}})
+        const newID = response.data.createReview.repositoryId
+        console.log('data', response.data)
+        navigate(`/${newID}`)
     }
 
     return(
