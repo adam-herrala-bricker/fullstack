@@ -3,7 +3,6 @@ import theme from '../theme'
 
 const styles = StyleSheet.create({
     mainContainer: {
-        paddingTop: 5,
         paddingBottom: 5,
         flexDirection: 'row',
         justifyContent: 'space-evenly',
@@ -38,12 +37,6 @@ const styles = StyleSheet.create({
 
     textUnselected: {
         color: 'black'
-    },
-
-    textSort: {
-        alignSelf: 'center',
-        fontWeight: theme.fontWeights.bold,
-        fontSize: theme.fontSizes.subheading
     }
 
 })
@@ -70,7 +63,6 @@ const SelectOrdering = ({ ordering, setOrdering }) => {
    
     return(
       <View style = {styles.mainContainer}>
-        <Text style = {styles.textSort}>sort</Text>
         <OrderingElement displayText = 'added' highlight = {isHighlighted('CREATED_AT')} handleSelect = {() => setOrdering({...ordering, orderBy: 'CREATED_AT'})}/>
         <OrderingElement displayText = 'rating' highlight = {isHighlighted('RATING_AVERAGE')} handleSelect = {() => setOrdering({...ordering, orderBy: 'RATING_AVERAGE'})}/>
         <OrderingElement displayText = 'ascending' highlight = {isHighlighted('ASC')}handleSelect = {() => setOrdering({...ordering, orderDirection: 'ASC'})}/>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { FlatList, Pressable, View, StyleSheet } from 'react-native';
+import { FlatList, Pressable, View, TextInput, StyleSheet } from 'react-native';
 import { useNavigate } from 'react-router-native';
+import { useDebounce } from 'use-debounce'
 import useRepositories from '../hooks/useRepositories';
 import RepositoryItem from './RepositoryItem';
 import SelectOrdering from './SelectOrdering'
@@ -19,6 +20,18 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
   },
+
+  searchBox : {
+    margin: 8,
+    padding: 10,
+
+    borderRadius: theme.radii.subtleRadius,
+    borderStyle: 'solid',
+    borderWidth: 1,
+
+    fontSize: theme.fontSizes.subheading,
+    fontFamily: theme.fontFamily
+  }
 });
 
 const ItemSeparator = () => <View style={styles.separator} />;
@@ -57,12 +70,21 @@ export const RepositoryListContainer = ({ repositories }) => {
 const RepositoryList = () => {
   const defaultOrdering = {orderBy: 'CREATED_AT', orderDirection: 'DESC'}
   const [ordering, setOrdering] = useState(defaultOrdering)
+  const [searchKeyword, setSearchKeyword] = useState('')
+  //prevents over-querying the server as the user types (quite nifty)
+  const [searchDebounce] = useDebounce(searchKeyword, 500)
   
   //this "side effect" would make testing harder
-  const { repositories } = useRepositories(ordering);
+  const { repositories } = useRepositories(ordering, searchDebounce);
+
+  //event handler
+  const handleType = (value) => {
+    setSearchKeyword(value)
+  }
 
   return (
     <View style = {styles.superContainer}>
+      <TextInput placeholder = 'search' style = {styles.searchBox} value = {searchKeyword} onChangeText = {handleType}/>
       <SelectOrdering ordering = {ordering} setOrdering = { setOrdering }/>
       <RepositoryListContainer repositories = { repositories }/>
     </View>
