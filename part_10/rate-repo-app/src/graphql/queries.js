@@ -12,8 +12,8 @@ query {
 
 //exactly what it sounds likes. get all the repositories 
 export const GET_REPOSITORIES = gql `
-    query {
-        repositories {
+    query ($orderBy: AllRepositoriesOrderBy, $orderDirection: OrderDirection){
+        repositories (orderBy: $orderBy, orderDirection: $orderDirection){
             edges {
                 node {
                   description

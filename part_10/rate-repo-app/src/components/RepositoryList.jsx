@@ -1,12 +1,19 @@
+import { useState } from 'react'
 import { FlatList, Pressable, View, StyleSheet } from 'react-native';
 import { useNavigate } from 'react-router-native';
 import useRepositories from '../hooks/useRepositories';
 import RepositoryItem from './RepositoryItem';
+import SelectOrdering from './SelectOrdering'
 import theme from '../theme';
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.backgroudLight
+  },
+
+  //need this to scroll all the way to the bottom
+  superContainer: {
+    flex: 1
   },
 
   separator: {
@@ -48,11 +55,18 @@ export const RepositoryListContainer = ({ repositories }) => {
 };
 
 const RepositoryList = () => {
+  const defaultOrdering = {orderBy: 'CREATED_AT', orderDirection: 'DESC'}
+  const [ordering, setOrdering] = useState(defaultOrdering)
+  
   //this "side effect" would make testing harder
-  const { repositories } = useRepositories();
+  const { repositories } = useRepositories(ordering);
 
   return (
-    <RepositoryListContainer repositories = { repositories }/>
+    <View style = {styles.superContainer}>
+      <SelectOrdering ordering = {ordering} setOrdering = { setOrdering }/>
+      <RepositoryListContainer repositories = { repositories }/>
+    </View>
+    
   );
 };
 
