@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     }
 })
 
-const ReviewItem = ({ review }) => {
+export const ReviewItem = ({ review, showUser }) => {
 
     return(
         <View style = {styles.containerMain}>
@@ -90,7 +90,7 @@ const ReviewItem = ({ review }) => {
             <View style = {styles.containerBody}>
                 <View>
                     <Text style = {styles.textUser}>
-                        {review.user.username}
+                        {showUser ? review.user.username : review.repositoryId}
                     </Text>
                 </View>
                 <View>
@@ -130,14 +130,13 @@ const RepositoryItemSingle = () => {
 
     //data just for the review component
     const reviewData = data.repository.reviews.edges.map(i => i.node)
-    //console.log(reviewData)
 
     return (
         <View style = {styles.containerSuperParent}>
             <RepositoryItem item = {data.repository} isSingle = {true}/>
             <FlatList
                 data = {reviewData}
-                renderItem = {({ item }) => <ReviewItem review = {item}/>}
+                renderItem = {({ item }) => <ReviewItem review = {item} showUser = {true}/>}
                 keyExtractor = {({ id }) => id} 
                 style = {styles.containerOuter}
             />

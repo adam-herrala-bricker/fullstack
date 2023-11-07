@@ -68,6 +68,7 @@ const AppBar = () => {
             {thisUser 
               ? <BarItem label = 'New Review' path = '/review'/> 
               : <BarItem label = 'Sign Up' path = '/register'/>}
+            {thisUser && <BarItem label = 'My Reviews' path = '/user-reviews'/>}
             {thisUser 
               ? <SignOut /> 
               : <BarItem label = 'Log in' path = '/login'/> }

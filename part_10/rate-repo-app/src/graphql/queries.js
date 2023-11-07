@@ -2,12 +2,27 @@ import { gql } from '@apollo/client';
 
 //gets the info for a logged in user (otherwise returns null)
 export const GET_ME = gql`
-query {
+query ($includeReviews: Boolean = false){
     me {
         id
         username
+        reviews @include(if: $includeReviews) {
+            edges {
+                node {
+                    repositoryId
+                    id
+                    text
+                    rating
+                    createdAt
+                    user {
+                        id
+                        username
+                    }
+                }
+            }
+        }
     }
-    }
+}
 `;
 
 //exactly what it sounds likes. get all the repositories 
