@@ -20,5 +20,13 @@ export const NEW_REVIEW = gql`
             repositoryId
         }
     }
+`
 
+//don't think we need this to return anything
+export const NEW_USER = gql`
+    mutation createNewUser($username: String!, $password: String!) {
+        createUser(user: {username: $username, password: $password}) {
+            id
+        }
+    }
 `
