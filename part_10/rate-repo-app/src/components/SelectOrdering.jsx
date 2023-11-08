@@ -73,8 +73,8 @@ const SelectOrdering = ({ ordering, setOrdering }) => {
       <View style = {styles.mainContainer}>
         <OrderingElement displayText = 'added' highlight = {isHighlighted('CREATED_AT')} handleSelect = {() => setOrdering({...ordering, orderBy: 'CREATED_AT'})}/>
         <OrderingElement displayText = 'rating' highlight = {isHighlighted('RATING_AVERAGE')} handleSelect = {() => setOrdering({...ordering, orderBy: 'RATING_AVERAGE'})}/>
-        <OrderingElement displayText = 'lowest' highlight = {isHighlighted('ASC')}handleSelect = {() => setOrdering({...ordering, orderDirection: 'ASC'})}/>
-        <OrderingElement displayText = 'highest' highlight = {isHighlighted('DESC')} handleSelect = {() => setOrdering({...ordering, orderDirection: 'DESC'})}/>
+        <OrderingElement displayText = {ordering.orderBy === 'RATING_AVERAGE' ? 'lowest' : 'oldest'} highlight = {isHighlighted('ASC')}handleSelect = {() => setOrdering({...ordering, orderDirection: 'ASC'})}/>
+        <OrderingElement displayText = {ordering.orderBy === 'RATING_AVERAGE' ? 'highest' : 'newest'} highlight = {isHighlighted('DESC')} handleSelect = {() => setOrdering({...ordering, orderDirection: 'DESC'})}/>
     </View>
     )
   }
