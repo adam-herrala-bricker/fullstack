@@ -2,11 +2,11 @@ import { gql } from '@apollo/client';
 
 //gets the info for a logged in user (otherwise returns null)
 export const GET_ME = gql`
-query ($includeReviews: Boolean = false){
+query ($includeReviews: Boolean = false, $first: Int, $after: String){
     me {
         id
         username
-        reviews @include(if: $includeReviews) {
+        reviews (first: $first, after: $after) @include(if: $includeReviews) {
             edges {
                 node {
                     repositoryId
@@ -23,6 +23,12 @@ query ($includeReviews: Boolean = false){
                         username
                     }
                 }
+                cursor
+            }
+            pageInfo {
+                endCursor
+                startCursor
+                hasNextPage
             }
         }
     }
@@ -31,8 +37,20 @@ query ($includeReviews: Boolean = false){
 
 //exactly what it sounds likes. get all the repositories 
 export const GET_REPOSITORIES = gql `
-    query ($orderBy: AllRepositoriesOrderBy, $orderDirection: OrderDirection, $searchKeyword: String){
-        repositories (orderBy: $orderBy, orderDirection: $orderDirection, searchKeyword: $searchKeyword){
+    query (
+        $orderBy: AllRepositoriesOrderBy, 
+        $orderDirection: OrderDirection, 
+        $searchKeyword: String,
+        $first: Int,
+        $after: String
+        ){
+        repositories (
+            orderBy: $orderBy, 
+            orderDirection: $orderDirection, 
+            searchKeyword: $searchKeyword,
+            first: $first,
+            after: $after
+            ){
             edges {
                 node {
                   description
@@ -49,6 +67,11 @@ export const GET_REPOSITORIES = gql `
                   ownerName
                 }
                 cursor
+            }
+            pageInfo {
+                endCursor
+                startCursor
+                hasNextPage
             }
         }
     }

@@ -1,21 +1,33 @@
 import { useQuery } from '@apollo/client';
 import { GET_REPOSITORIES } from '../graphql/queries';
 
-const useRepositories = ({orderBy, orderDirection}, searchKeyword) => {
-    const queryResponse = useQuery(GET_REPOSITORIES, {
+const useRepositories = (variables) => {
+    const { data, loading, fetchMore, result } = useQuery(GET_REPOSITORIES, {
         fetchPolicy: 'cache-and-network',
-        variables: { orderBy, orderDirection, searchKeyword}
+        variables: variables
     })
    
-    //console.log('query response:', queryResponse.data)
-    //console.log(queryResponse.data.repositories.edges)
+   const handleFetchMore = () => {
+    const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage
 
-    //return { repositories, loading, refetch: fetchRepositories };
-    //note that this doesn't have a refetch function now, but unclear if it needs one?
+    if (!canFetchMore) {
+        return null
+    }
+
+    fetchMore({
+        variables: {
+            after: data.repositories.pageInfo.endCursor,
+            ...variables
+        }
+    })
+
+   }
+
     return { 
-                repositories: queryResponse.data?.repositories,
-                loading: queryResponse.loading
-
+                repositories: data?.repositories,
+                fetchMore: handleFetchMore,
+                loading,
+                result
             }
 };
 

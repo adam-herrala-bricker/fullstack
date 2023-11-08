@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 //seperating out container for purely for testing purposes (efficient!)
-export const RepositoryListContainer = ({ repositories }) => {
+export const RepositoryListContainer = ({ repositories, onEndReached }) => {
   const navigate = useNavigate()
 
   //need to get the "nodes" from the "edges" array
@@ -57,6 +57,8 @@ export const RepositoryListContainer = ({ repositories }) => {
       style = {styles.container}
       data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
+      onEndReached = {onEndReached}
+      onEndReachedThreshold = {.5}
       renderItem = {({item}) => 
         <Pressable onPress = {() => handlePress(item.id)}>
           <RepositoryItem item = {item} isSingle = {false}/>
@@ -75,18 +77,28 @@ const RepositoryList = () => {
   const [searchDebounce] = useDebounce(searchKeyword, 500)
   
   //this "side effect" would make testing harder
-  const { repositories } = useRepositories(ordering, searchDebounce);
+  const { repositories, fetchMore } = useRepositories({
+    orderBy: ordering.orderBy,
+    orderDirection: ordering.orderDirection,
+    searchKeyword: searchDebounce,
+    first: 5 //for pagination
+  });
 
   //event handler
   const handleType = (value) => {
     setSearchKeyword(value)
   }
 
+  const onEndReached = () => {
+    //console.log('end reached!')
+    fetchMore()
+  }
+
   return (
     <View style = {styles.superContainer}>
       <TextInput placeholder = 'search' style = {styles.searchBox} value = {searchKeyword} onChangeText = {handleType}/>
       <SelectOrdering ordering = {ordering} setOrdering = { setOrdering }/>
-      <RepositoryListContainer repositories = { repositories }/>
+      <RepositoryListContainer repositories = { repositories } onEndReached = { onEndReached}/>
     </View>
     
   );

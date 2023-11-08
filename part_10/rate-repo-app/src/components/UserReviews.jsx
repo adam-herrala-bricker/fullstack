@@ -1,7 +1,6 @@
 import { FlatList, View, StyleSheet } from 'react-native'
-import { useQuery } from '@apollo/client'
-import { GET_ME } from '../graphql/queries'
 import { ReviewItem } from './RepositoryItemSingle'
+import useMe from '../hooks/useMe'
 
 import theme from '../theme'
 
@@ -15,13 +14,13 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 const UserReviews = () => {
-    const {data, loading, refetch} = useQuery(
-        GET_ME,
-        {
-            variables: { includeReviews: true },
-            fetchPolicy: 'cache-and-network'
-        }
-    )
+    const first = 5 //first is for pagination
+    const {data, loading, refetch, fetchMore} = useMe({ includeReviews: true, first})
+
+    //event handler
+    const handleEndReached = () => {
+        fetchMore()
+    }
         
     if (loading) {
         return null
@@ -32,6 +31,8 @@ const UserReviews = () => {
         <FlatList 
             data = {reviews}
             ItemSeparatorComponent={ItemSeparator}
+            onEndReached = {handleEndReached}
+            onEndReachedThreshold = { .5 }
             renderItem = {({item}) => <ReviewItem review = {item} refetch = {refetch} isSingleView = {false}/>}/>
         
     )

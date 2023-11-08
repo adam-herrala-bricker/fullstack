@@ -10,33 +10,41 @@ const styles = StyleSheet.create({
     },
 
     buttonSelected: {
+        flex: 1,
+        alignItems: 'center',
+
         backgroundColor: theme.colors.backgroundSecondary,
 
         borderRadius: theme.radii.standardRadius,
         borderColor: theme.colors.backgroundSecondary,
         borderWidth: 1,
 
-        marginTop: 5,
-        padding: 5
+        margin: 4,
+        padding: 4
     },
 
     buttonUnselected: {
-        backgroundColor: theme.colors.backgroudLight,
+        flex: 1,
+        alignItems: 'center',
+
+        backgroundColor: theme.colors.backgroupWhite,
 
         borderRadius: theme.radii.standardRadius,
-        borderColor: 'black',
+        borderColor: theme.colors.backgroudLight,
         borderWidth: 1,
 
-        marginTop: 5,
-        padding: 5
+        margin: 4,
+        padding: 4
     },
 
     textSelected: {
-        color: theme.colors.textWhite
+        color: theme.colors.textWhite,
+        fontWeight: theme.fontWeights.bold
     },
 
     textUnselected: {
-        color: 'black'
+        color: theme.colors.backgroundSecondary,
+        fontWeight: theme.fontWeights.bold
     }
 
 })
@@ -65,8 +73,8 @@ const SelectOrdering = ({ ordering, setOrdering }) => {
       <View style = {styles.mainContainer}>
         <OrderingElement displayText = 'added' highlight = {isHighlighted('CREATED_AT')} handleSelect = {() => setOrdering({...ordering, orderBy: 'CREATED_AT'})}/>
         <OrderingElement displayText = 'rating' highlight = {isHighlighted('RATING_AVERAGE')} handleSelect = {() => setOrdering({...ordering, orderBy: 'RATING_AVERAGE'})}/>
-        <OrderingElement displayText = 'ascending' highlight = {isHighlighted('ASC')}handleSelect = {() => setOrdering({...ordering, orderDirection: 'ASC'})}/>
-        <OrderingElement displayText = 'descending' highlight = {isHighlighted('DESC')} handleSelect = {() => setOrdering({...ordering, orderDirection: 'DESC'})}/>
+        <OrderingElement displayText = 'lowest' highlight = {isHighlighted('ASC')}handleSelect = {() => setOrdering({...ordering, orderDirection: 'ASC'})}/>
+        <OrderingElement displayText = 'highest' highlight = {isHighlighted('DESC')} handleSelect = {() => setOrdering({...ordering, orderDirection: 'DESC'})}/>
     </View>
     )
   }
