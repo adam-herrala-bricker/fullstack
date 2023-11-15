@@ -1,0 +1,15 @@
+(Note: The point of this exercise is that I, having never done any of these things with Python, am to use “Google” to find appropriate solutions.)
+
+CI/CD solutions for a hypothetical Python project with a 6-person team.
+
+- Linting: There are a number of linting options available for Python. Even restricting our selection to those with dedicated VS Code plug-ins, we could choose from Pylint, flake8, mypy, or Ruff. Quickly reading through the documentation, it looks like Pylint would be fine.
+
+- Testing: For unit testing, Python appears to have its own dedicated module, “unittest.” Other solutions, like nose or Pytest, seem to exist to build on unittest and make it more manageable when running a large number of tests.
+
+- Building: This, uh, seems more complicated, and the steps entailed will vary with what OS you’re using. If it were me, and I actually had to compile and build the code for a Python project, I’d carefully study Python’s development guide for doing just that: https://devguide.python.org/getting-started/setup-building/ 
+
+- Self-hosted alternatives to Jenkins: Because they don’t identify themselves as such, it’s non-trivial to assess at a glance whether CI tools are self-hosted or cloud-based. However, it seems like Gradle and GitLab might provide self-hosted CI/CD solutions.
+
+- Cloud-based alternatives to GitHub Actions: Toot toot, all aboard the CloudShip! And CloudShip is just one of the many products offered by CloudBees, which seems to cater to the CI/CD needs of larger businesses (including cloud-based Jenkins). 
+
+- Would a self-hosted or cloud-based solution be best for this project? As a small project, presumably already on GitHub and using a cloud service to deploy the production version, something cloud-based seems fine in this case. 
