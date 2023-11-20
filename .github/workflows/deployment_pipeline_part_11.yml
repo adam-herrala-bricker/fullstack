@@ -3,7 +3,7 @@ name: Deployment pipeline (part 11)
 on:
   push:
     branches:
-      - 'main/part_11' #only deploy for pushes to part_11 on main branch
+      - main #only deploy for pushes to part_11 on main branch
 
 jobs:
   deployment_pipeline_part_11:
