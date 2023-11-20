@@ -11,7 +11,7 @@ jobs:
     env: #environmental variables: from github secrets to this environment
       SECRET: ${{ secrets.SECRET}}
       TOKEN: ${{ secrets.TOKEN }}
-      RANDY_HASH: ${{ RANDY_HASH }}
+      RANDY_HASH: ${{ secrets.RANDY_HASH }}
       MONGODB_PW: ${{ secrets.MONGODB_PW}}
       MONGODB_URI: ${{ secrets.MONGODB_URI}}
       TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI}}
