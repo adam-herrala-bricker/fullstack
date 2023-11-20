@@ -14,4 +14,4 @@ jobs:
           sparse-checkout: | 
             part_11
       - name: check working directory
-        run: ls -a
+        run: cd part_11 && ls -a
