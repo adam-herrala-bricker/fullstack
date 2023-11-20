@@ -2,8 +2,11 @@ name: Deployment pipeline (part 11)
 
 on:
   push:
+    #only deploy for pushes to part_11 on main branch
     branches:
-      - 'main/part_11' #only deploy for pushes to part_11 on main branch
+      - main
+    paths:
+      - 'part_11/' #note: can't have this workflow set to required bc it skips most paths, which is fine given the way this repo is set up
 
 jobs:
   deployment_pipeline_part_11:
