@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Build script"
+echo "Build script!!"
 
 #move to frontend directory and install frontend dependencies
 cd ../blog-refactor-frontend && npm install
