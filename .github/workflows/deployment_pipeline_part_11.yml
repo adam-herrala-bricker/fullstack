@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - 'part_11/' #note: can't have this workflow set to required bc it skips most paths, which is fine given the way this repo is set up
+      - 'part_11/**' #note: can't have this workflow set to required bc it skips most paths, which is fine given the way this repo is set up
 
 jobs:
   deployment_pipeline_part_11:
@@ -27,7 +27,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '14.17' #same node version as in render production environment
-      
       - name: Install frontend dependencies
         run: cd part_11/blog-refactor-frontend && npm install
       - name: Install backend dependencies
