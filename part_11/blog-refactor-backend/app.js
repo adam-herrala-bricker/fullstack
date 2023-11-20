@@ -26,8 +26,8 @@ mongoose
 
 app.use(cors());
 app.use(express.json());
-/* would put connection to static FE and custom middleware here too, e.g.:
-app.use(express.static('build))
+app.use(express.static('../blog-refactor-frontend/dist'));
+/* would put custom middleware here, e.g.:
 app.use(middleWare.requestLogger)
 */
 

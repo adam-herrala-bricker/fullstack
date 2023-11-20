@@ -2,3 +2,4 @@
 *.env
 **/node_modules/
 **/requester_tester_tokened.rest
+part_11/dist/**
