@@ -16,4 +16,4 @@ jobs:
       - uses: actions/checkout@v3
         with:
           sparse-checkout: | 
-            ./part_11/**
+            part_11
