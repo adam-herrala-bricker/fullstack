@@ -7,6 +7,15 @@ on:
       - main
     paths:
       - 'part_11/**' #note: can't have this workflow set to required bc it skips most paths, which is fine given the way this repo is set up
+  #same rules for PRs
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'part_11/**'
+    types:
+      - opened
+      - synchronize
 
 jobs:
   deployment_pipeline_part_11:
