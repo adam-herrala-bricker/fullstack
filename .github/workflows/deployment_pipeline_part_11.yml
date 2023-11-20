@@ -20,5 +20,7 @@ jobs:
         run: cd part_11/blog-refactor-frontend && npm install
       - name: Install backend dependencies
         run: cd part_11/blog-refactor-backend && npm install
-      - name: check working directory in subsequent step
-        run: ls -a
+      - name: Check (frontend) style
+        run: cd part_11/blog-refactor-frontend && npm run lint
+      - name: Run (backend) integration tests
+        run: cd part_11/blog-refactor-backend && npm run test
