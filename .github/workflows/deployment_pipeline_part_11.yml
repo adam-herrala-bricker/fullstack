@@ -13,3 +13,5 @@ jobs:
         env:
           FOUND_REPO: ${{ github.repository }}
         run: echo "$FOUND_REPO"
+      - uses: actions/checkout@v3
+        sparse-checkout: 'part_11/**'
