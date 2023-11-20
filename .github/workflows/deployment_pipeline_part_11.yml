@@ -18,5 +18,7 @@ jobs:
           node-version: '14.17' #same node version as in render production environment
       - name: Install frontend dependencies
         run: cd part_11/blog-refactor-frontend && npm install
+      - name: Install backend dependencies
+        run: cd part_11/blog-refactor-backend && npm install
       - name: check working directory in subsequent step
         run: ls -a
