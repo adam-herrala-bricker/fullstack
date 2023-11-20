@@ -44,3 +44,6 @@ jobs:
         run: cd part_11/blog-refactor-frontend && npm run lint
       - name: Run (backend) integration tests
         run: cd part_11/blog-refactor-backend && npm run test
+      - name: Deploy to production
+        if: ${{ github.event_name == 'push' }}
+        run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
