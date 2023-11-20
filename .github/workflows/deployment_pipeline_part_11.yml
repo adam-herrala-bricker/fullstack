@@ -9,9 +9,8 @@ jobs:
   deployment_pipeline_part_11:
     runs-on: ubuntu-20.04
     steps:
+      - uses: echo "$github.repository"
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '14.17' #version in render production environment
-      - name: Install frontend dependencies
-        run: cd ./part_11/frontend && npm install
