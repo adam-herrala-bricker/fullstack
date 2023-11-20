@@ -1,0 +1,17 @@
+name: Deployment pipeline (part 11)
+
+on:
+  push:
+    branches:
+      - 'main/part_11' #only deploy for pushes to part_11 on main branch
+
+jobs:
+  deployment_pipeline_part_11:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14.17' #version in render production environment
+      - name: Install frontend dependencies
+        run: cd ./part_11/frontend && npm install
