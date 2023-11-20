@@ -9,11 +9,9 @@ jobs:
   deployment_pipeline_part_11:
     runs-on: ubuntu-20.04
     steps:
-      - name: Check repository
-        env:
-          FOUND_REPO: ${{ github.repository }}
-        run: echo "$FOUND_REPO"
       - uses: actions/checkout@v3
         with:
           sparse-checkout: | 
             part_11
+      - name: check working directory
+        run: ls -a
