@@ -11,5 +11,5 @@ jobs:
     steps:
       - name: Check repository
         env:
-          FOUND_REPO: $github.repository
+          FOUND_REPO: ${{ github.repository }}
         run: echo "$FOUND_REPO"
