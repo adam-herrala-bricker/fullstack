@@ -3,4 +3,5 @@
 **/node_modules/
 **/requester_tester_tokened.rest
 **/mongo_data/**
+**/redis_data/**
 part_11/dist/**
