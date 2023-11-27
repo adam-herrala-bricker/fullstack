@@ -2,4 +2,5 @@
 *.env
 **/node_modules/
 **/requester_tester_tokened.rest
+**/mongo_data/**
 part_11/dist/**
