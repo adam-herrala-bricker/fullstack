@@ -1,0 +1,123 @@
+Script started on Mon Nov 27 10:48:20 2023
+Restored session: Mon Nov 27 10:46:13 EET 2023
+[1m[7m%[27m[1m[0m                                                                               
+ 
+]7;file://TY2109038/Users/ambric/Development/fullstack/part_12/part12-containers-applications
+[0m[27m[24m[J(base) ambric@TY2109038 part12-containers-applications % [K[?2004hddocker run -it ubuntu b 
+[Ka
+ash[?2004l
+
+Unable to find image 'ubuntu:latest' locally
+latest: Pulling from library/ubuntu
+
+[1A[2K
+bfbe77e41a78: Pulling fs layer 
+[1B[1A[2K
+bfbe77e41a78: Downloading  277.8kB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  1.674MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  3.078MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  4.483MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  5.868MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading   7.26MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  8.649MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  10.04MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  11.43MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  12.83MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  14.22MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  15.61MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading     17MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  18.39MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  19.79MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  21.18MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  22.56MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  23.95MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  25.34MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Downloading  26.75MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Verifying Checksum 
+[1B[1A[2K
+bfbe77e41a78: Download complete 
+[1B[1A[2K
+bfbe77e41a78: Extracting  294.9kB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Extracting  6.783MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Extracting  10.91MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Extracting  20.94MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Extracting   23.3MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Extracting  25.95MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Extracting  27.13MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Extracting  27.35MB/27.35MB
+[1B[1A[2K
+bfbe77e41a78: Pull complete 
+[1BDigest: sha256:2b7412e6465c3c7fc5bb21d3e6f1917c167358449fecac8176c6e496e5c1f05f
+Status: Downloaded newer image for ubuntu:latest
+[?2004h]0;root@7a137252a05b: /root@7a137252a05b:/# ls
+[?2004l
+[0m[01;36mbin[0m   [01;34mdev[0m  [01;34mhome[0m  [01;34mmedia[0m  [01;34mopt[0m   [01;34mroot[0m  [01;36msbin[0m  [01;34msys[0m  [01;34musr[0m
+[01;34mboot[0m  [01;34metc[0m  [01;36mlib[0m   [01;34mmnt[0m    [01;34mproc[0m  [01;34mrun[0m   [01;34msrv[0m   [30;42mtmp[0m  [01;34mvar[0m
+[?2004h]0;root@7a137252a05b: /root@7a137252a05b:/# cd usd r
+[?2004l
+[?2004h]0;root@7a137252a05b: /usrroot@7a137252a05b:/usr# ls
+[?2004l
+[0m[01;34mbin[0m  [01;34mgames[0m  [01;34minclude[0m  [01;34mlib[0m  [01;34mlibexec[0m  [01;34mlocal[0m  [01;34msbin[0m  [01;34mshare[0m  [01;34msrc[0m
+[?2004h]0;root@7a137252a05b: /usrroot@7a137252a05b:/usr# cd src
+[?2004l
+[?2004h]0;root@7a137252a05b: /usr/srcroot@7a137252a05b:/usr/src# ls
+[?2004l
+[?2004h]0;root@7a137252a05b: /usr/srcroot@7a137252a05b:/usr/src# mkdir app
+[?2004l
+[?2004h]0;root@7a137252a05b: /usr/srcroot@7a137252a05b:/usr/src# ls
+[?2004l
+[0m[01;34mapp[0m
+[?2004h]0;root@7a137252a05b: /usr/srcroot@7a137252a05b:/usr/src# cd app
+[?2004l
+[?2004h]0;root@7a137252a05b: /usr/src/approot@7a137252a05b:/usr/src/app# nano
+[?2004l
+bash: nano: command not found
+[?2004h]0;root@7a137252a05b: /usr/src/approot@7a137252a05b:/usr/src/app# vim
+[?2004l
+bash: vim: command not found
+[?2004h]0;root@7a137252a05b: /usr/src/approot@7a137252a05b:/usr/src/app# < > index.js
+[?2004l
+[?2004h]0;root@7a137252a05b: /usr/src/approot@7a137252a05b:/usr/src/app# ls
+[?2004l
+index.js
+[?2004h]0;root@7a137252a05b: /usr/src/approot@7a137252a05b:/usr/src/app# exit
+[?2004l
+exit
+[1m[7m%[27m[1m[0m                                                                               
+ 
+]7;file://TY2109038/Users/ambric/Development/fullstack/part_12/part12-containers-applications
+[0m[27m[24m[J(base) ambric@TY2109038 part12-containers-applications % [K[?2004heexit[?2004l
+
+
+Saving session...
+...saving history...truncating history files...
+...completed.
+
+Script done on Mon Nov 27 10:53:41 2023
