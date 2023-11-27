@@ -5,3 +5,11 @@ Content-Type: application/json
     "text": "Write code!",
     "done": true
 }
+
+###
+POST http://localhost:3000/todos
+Content-Type: application/json
+
+{
+    "text": "Focus down and listen up more"
+}
