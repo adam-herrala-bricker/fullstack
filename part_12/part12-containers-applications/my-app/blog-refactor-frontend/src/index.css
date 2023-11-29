@@ -1,0 +1,82 @@
+.login-container {
+  position: absolute;
+  top: 20vh;
+  left: 0px;
+
+  width: 100vw;
+
+  display:flex;
+  flex-direction:column;
+  row-gap: 10px;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-container {
+  position: sticky;
+  top: 10px;
+
+  display:flex;
+  justify-content: end;
+
+  padding: 5px;
+
+  z-index: 1001;
+}
+
+.menu-container {
+  position: sticky;
+  top: 0px;
+
+  background-color: white;
+  
+  border-style: solid;
+  border-color: white;
+
+  z-index: 1000;
+}
+
+.segment-container {
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 5px;;
+}
+
+.create-container {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+
+  row-gap: 5px;
+
+}
+
+.create-item {
+  width: 300px;
+}
+
+.comment-add-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.bloggy {
+
+  max-width: 500px;
+  padding : 15px;
+}
+
+.good-link {
+  padding : 2px;
+  color: black;
+}
+
+.display-user {
+  margin-bottom: 10px;
+}
+
+th, td {
+  padding : 10px;
+}

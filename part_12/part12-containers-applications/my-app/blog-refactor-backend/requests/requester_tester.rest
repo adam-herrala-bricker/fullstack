@@ -1,0 +1,15 @@
+###GET test
+GET http://localhost:3003/api/blogs
+
+###POST test
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer 
+
+{
+    "title" : "how to train your dragon, II",
+    "author" : "Hollywood, CA",
+    "url" : "deadspin.com/dragons_3",
+    "likes" : 6
+
+}
