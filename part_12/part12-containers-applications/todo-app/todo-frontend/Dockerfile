@@ -9,6 +9,9 @@ ENV REACT_APP_BACKEND_URL=http://localhost:3000
 ENV PORT=3001
 
 RUN npm ci
+# build will fail if tests fails
+RUN CI=true npm test
+
 RUN npm run build
 
 # stage to serve static build

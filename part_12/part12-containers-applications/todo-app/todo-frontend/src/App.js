@@ -1,5 +1,5 @@
 import './App.css';
-import TodoView from './Todos/TodoView'
+import TodoView from './components/TodoView'
 
 function App() {
   return (
