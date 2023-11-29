@@ -3,15 +3,33 @@ version: '3.8'
 services:
   app:
     image: todo-frontend-dev
-    # note: unsure if image needed here, as the instructions are unclear not only on the procedure, but the objectives of these exercises
-    # they do make clear that it's not supposed to fully work, so keep if mind if you do this for real you'll have to put more here
-    # especially stuff for making the build
+    volumes:
+      - ./todo-frontend/:/usr/src/app
+  server:
+    image: todo-backend-dev
+    volumes:
+      - ./todo-backend/:/usr/src/server
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - MONGO_URL=mongodb://the_username:the_password@mongo:27017/the_database
+  mongo: # this is for containerizing the mongo DB
+    image: mongo
     ports: 
-      - 3001
-    # note also that now there's only a container port, with no exposed ports
-    # the instructions never say to do this, nor even explain how, but from the way they tell you to set it up
-    # (i.e., the frontend "behind" the reverse proxy) it's implied this is what they want
-    container_name: todo-proxy-dev
+      - 27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: the_database
+    volumes:
+      - ./todo-backend/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - ./todo-backend/mongo_data:/data/db # local storage of data
+  redis:
+    image: redis
+    ports:
+      - 6379
+    command: ['redis-server', '--appendonly', 'yes'] # Override CMD to persist state
+    volumes:
+      - ./todo-backend/redis_data:/data #volume for storage
   nginx:
     image: nginx:1.20.1
     volumes:
@@ -21,3 +39,6 @@ services:
     container_name: reverse-proxy
     depends_on:
       - app
+      - server
+      - mongo
+      - redis
