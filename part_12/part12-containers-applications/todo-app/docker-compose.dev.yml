@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  app:
+    image: todo-frontend-dev
+    # note: unsure if image needed here, as the instructions are unclear not only on the procedure, but the objectives of these exercises
+    # they do make clear that it's not supposed to fully work, so keep if mind if you do this for real you'll have to put more here
+    # especially stuff for making the build
+    ports: 
+      - 3001
+    # note also that now there's only a container port, with no exposed ports
+    # the instructions never say to do this, nor even explain how, but from the way they tell you to set it up
+    # (i.e., the frontend "behind" the reverse proxy) it's implied this is what they want
+    container_name: todo-proxy-dev
+  nginx:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports: 
+      - 8080:80
+    container_name: reverse-proxy
+    depends_on:
+      - app
