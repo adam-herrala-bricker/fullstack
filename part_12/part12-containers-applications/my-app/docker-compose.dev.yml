@@ -3,6 +3,9 @@ version: '3.8'
 services:
   app:
     image: my-app-frontend-dev
+    build:
+      context: ./blog-refactor-frontend
+      dockerfile: dev.Dockerfile
   server:
     image: my-app-backend-dev
     build:
