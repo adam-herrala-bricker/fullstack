@@ -1,0 +1,17 @@
+#starting understand what these compose files do . . .
+version: '3.8'
+
+services:
+  # . . . first they build the image . . .
+  app:
+    image: todo-frontend-dev
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    # . . . and then they run the container
+    volumes:
+      - ./:/usr/src/app
+      # the volume lets us preserve data
+    ports: 
+      - 3001:3001
+    container_name: todo-frontend-dev
