@@ -1,5 +1,5 @@
 //note: added stuff from the exercises too
-const { mongourl, PORT, NODE_ENV } = require("./utils/config");
+let { mongourl, PORT, NODE_ENV, MONGO_DOCKER_URL } = require("./utils/config");
 const express = require("express");
 require("express-async-errors");
 const app = express();
@@ -13,6 +13,14 @@ const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", false);
 
+// if you give it MONGO_DOCKER_URL, it doesn't use the external one
+if (MONGO_DOCKER_URL) {
+  console.log('Mongo docker url:', MONGO_DOCKER_URL)
+  mongourl = MONGO_DOCKER_URL
+} else {
+  console.log('No url for containerized Mongo DB found.')
+};
+
 logger.info("connecting to", mongourl);
 
 mongoose
@@ -21,8 +29,10 @@ mongoose
     logger.info("connected to MongoDB!");
   })
   .catch((error) => {
-    logger.error("error connecting to MongoDB: error.message");
+    logger.error(`error connecting to MongoDB: ${error.message}`);
   });
+
+
 
 app.use(cors());
 app.use(express.json());

@@ -9,5 +9,6 @@ const mongourl =
     : process.env.MONGODB_URI;
 
 const NODE_ENV = process.env.NODE_ENV;
+const MONGO_DOCKER_URL = process.env.MONGO_DOCKER_URL || undefined;
 
-module.exports = { mongourl, PORT, TOKEN, RANDY_HASH, NODE_ENV };
+module.exports = { mongourl, PORT, TOKEN, RANDY_HASH, NODE_ENV, MONGO_DOCKER_URL };

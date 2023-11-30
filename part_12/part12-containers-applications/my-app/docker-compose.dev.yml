@@ -13,7 +13,21 @@ services:
       dockerfile: dev.Dockerfile
     volumes:
       - ./blog-refactor-backend:/usr/src/server
+    environment:
+      - MONGO_DOCKER_URL=mongodb://the_username:the_password@mongo:27017/the_database
     env_file: ./blog-refactor-backend/.env
+  mongo:
+    image: mongo
+    restart: always
+    ports: 
+      - 27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: the_database
+    volumes:
+      - ./blog-refactor-backend/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - ./blog-refactor-backend/mongo_data:/data/db
   nginx:
     image: nginx:1.20.1
     volumes:
@@ -22,5 +36,7 @@ services:
       - 3003:80
     container_name: reverse-proxy
     depends_on:
+      - app
       - server
+      - mongo
   
