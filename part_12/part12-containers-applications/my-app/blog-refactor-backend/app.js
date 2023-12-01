@@ -5,6 +5,7 @@ require("express-async-errors");
 const app = express();
 const cors = require("cors");
 const blogsRouter = require("./controllers/blog");
+const blogsRouter2 = require("./controllers/blog2");
 const usersRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
 const middleware = require("./utils/middleware");
@@ -44,6 +45,7 @@ app.use(middleWare.requestLogger)
 app.use(middleware.userExtractor); //this must go before the routers!!!!
 
 app.use("/api/blogs", blogsRouter);
+app.use("/blogs/api/blogs", blogsRouter2)
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
 

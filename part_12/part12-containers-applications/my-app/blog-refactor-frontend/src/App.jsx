@@ -169,7 +169,7 @@ const App = () => {
         <div className = 'menu-container'>
           logged in as {user.name}
           <Menu borderless inverted>
-            <Menu.Item><h1>Blog app</h1></Menu.Item>
+            <Menu.Item><h1>Blog app!</h1></Menu.Item>
             <Menu.Item><Link className = 'good-link' to = '/'>home</Link></Menu.Item>
             <Menu.Item><Link className = 'good-link' to = '/users'>users</Link></Menu.Item>
             <Menu.Item><Button primary onClick={handleLogout}>log out</Button></Menu.Item>
