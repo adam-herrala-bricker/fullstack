@@ -1,0 +1,17 @@
+### GET request for all blogs
+GET http://localhost:3001/api/blogs
+Content-Type: application/json
+
+### POST request for new blog
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "author": "Jane",
+  "url": "jane.org",
+  "title": "Jane Blog",
+  "likes": "15000"
+}
+
+### DELETE request for blog
+DELETE http://localhost:3001/api/blogs/7

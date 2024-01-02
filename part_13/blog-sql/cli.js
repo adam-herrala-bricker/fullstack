@@ -7,6 +7,7 @@ const sequelize = new Sequelize(DATABASE_URL);
 // this matches the schemea we defined on the command line
 // (it doesn't define the schema)
 class Blog extends Model {};
+
 Blog.init({
   id: {
     type: DataTypes.INTEGER,
