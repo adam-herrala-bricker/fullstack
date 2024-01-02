@@ -8,13 +8,13 @@ Content-Type: application/json
 
 {
   "author": "Jane",
-  "url": "jane.org",
   "title": "Jane Blog",
-  "likes": "15000"
+  "url": "jane.org",
+  "likes": 35
 }
 
 ### PUT request to update the number of likes
-PUT http://localhost:3001/api/blogs/1
+PUT http://localhost:3001/api/blogs/4
 Content-Type: application/json
 
 {
