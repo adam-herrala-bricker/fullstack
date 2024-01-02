@@ -13,5 +13,14 @@ Content-Type: application/json
   "likes": "15000"
 }
 
+### PUT request to update the number of likes
+PUT http://localhost:3001/api/blogs/1
+Content-Type: application/json
+
+{
+  "likes": 15
+}
+
+
 ### DELETE request for blog
 DELETE http://localhost:3001/api/blogs/12

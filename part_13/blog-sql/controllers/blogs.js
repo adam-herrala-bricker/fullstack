@@ -24,6 +24,18 @@ router.post('/', async (req, res) => {
   }
 });
 
+// PUT request to update the number of likes for a blog
+// (the request will have the LIKES ONLY!!)
+router.put('/:id', isBlog, async (req, res) => {
+  if (req.blog) {  // check to make sure it's in there
+    req.blog.likes = req.body.likes
+    await req.blog.save();
+    return res.json(req.blog);
+  } else {
+    return res.status(404).end();
+  }
+});
+
 // DELETE request to remove a blog
 router.delete('/:id', isBlog, async (req, res) => {
   const thisID = req.params.id;
