@@ -11,7 +11,12 @@ const isBlog = async (req, res, next) => {
 
 // GET request for all blogs
 router.get('/', async (req, res) => {
-  const blogs = await Blog.findAll();
+  const blogs = await Blog.findAll({
+    include: {
+      model: User,
+      attributes: ['username', 'name']
+    }
+  });
   res.json(blogs);
 });
 

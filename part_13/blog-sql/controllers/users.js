@@ -1,10 +1,15 @@
 const bcrypt = require('bcrypt');
 const router = require('express').Router();
-const {User} = require('../models');
+const {Blog, User} = require('../models');
 
 // GET request for list of all users
 router.get('/', async (req, res) => {
-  const users = await User.findAll();
+  const users = await User.findAll({
+    include: {
+      model: Blog,
+      attributes: ['title', 'author', 'id']
+    }
+  });
   res.json(users);
 });
 
