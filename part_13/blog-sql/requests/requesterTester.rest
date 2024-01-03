@@ -23,7 +23,7 @@ Content-Type: application/json
 
 
 ### DELETE request for blog
-DELETE http://localhost:3001/api/blogs/12
+DELETE http://localhost:3001/api/blogs/2
 
 ### GET request for all users
 GET http://localhost:3001/api/users

@@ -35,8 +35,15 @@ router.put('/:id', isBlog, async (req, res) => {
 });
 
 // DELETE request to remove a blog
-router.delete('/:id', isBlog, async (req, res) => {
+router.delete('/:id', tokenExtractor, isBlog, async (req, res) => {
   const thisID = req.params.id;
+  const thisBlog = await Blog.findByPk(thisID);
+  const thisUser = await User.findByPk(req.decodedToken.id);
+
+  // whoops! someone's trying to delete another user's post ... cheeky devil
+  if (thisBlog.userId !== thisUser.id) {
+    return res.status(401).json({error: 'you can only delete your own posts'});
+  }
 
   await Blog.destroy({where: {id: thisID}})
   return res.status(204).end();

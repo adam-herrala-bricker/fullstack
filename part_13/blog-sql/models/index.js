@@ -3,7 +3,7 @@ const Blog = require('./blog');
 const User = require('./user');
 
 User.hasMany(Blog);
-Blog.belongsTo(User);
+Blog.belongsTo(User); // this automatically creates the "userId" attribute for Blog
 
 Blog.sync({alter: true});
 User.sync({alter: true});
