@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const {Op} = require('sequelize'); // Op = "operator" (can't explain why I don't like this syntax)
 const {tokenExtractor} = require('../util/middleware');
 const {Blog, User} = require('../models');
 
@@ -11,12 +12,24 @@ const isBlog = async (req, res, next) => {
 
 // GET request for all blogs
 router.get('/', async (req, res) => {
+  const search = req.query.search;
+  const where = {};
+
+  // add the search term to where
+  if (search) {
+    where.title = {
+      [Op.iLike]: `%${search}%`
+    }
+  };
+
   const blogs = await Blog.findAll({
     include: {
       model: User,
       attributes: ['username', 'name']
-    }
+    },
+    where
   });
+
   res.json(blogs);
 });
 
