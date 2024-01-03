@@ -7,10 +7,11 @@ const {connectToDB} = require('./util/db');
 const middleware = require('./util/middleware');
 
 const blogRouter = require('./controllers/blogs');
-
+const userRouter = require('./controllers/users');
 
 app.use(express.json()); // don't forget this or req bodies won't work!!
 app.use('/api/blogs', blogRouter);
+app.use('/api/users', userRouter);
 app.use(middleware.errorHandler);
 
 const start = async () => {

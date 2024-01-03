@@ -24,3 +24,24 @@ Content-Type: application/json
 
 ### DELETE request for blog
 DELETE http://localhost:3001/api/blogs/12
+
+### GET request for all users
+GET http://localhost:3001/api/users
+
+### POST request to create new user
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "name": "Sophia Banks",
+  "username": "spb1122",
+  "password": "example"
+}
+
+### PUT request to change a username
+PUT http://localhost:3001/api/users/jonBilliams
+Content-Type: application/json
+
+{
+  "newUsername": "goldrushSupreme"
+}
