@@ -3,7 +3,7 @@ GET http://localhost:3001/api/blogs
 Content-Type: application/json
 
 ### GET request for all blogs (with search term)
-GET http://localhost:3001/api/blogs?search=blog
+GET http://localhost:3001/api/blogs?search=aaaaaaaa
 Content-Type: application/json
 
 ### POST request for new blog

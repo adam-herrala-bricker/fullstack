@@ -13,13 +13,16 @@ const isBlog = async (req, res, next) => {
 // GET request for all blogs
 router.get('/', async (req, res) => {
   const search = req.query.search;
-  const where = {};
+  let where = {};
 
   // add the search term to where
   if (search) {
-    where.title = {
-      [Op.iLike]: `%${search}%`
-    }
+    where = {
+      [Op.or] : {
+        title: {[Op.iLike]: `%${search}%`},
+        author: {[Op.iLike]: `%${search}%`}
+      }
+    };
   };
 
   const blogs = await Blog.findAll({
