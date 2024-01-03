@@ -34,7 +34,7 @@ Content-Type: application/json
 
 {
   "name": "Sophia Banks",
-  "username": "spb1122@gmail.org",
+  "username": "spb1122@gmail.com",
   "password": "example"
 }
 
@@ -54,3 +54,6 @@ Content-Type: application/json
   "username": "goldrushSupreme",
   "password": "exampl"
 }
+
+### DELETE request to delete user
+DELETE http://localhost:3001/api/users/7

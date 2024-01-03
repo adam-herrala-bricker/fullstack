@@ -29,4 +29,13 @@ router.put('/:username', async (req, res) => {
   return res.json(updates[1]); // don't need to return the number of changed rows
 });
 
+// DELETE request to delete a user by id
+router.delete('/:id', async (req, res) => {
+  const thisID = req.params.id;
+  
+  await User.destroy({where: {id: thisID}})
+  return res.status(204).end();
+
+});
+
 module.exports = router;
