@@ -2,10 +2,11 @@
 const Blog = require('./blog');
 const User = require('./user');
 
-User.hasMany(Blog);
 Blog.belongsTo(User); // this automatically creates the "userId" attribute for Blog
+User.hasMany(Blog);
 
-Blog.sync({alter: true});
-User.sync({alter: true});
+// no syncing now that we're handling this with migrations
+// Blog.sync({alter: true});
+// User.sync({alter: true});
 
 module.exports = {Blog, User};
