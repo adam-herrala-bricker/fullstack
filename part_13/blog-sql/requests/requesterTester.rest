@@ -52,7 +52,7 @@ Content-Type: application/json
 
 {
   "username": "goldrushSupreme",
-  "password": "exampl"
+  "password": "example"
 }
 
 ### DELETE request to delete user

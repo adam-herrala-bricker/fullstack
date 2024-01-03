@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const {Blog} = require('../models');
+const {tokenExtractor} = require('../util/middleware');
+const {Blog, User} = require('../models');
 
 // MW to check if blog is there
 const isBlog = async (req, res, next) => {
@@ -15,8 +16,13 @@ router.get('/', async (req, res) => {
 });
 
 // POST request for new blog
-router.post('/', async (req, res) => {
-  const blog = await Blog.create(req.body);
+router.post('/', tokenExtractor, async (req, res) => {
+  const user = await User.findByPk(req.decodedToken.id);
+  const blog = await Blog.create({
+    ...req.body,
+    userId: user.id,
+    date: new Date()
+  });
   return res.json(blog);
 });
 

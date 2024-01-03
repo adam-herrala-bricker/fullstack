@@ -6,3 +6,4 @@
 **/redis_data/**
 part_11/dist/**
 part_12/**/dist/**
+part_13/**/bearerTester.rest
