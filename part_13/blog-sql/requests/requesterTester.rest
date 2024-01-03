@@ -1,3 +1,7 @@
+### GET request for all authors
+GET http://localhost:3001/api/authors
+Content-Type: application/json
+
 ### GET request for all blogs
 GET http://localhost:3001/api/blogs
 Content-Type: application/json

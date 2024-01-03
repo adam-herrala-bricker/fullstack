@@ -6,11 +6,14 @@ const {PORT} = require('./util/config');
 const {connectToDB} = require('./util/db');
 const middleware = require('./util/middleware');
 
+const authorRouter = require('./controllers/authors');
 const blogRouter = require('./controllers/blogs');
 const loginRouter = require('./controllers/login');
 const userRouter = require('./controllers/users');
 
 app.use(express.json()); // don't forget this or req bodies won't work!!
+
+app.use('/api/authors', authorRouter);
 app.use('/api/blogs', blogRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/users', userRouter);
