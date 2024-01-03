@@ -34,7 +34,7 @@ Content-Type: application/json
 
 {
   "name": "Sophia Banks",
-  "username": "spb1122",
+  "username": "spb1122@gmail.org",
   "password": "example"
 }
 
@@ -44,4 +44,13 @@ Content-Type: application/json
 
 {
   "newUsername": "goldrushSupreme"
+}
+
+### POST request to log in 
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "username": "goldrushSupreme",
+  "password": "exampl"
 }
