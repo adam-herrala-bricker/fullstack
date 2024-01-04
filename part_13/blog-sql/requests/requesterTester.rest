@@ -30,7 +30,7 @@ POST http://localhost:3001/api/readings
 Content-Type: application/json
 
 {
-  "blogId": 2,
+  "blogId": 1,
   "userId": 2
 }
 

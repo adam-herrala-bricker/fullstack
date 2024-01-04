@@ -36,15 +36,6 @@ Blog.init({
       max: new Date().getFullYear()
     }
   },
-
-  readStatus: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-    defaultValue: 'unassigned',
-    validate: {
-      isIn: [['unassigned', 'read', 'unread']]
-    }
-  }
   
 }, {
   sequelize,

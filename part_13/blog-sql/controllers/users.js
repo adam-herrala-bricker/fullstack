@@ -17,13 +17,14 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   const userID = req.params.id;
   const thisUser = await User.findByPk(userID, {
+    attributes: {exclude: ['id', 'createdAt','updatedAt', 'passwordHash']},
     include: [
       {
         model: Blog,
         as: 'marked_readings',
         attributes: {exclude: ['createdAt', 'updatedAt', 'userId']},
         through: {
-          attributes: ['id']
+          attributes: ['id', 'read']
         }
       }
     ]

@@ -19,21 +19,17 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {model: 'blogs', key: 'id'}
-      }
-    })
+      },
 
-    await queryInterface.addColumn('blogs', 'read_status', {
-      type: DataTypes.TEXT,
-      allowNull: false,
-      defaultValue: 'unassigned',
-      validate: {
-        isIn: [['unassigned', 'read', 'unread']]
+      read: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       }
     })
   },
 
   down: async ({context: queryInterface}) => {
     await queryInterface.dropTable('reading_lists')
-    await queryInterface.removeColumn('blogs', 'read_status')
   }
 };
