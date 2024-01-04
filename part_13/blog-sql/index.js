@@ -9,6 +9,7 @@ const middleware = require('./util/middleware');
 const authorRouter = require('./controllers/authors');
 const blogRouter = require('./controllers/blogs');
 const loginRouter = require('./controllers/login');
+const readingsRouter = require('./controllers/readingList');
 const userRouter = require('./controllers/users');
 
 app.use(express.json()); // don't forget this or req bodies won't work!!
@@ -16,6 +17,7 @@ app.use(express.json()); // don't forget this or req bodies won't work!!
 app.use('/api/authors', authorRouter);
 app.use('/api/blogs', blogRouter);
 app.use('/api/login', loginRouter);
+app.use('/api/readings', readingsRouter);
 app.use('/api/users', userRouter);
 app.use(middleware.errorHandler);
 

@@ -10,6 +10,10 @@ Content-Type: application/json
 GET http://localhost:3001/api/blogs?search=ron
 Content-Type: application/json
 
+### GET request for the reading list
+GET http://localhost:3001/api/readings
+Content-Type: application/json
+
 ### POST request for new blog
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
@@ -19,6 +23,15 @@ Content-Type: application/json
   "title": "Jane Blog",
   "url": "jane.org",
   "likes": 35
+}
+
+### POST request for a new entry in the reading list
+POST http://localhost:3001/api/readings
+Content-Type: application/json
+
+{
+  "blogId": 2,
+  "userId": 2
 }
 
 ### PUT request to update the number of likes
@@ -36,13 +49,16 @@ DELETE http://localhost:3001/api/blogs/2
 ### GET request for all users
 GET http://localhost:3001/api/users
 
+### GET request for a single user
+GET http://localhost:3001/api/users/2
+
 ### POST request to create new user
 POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-  "name": "Sophia Banks",
-  "username": "spb1122@gmail.com",
+  "name": "Jeremy Magnesium",
+  "username": "jerry-mags@gmail.com",
   "password": "example"
 }
 

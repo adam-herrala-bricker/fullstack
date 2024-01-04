@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const router = require('express').Router();
-const {Blog, User} = require('../models');
+const {Blog, ReadingList, User} = require('../models');
 
 // GET request for list of all users
 router.get('/', async (req, res) => {
@@ -11,6 +11,25 @@ router.get('/', async (req, res) => {
     }
   });
   res.json(users);
+});
+
+// GET request for just one user
+router.get('/:id', async (req, res) => {
+  const userID = req.params.id;
+  const thisUser = await User.findByPk(userID, {
+    include: [
+      {
+        model: Blog,
+        as: 'marked_readings',
+        attributes: {exclude: ['readStatus', 'createdAt', 'updatedAt', 'userId']},
+        through: {
+          attributes: []
+        }
+      }
+    ]
+  });
+
+  res.json(thisUser);
 });
 
 // POST request for adding new user
