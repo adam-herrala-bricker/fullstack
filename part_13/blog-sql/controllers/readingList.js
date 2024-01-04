@@ -28,7 +28,7 @@ router.put('/:id', tokenExtractor, async (req, res) => {
     return res.status(401).json({error: 'you can only update your own posts'})
   }
 
-  thisEntry.read = true
+  thisEntry.read = req.body.read;
   await thisEntry.save();
 
   res.json(thisEntry);
