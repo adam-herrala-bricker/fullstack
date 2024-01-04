@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const router = require('express').Router();
-const {Blog, ReadingList, User} = require('../models');
+const {Op} = require('sequelize');
+const {Blog, User} = require('../models');
 
 // GET request for list of all users
 router.get('/', async (req, res) => {
@@ -15,6 +16,12 @@ router.get('/', async (req, res) => {
 
 // GET request for just one user
 router.get('/:id', async (req, res) => {
+  const read = req.query.read;
+  let where = {}
+
+  if (read) where = {read}
+  
+  console.log(where);
   const userID = req.params.id;
   const thisUser = await User.findByPk(userID, {
     attributes: {exclude: ['id', 'createdAt','updatedAt', 'passwordHash']},
@@ -24,10 +31,11 @@ router.get('/:id', async (req, res) => {
         as: 'marked_readings',
         attributes: {exclude: ['createdAt', 'updatedAt', 'userId']},
         through: {
-          attributes: ['id', 'read']
+          attributes: ['id', 'read'],
+          where // notice that where goes here!!
         }
       }
-    ]
+    ],
   });
 
   res.json(thisUser);
