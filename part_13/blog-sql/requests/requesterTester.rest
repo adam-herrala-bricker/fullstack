@@ -50,7 +50,7 @@ DELETE http://localhost:3001/api/blogs/2
 GET http://localhost:3001/api/users
 
 ### GET request for a single user
-GET http://localhost:3001/api/users/2
+GET http://localhost:3001/api/users/1
 
 ### POST request to create new user
 POST http://localhost:3001/api/users
