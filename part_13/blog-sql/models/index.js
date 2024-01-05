@@ -1,4 +1,4 @@
-// this is just so all the models can be imported at once
+const ActiveSession = require('./activeSession')
 const Blog = require('./blog');
 const ReadingList = require('./readingList');
 const User = require('./user');
@@ -13,4 +13,4 @@ User.belongsToMany(Blog, {through: ReadingList, as: 'marked_readings'});
 // Blog.sync({alter: true});
 // User.sync({alter: true});
 
-module.exports = {Blog, ReadingList, User};
+module.exports = {ActiveSession, Blog, ReadingList, User};

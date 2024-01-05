@@ -21,7 +21,6 @@ router.get('/:id', async (req, res) => {
 
   if (read) where = {read}
   
-  console.log(where);
   const userID = req.params.id;
   const thisUser = await User.findByPk(userID, {
     attributes: {exclude: ['id', 'createdAt','updatedAt', 'passwordHash']},

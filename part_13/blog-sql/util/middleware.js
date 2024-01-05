@@ -1,13 +1,29 @@
 const jwt = require('jsonwebtoken');
+const {ActiveSession} = require('../models');
 const {USER_SECRET} = require('./config');
 
-const tokenExtractor = (req, res, next) => {
+const tokenExtractor = async (req, res, next) => {
   const authorization = req.get('authorization');
   
   
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    const encodedToken = authorization.substring(7);
     try {
-      req.decodedToken = jwt.verify(authorization.substring(7), USER_SECRET);
+      const decodedToken = jwt.verify(encodedToken, USER_SECRET);
+
+      // check that this is an active token for the given user
+      const userSessions = await ActiveSession.findAll({
+        attributes: ['token', 'userId'],
+        where: {
+          userId: decodedToken.id
+        }
+      });
+      const userTokens = userSessions.map(i => i.token);
+      if (!userTokens.includes(encodedToken)) {
+        return res.status(403).json({error: 'expired token'});
+      }
+
+      req.decodedToken = decodedToken
     } catch {
       return res.status(401).json({error: 'invalid token'});
     }

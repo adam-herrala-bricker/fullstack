@@ -55,6 +55,18 @@ GET http://localhost:3001/api/users/2
 ### GET request for a single user (read/unread only)
 GET http://localhost:3001/api/users/2?read=false
 
+### GET request for all active sessions
+GET http://localhost:3001/api/admin
+
+### POST request to enable/disable users
+POST http://localhost:3001/api/admin
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "disabled": false
+}
+
 ### POST request to create new user
 POST http://localhost:3001/api/users
 Content-Type: application/json
